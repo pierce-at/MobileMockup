@@ -1,0 +1,10 @@
+.next
+node_modules
+coverage
+dist
+out
+*.log
+.env
+.env.local
+.env.*.local
+reference files/

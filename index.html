@@ -1,0 +1,3663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TCSW 2026 · Mobile Event App. Powered by Attentio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --midnight: #0a1838;          /* TCSW deep navy */
+    --indigo: #142554;            /* lifted navy */
+    --gold: #f5c842;              /* TCSW signature gold */
+    --gold-deep: #d9a916;
+    --gold-soft: #fde9a6;
+    --aurora: #4ad7c0;             /* secondary, used sparingly */
+    --aurora-deep: #2ba893;
+    --coral: #ff6b6b;              /* secondary accent */
+    --plum: #6b3aa0;               /* hints in banner gradient */
+    --ink: #0a1838;
+    --paper: #f6f6fb;
+    --line: #e6e7ef;
+    --muted: #6b6f86;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #eef0f7;
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================ HERO ============================ */
+  .hero {
+    background:
+      radial-gradient(900px 500px at 90% 100%, rgba(245,200,66,0.18), transparent 55%),
+      radial-gradient(700px 500px at 10% 0%, rgba(107,58,160,0.22), transparent 60%),
+      linear-gradient(180deg, #0a1838 0%, #142554 60%, #0a1838 100%);
+    color: white;
+    padding: 56px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* diagonal accent stripes matching TCSW banner art */
+  .hero::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; bottom: 0; width: 18%;
+    background:
+      linear-gradient(115deg, transparent 0 28%, rgba(245,200,66,0.35) 28% 29%, transparent 29% 42%, rgba(74,215,192,0.28) 42% 43%, transparent 43% 56%, rgba(107,58,160,0.45) 56% 57%, transparent 57%);
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero .right-stripes {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; width: 18%;
+    background:
+      linear-gradient(245deg, transparent 0 28%, rgba(245,200,66,0.35) 28% 29%, transparent 29% 42%, rgba(74,215,192,0.28) 42% 43%, transparent 43% 56%, rgba(107,58,160,0.45) 56% 57%, transparent 57%);
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 1240px; margin: 0 auto; position: relative; z-index: 1; }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 48px;
+  }
+  .brand-mark {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .brand-mark-icon {
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    filter: drop-shadow(0 0 12px rgba(245,200,66,0.4));
+  }
+  .brand-mark-icon svg { width: 100%; height: 100%; }
+  .nav-pill {
+    font-size: 12px;
+    padding: 8px 14px; border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(40px, 6vw, 76px);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+  }
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-soft) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-sub {
+    margin-top: 22px; max-width: 640px;
+    font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.78);
+  }
+  .hero-meta {
+    margin-top: 36px;
+    display: flex; flex-wrap: wrap; gap: 14px;
+  }
+  .meta-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px; border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.85);
+  }
+  .meta-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 12px var(--gold);}
+  .meta-chip.coral .dot { background: var(--coral); box-shadow: 0 0 12px var(--coral); }
+  .meta-chip.gold  .dot { background: var(--aurora);  box-shadow: 0 0 12px var(--aurora);  }
+
+  /* ============================ DEMO STAGE ============================ */
+  .demo-stage {
+    background: linear-gradient(180deg, #eef0f7 0%, #ffffff 100%);
+    padding: 64px 24px 96px;
+  }
+  .stage-inner { max-width: 1240px; margin: 0 auto; }
+  .scene {
+    padding: 80px 0;
+    border-top: 1px dashed #d4d6e2;
+  }
+  .scene:first-child { border-top: 0; padding-top: 24px; }
+  .scene-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 40px; flex-wrap: wrap; }
+  .scene-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    background: var(--midnight);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border-left: 3px solid var(--gold);
+  }
+  .scene-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px, 3.4vw, 42px);
+    font-weight: 700;
+    color: var(--midnight);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .scene-sub {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 680px;
+    margin-top: 10px;
+  }
+  .scene-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .scene-grid.reverse { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 900px) {
+    .scene-grid, .scene-grid.reverse { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .scene-copy h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .scene-copy p {
+    color: #3a3d52;
+    font-size: 16px;
+    margin-bottom: 18px;
+  }
+  .bullet-list { list-style: none; display: grid; gap: 12px; margin-top: 22px; }
+  .bullet-list li {
+    display: flex; gap: 12px;
+    padding: 12px 14px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 14px;
+    color: #2c2f44;
+  }
+  .bullet-list li::before {
+    content: "";
+    flex: 0 0 22px;
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5c842'><path d='M9 16.2 5.5 12.7l-1.4 1.4L9 19 20 8l-1.4-1.4z'/></svg>") center / 16px 16px no-repeat,
+      #0a1838;
+    margin-top: 1px;
+  }
+  .phone-wrap { display: flex; justify-content: center; align-items: center; perspective: 1200px; }
+  .phone-wrap.dual { gap: 28px; }
+
+  /* ============================ PHONE ============================ */
+  .phone {
+    width: 320px;
+    background: #0c1033;
+    border-radius: 48px;
+    padding: 12px;
+    box-shadow:
+      0 50px 90px -30px rgba(12,16,51,0.45),
+      0 30px 60px -20px rgba(12,16,51,0.35),
+      inset 0 0 0 2px rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .phone-screen {
+    border-radius: 36px;
+    overflow: hidden;
+    background: white;
+    position: relative;
+    aspect-ratio: 9/19.5;
+    display: flex; flex-direction: column;
+  }
+  .notch {
+    position: absolute; top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 110px; height: 26px;
+    background: #0c1033;
+    border-radius: 18px;
+    z-index: 20;
+  }
+  .home-indicator {
+    position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+    width: 96px; height: 4px; background: rgba(10,24,56,0.55);
+    border-radius: 99px; z-index: 30;
+  }
+  /* Android variant */
+  .phone.android {
+    background: #050a1c;
+    border-radius: 38px;
+    padding: 10px;
+  }
+  .phone.android .phone-screen { border-radius: 28px; }
+  .phone.android .notch { display: none; }
+  .hole-punch {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #050a1c; z-index: 20;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  .nav-pill-android {
+    position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 4px; background: rgba(10,24,56,0.6);
+    border-radius: 99px; z-index: 30;
+  }
+  /* OS badge above each phone */
+  .os-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 999px;
+    background: var(--midnight); color: var(--gold-soft);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .os-badge svg { width: 12px; height: 12px; }
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 22px 4px;
+    font-size: 11px; font-weight: 700;
+    color: var(--ink);
+    z-index: 10; position: relative;
+  }
+  .status-bar.dark { color: white; }
+  .status-icons { display: flex; gap: 4px; align-items: center; }
+  .status-icons svg { width: 14px; height: 14px; }
+
+  /* App Banner, custom designed for TCSW (navy + gold) */
+  .app-banner {
+    padding: 14px 16px 18px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 90% at 0% 100%, rgba(107,58,160,0.45), transparent 60%),
+      radial-gradient(140% 80% at 100% 0%, rgba(74,215,192,0.18), transparent 60%),
+      linear-gradient(135deg, #0a1838 0%, #142554 55%, #0a1838 100%);
+  }
+  /* TCSW diagonal stripe motif, left side */
+  .app-banner::before {
+    content: "";
+    position: absolute; top: 0; bottom: 0; left: 0; width: 32px;
+    background:
+      linear-gradient(115deg,
+        transparent 0 18%,
+        rgba(245,200,66,0.65) 18% 20%,
+        transparent 20% 38%,
+        rgba(74,215,192,0.55) 38% 40%,
+        transparent 40% 58%,
+        rgba(107,58,160,0.7) 58% 60%,
+        transparent 60% 78%,
+        rgba(245,200,66,0.35) 78% 79%,
+        transparent 79%);
+    pointer-events: none;
+  }
+  /* mirror on right */
+  .app-banner::after {
+    content: "";
+    position: absolute; top: 0; bottom: 0; right: 0; width: 32px;
+    background:
+      linear-gradient(245deg,
+        transparent 0 18%,
+        rgba(245,200,66,0.65) 18% 20%,
+        transparent 20% 38%,
+        rgba(74,215,192,0.55) 38% 40%,
+        transparent 40% 58%,
+        rgba(107,58,160,0.7) 58% 60%,
+        transparent 60% 78%,
+        rgba(245,200,66,0.35) 78% 79%,
+        transparent 79%);
+    pointer-events: none;
+  }
+  .banner-top { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2;}
+  .banner-eyebrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 9px; letter-spacing: 0.22em; font-weight: 700;
+    color: rgba(245,200,66,0.85); text-transform: uppercase;
+  }
+  .banner-year {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.18em;
+  }
+  /* Brand wordmark (logo removed; wordmark + stripes carry brand) */
+  .banner-lockup {
+    margin-top: 12px;
+    position: relative; z-index: 2;
+  }
+  .banner-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    line-height: 0.86;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: inline-block;
+    position: relative;
+  }
+  .banner-title .accent {
+    color: var(--gold);
+    display: block;
+    font-size: 24px;
+    margin-top: 2px;
+  }
+  /* Gold underline accent that echoes the diagonal stripe motif */
+  .banner-title::after {
+    content: "";
+    display: block;
+    width: 36px; height: 3px;
+    background: var(--gold);
+    border-radius: 99px;
+    margin-top: 8px;
+    box-shadow: 0 0 8px rgba(245,200,66,0.5);
+  }
+  .banner-sub {
+    margin-top: 8px;
+    font-size: 10px; color: rgba(255,255,255,0.78);
+    display: flex; gap: 8px; align-items: center;
+    position: relative; z-index: 2;
+    font-weight: 500;
+  }
+  .banner-sub .pulse {
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold); box-shadow: 0 0 8px var(--gold);
+  }
+  .banner-beta {
+    margin-top: 10px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 10px; border-radius: 999px;
+    background: rgba(245,200,66,0.12);
+    border: 1px solid rgba(245,200,66,0.4);
+    font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700;
+    color: var(--gold-soft);
+    position: relative; z-index: 2;
+  }
+  .banner-beta .beta-mark {
+    display: inline-block; width: 14px; height: 14px; border-radius: 4px;
+    background: var(--gold);
+    font-size: 9px; color: var(--midnight); text-align: center; line-height: 14px;
+    font-weight: 800; letter-spacing: 0;
+  }
+
+  /* App body */
+  .app-body {
+    flex: 1;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    background: #fafbfd;
+    position: relative;
+  }
+  .tabs {
+    display: flex; gap: 4px; padding: 12px 14px 10px;
+    background: white; border-bottom: 1px solid #f1f2f8;
+  }
+  .tab {
+    flex: 1; text-align: center;
+    font-size: 11px; font-weight: 600;
+    color: var(--muted);
+    padding: 9px 0;
+    border-radius: 999px;
+    cursor: default;
+    transition: background 0.25s;
+  }
+  .tab.active { background: var(--midnight); color: var(--gold); }
+  .day-strip {
+    display: flex; gap: 6px; padding: 10px 14px;
+    overflow-x: auto;
+    background: white;
+    border-bottom: 1px solid #eef0f7;
+  }
+  .day-chip {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #f4f5fa;
+    text-align: center;
+    min-width: 50px;
+    transition: all 0.25s;
+  }
+  .day-chip .d { font-size: 8px; font-weight: 700; color: var(--muted); letter-spacing: 0.1em; }
+  .day-chip .n { font-size: 14px; font-weight: 800; color: var(--ink); }
+  .day-chip.active { background: var(--midnight); }
+  .day-chip.active .d { color: var(--gold); }
+  .day-chip.active .n { color: white; }
+
+  .session-list { padding: 12px; overflow-y: auto; flex: 1; }
+  .time-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 700;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 8px 4px 6px;
+  }
+  .time-row .line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, #e6e7ef, transparent);
+  }
+  .session-card {
+    background: white;
+    border: 1px solid #ebedf5;
+    border-radius: 18px;
+    padding: 14px;
+    margin-bottom: 10px;
+    position: relative;
+    box-shadow: 0 2px 6px -3px rgba(10,24,56,0.06);
+  }
+  .session-card.sponsored {
+    border-color: rgba(245,200,66,0.6);
+    background: linear-gradient(180deg, #fff7d6 0%, white 100%);
+  }
+  .session-card.featured {
+    border-color: rgba(10,24,56,0.4);
+    background: linear-gradient(180deg, #f0f3fb 0%, white 100%);
+  }
+  .session-card.featured::before {
+    content: ""; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+    background: var(--midnight);
+    border-radius: 14px 0 0 14px;
+  }
+  .sc-tags {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .sc-tag {
+    font-size: 8px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 3px 6px; border-radius: 4px;
+    background: #eef0f7; color: var(--muted);
+  }
+  .sc-tag.green { background: #e0f7ee; color: #0a8f5c; }
+  .sc-tag.coral { background: #ffe3e7; color: #b91c2c; }
+  .sc-tag.gold  { background: var(--gold); color: var(--midnight); }
+  .sc-tag.indigo{ background: var(--midnight); color: var(--gold); }
+  .sc-tag.filling { background: var(--midnight); color: var(--gold); }
+  .sc-title { font-size: 12.5px; font-weight: 700; color: var(--ink); line-height: 1.25; }
+  .sc-meta { font-size: 10px; color: var(--muted); margin-top: 6px; display: flex; gap: 8px; flex-wrap: wrap;}
+  .sc-meta span { display: inline-flex; align-items: center; gap: 3px; }
+  .sc-speakers { font-size: 10px; color: #3a3d52; margin-top: 6px; }
+  .sc-speakers b { color: var(--ink); }
+  .save-btn {
+    position: absolute; top: 10px; right: 10px;
+    width: 22px; height: 22px; border-radius: 7px;
+    background: #f1f3f9; display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .save-btn.saved { background: var(--gold); color: var(--midnight); font-weight: 800; }
+
+  /* Tab bar, soft pill style */
+  .tab-bar {
+    display: flex; justify-content: space-between;
+    padding: 10px 8px 18px;
+    gap: 2px;
+    background: white;
+    border-top: 1px solid #f1f2f8;
+    position: relative;
+  }
+  .tab-item {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-size: 8px; color: var(--muted); font-weight: 600;
+    flex: 1;
+    padding: 5px 3px;
+    border-radius: 999px;
+    transition: all 0.3s;
+  }
+  .tab-item .ic {
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .tab-item.active {
+    background: rgba(245,200,66,0.16);
+    color: var(--midnight);
+  }
+  .tab-item.active .ic {
+    color: var(--midnight);
+    transform: translateY(-1px);
+  }
+  .tab-item .ic svg { width: 16px; height: 16px; }
+
+  .powered {
+    font-size: 6.5px; color: rgba(255,255,255,0.35);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 500;
+    margin-top: 10px; position: relative; z-index: 2;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .powered .attn {
+    color: rgba(245,200,66,0.7);
+    font-weight: 600;
+  }
+
+  /* SESSION DETAIL */
+  .sd-hero {
+    height: 130px;
+    background:
+      radial-gradient(120% 80% at 80% 30%, rgba(245,200,66,0.45), transparent 60%),
+      linear-gradient(135deg, #0a1838 0%, #142554 60%, #6b3aa0 100%);
+    position: relative;
+  }
+  .sd-hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  .sd-back {
+    position: absolute; top: 12px; left: 12px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,0.22); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 14px; font-weight: 600;
+    z-index: 2;
+  }
+  .sd-content { padding: 14px; flex: 1; overflow-y: auto; }
+  .sd-tag-row { display: flex; gap: 6px; margin-bottom: 8px; }
+  .sd-title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; line-height: 1.15; color: var(--ink); }
+  .sd-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 11px; color: #3a3d52; }
+  .sd-row .ico { width: 24px; height: 24px; background: #eef0f7; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; flex: 0 0 24px; }
+  .sd-row b { color: var(--ink); font-weight: 700; }
+  .sd-desc {
+    margin-top: 12px; font-size: 11.5px; line-height: 1.5; color: #3a3d52;
+  }
+  .sd-speakers {
+    margin-top: 12px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  }
+  .speaker-card {
+    background: #f6f7fb; border-radius: 10px; padding: 8px; display: flex; gap: 6px; align-items: center;
+  }
+  .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--midnight);
+    border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 10px; font-weight: 700;
+    flex: 0 0 28px;
+  }
+  .speaker-card div { font-size: 10px; line-height: 1.2; }
+  .speaker-card .name { font-weight: 700; color: var(--ink); }
+  .speaker-card .role { color: var(--muted); font-size: 9px; }
+  .sd-cta {
+    display: flex; gap: 6px; padding: 10px 14px;
+    background: white; border-top: 1px solid #eef0f7;
+  }
+  .sd-cta button {
+    flex: 1; padding: 10px;
+    border-radius: 10px; border: 0;
+    font-size: 11px; font-weight: 700;
+    background: #f1f3f9; color: var(--ink);
+  }
+  .sd-cta .primary {
+    background: var(--midnight);
+    color: var(--gold);
+  }
+  .sponsor-band {
+    margin-top: 12px;
+    background: white;
+    border: 1px solid #ebedf5;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sponsor-band .sb-logo {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--midnight);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-weight: 800; font-size: 11px; letter-spacing: -0.04em;
+    border: 1.5px solid var(--gold);
+  }
+  .sponsor-band .label { font-size: 8.5px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; }
+  .sponsor-band .name { font-size: 12px; color: var(--ink); font-weight: 700; }
+
+  /* MY SCHEDULE */
+  .ms-summary {
+    background:
+      radial-gradient(120% 80% at 100% 0%, rgba(245,200,66,0.18), transparent 60%),
+      linear-gradient(135deg, #0a1838 0%, #142554 100%);
+    color: white;
+    padding: 14px 16px;
+    position: relative; overflow: hidden;
+  }
+  .ms-summary::after {
+    content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 18px;
+    background: linear-gradient(245deg,
+      transparent 0 30%, rgba(245,200,66,0.4) 30% 32%,
+      transparent 32% 55%, rgba(74,215,192,0.35) 55% 57%,
+      transparent 57%);
+  }
+  .ms-summary .lbl { font-size: 9px; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; font-weight: 700; }
+  .ms-summary .big { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; margin-top: 4px; }
+  .ms-stats { display: flex; gap: 10px; margin-top: 10px; }
+  .ms-stat { background: rgba(255,255,255,0.08); padding: 8px 10px; border-radius: 10px; flex: 1; border: 1px solid rgba(245,200,66,0.18);}
+  .ms-stat .n { font-size: 16px; font-weight: 800; color: var(--gold); }
+  .ms-stat .l { font-size: 8px; letter-spacing: 0.1em; color: rgba(255,255,255,0.7); text-transform: uppercase; font-weight: 700; }
+
+  .timeline {
+    padding: 14px 12px; flex: 1; overflow-y: auto;
+  }
+  .tl-item {
+    display: flex; gap: 10px; margin-bottom: 12px;
+  }
+  .tl-time {
+    flex: 0 0 48px; font-size: 9px; font-weight: 700;
+    color: var(--muted); padding-top: 8px;
+    text-align: right;
+  }
+  .tl-time b { display: block; font-size: 11px; color: var(--ink); }
+  .tl-card {
+    flex: 1; background: white; border: 1px solid #ebedf5;
+    border-radius: 12px; padding: 10px; position: relative;
+  }
+  .tl-title { font-size: 12px; font-weight: 700; color: var(--ink); }
+  .tl-loc { font-size: 10px; color: var(--muted); margin-top: 3px; }
+  .tl-card.conflict { border-color: #ffbac1; }
+  .tl-card .conflict-flag {
+    display: inline-block; margin-top: 6px;
+    padding: 3px 6px; border-radius: 4px;
+    background: #ffe3e7; color: #b91c2c;
+    font-size: 8.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+
+  /* MAP */
+  .map-screen { flex: 1; position: relative; overflow: hidden;
+    background:
+      radial-gradient(800px 600px at 50% 50%, #d9e5f2, #aebdd2);
+  }
+  .map-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(12,16,51,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(12,16,51,0.05) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .river {
+    position: absolute;
+    width: 200%; height: 60px;
+    top: 60%; left: -20%;
+    background: linear-gradient(180deg, #7faedc, #5a8fc7);
+    transform: rotate(-12deg);
+    opacity: 0.7;
+    border-radius: 30px;
+  }
+  .road {
+    position: absolute;
+    background: rgba(255,255,255,0.55);
+    height: 4px; border-radius: 2px;
+  }
+  .pin {
+    position: absolute;
+    width: 28px; height: 28px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--coral);
+    transform: rotate(-45deg);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 11px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  }
+  .pin span { transform: rotate(45deg); }
+  .pin.aurora { background: var(--aurora-deep); }
+  .pin.gold { background: var(--gold); color: var(--midnight); }
+  .pin.midnight { background: var(--midnight); color: var(--gold); }
+  .pin.sm {
+    width: 22px; height: 22px;
+    font-size: 9px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+  }
+  .pin.sm span { font-size: 9px; }
+  .campus-halo {
+    position: absolute;
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    border: 2px dashed rgba(10,24,56,0.5);
+    background: rgba(245,200,66,0.12);
+    transform: translate(-50%, -50%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 800;
+    color: var(--midnight);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1;
+  }
+  .zoom-ctrl {
+    position: absolute;
+    top: 12px; right: 12px;
+    display: flex; flex-direction: column;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(10,24,56,0.22);
+    z-index: 5;
+  }
+  .zoom-btn {
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+    color: var(--midnight);
+    border-bottom: 1px solid #f1f2f8;
+  }
+  .zoom-btn:last-child { border-bottom: 0; }
+  .zoom-btn.locate { color: var(--gold-deep); font-size: 14px; }
+  .map-scale {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 9px; font-weight: 700; color: var(--midnight);
+    background: rgba(255,255,255,0.8);
+    padding: 3px 8px; border-radius: 6px;
+    z-index: 5;
+    backdrop-filter: blur(4px);
+  }
+  .scale-bar {
+    width: 40px; height: 3px; background: var(--midnight); border-radius: 99px;
+    position: relative;
+  }
+  .scale-bar::before, .scale-bar::after {
+    content: ""; position: absolute; top: -2px; width: 2px; height: 7px; background: var(--midnight);
+  }
+  .scale-bar::before { left: 0; }
+  .scale-bar::after { right: 0; }
+
+  /* ================ Google-Maps-style street view (Surly) ================ */
+  .gmap {
+    position: absolute; inset: 0;
+    background: #eef1f5;
+    overflow: hidden;
+  }
+  .gmap .blocks { position: absolute; inset: 0; }
+  .gmap .blk {
+    position: absolute;
+    background: #f4ecd4;
+    border: 1px solid #e8debf;
+  }
+  .gmap .blk.green { background: #c9e2b4; border-color: #b5d29a; }
+  .gmap .blk.pink { background: #f7dccd; border-color: #ecc9b5; }
+  .gmap .blk.parking {
+    background: repeating-linear-gradient(45deg, #e0e3e8 0 4px, #d3d7df 4px 8px);
+  }
+  .gmap .rd {
+    position: absolute;
+    background: #ffffff;
+    box-shadow: 0 0 0 1px #d0d6e0;
+  }
+  .gmap .rd.h { left: 0; right: 0; height: 14px; }
+  .gmap .rd.v { top: 0; bottom: 0; width: 14px; }
+  .gmap .rd.rail {
+    background: #d8dde6;
+    height: 6px;
+    box-shadow: none;
+    border-top: 2px dashed #a8b0bd;
+  }
+  .gmap .label {
+    position: absolute;
+    font-size: 6.5px;
+    font-weight: 600;
+    color: #5a6273;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    transform: translateY(-50%);
+    background: rgba(238,241,245,0.6);
+    padding: 1px 3px;
+    border-radius: 2px;
+  }
+  .gmap .biz {
+    position: absolute;
+    font-size: 7px;
+    font-weight: 700;
+    color: #2c2f44;
+    line-height: 1.05;
+    white-space: nowrap;
+    text-shadow:
+      -1px -1px 0 #f4ecd4, 1px -1px 0 #f4ecd4,
+      -1px  1px 0 #f4ecd4, 1px  1px 0 #f4ecd4;
+  }
+  .gmap .biz.muted { color: #6b7080; font-size: 6.5px; font-weight: 600; }
+  /* Big red Google-style pin */
+  .gpin {
+    position: absolute;
+    width: 26px; height: 36px;
+    transform: translate(-50%, -100%);
+    z-index: 6;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.28));
+  }
+  .gpin svg { width: 100%; height: 100%; display: block; }
+  .gpin-pulse {
+    position: absolute;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(220,68,52,0.22);
+    transform: translate(-50%, -50%);
+    animation: pinPulse 2.2s ease-out infinite;
+    z-index: 5;
+  }
+  @keyframes pinPulse {
+    0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+  }
+
+  /* ================ Surly hero photo card ================ */
+  .surly-card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 24px 50px -28px rgba(10,24,56,0.35), 0 12px 30px -18px rgba(10,24,56,0.18);
+    border: 1px solid var(--line);
+    margin-bottom: 18px;
+  }
+  .surly-hero {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, #8ab5d4 0%, #b8d4e6 35%, #c9d4dc 60%, #6e7480 60.5%, #5b6168 100%);
+  }
+  /* Sun + clouds */
+  .surly-hero::before {
+    content: "";
+    position: absolute; top: 14px; right: 30%;
+    width: 80px; height: 14px; border-radius: 99px;
+    background: rgba(255,255,255,0.55);
+    box-shadow: 60px 8px 0 -2px rgba(255,255,255,0.4), -50px 16px 0 -1px rgba(255,255,255,0.35);
+    filter: blur(1px);
+  }
+  /* Silos */
+  .surly-silos {
+    position: absolute;
+    right: 16px; bottom: 35%;
+    display: flex; gap: 4px; align-items: flex-end;
+  }
+  .surly-silo {
+    width: 26px; height: 110px;
+    background: linear-gradient(90deg, #aab2bc 0%, #d2d8de 30%, #aab2bc 60%, #8a9099 100%);
+    border-radius: 13px 13px 2px 2px;
+    box-shadow: inset -2px 0 4px rgba(0,0,0,0.18), inset 2px 0 4px rgba(255,255,255,0.15);
+    position: relative;
+  }
+  .surly-silo::before {
+    content: "";
+    position: absolute; top: 6px; left: 4px; right: 4px;
+    height: 5px;
+    border-top: 1.5px solid rgba(0,0,0,0.18);
+    border-bottom: 1.5px solid rgba(0,0,0,0.18);
+  }
+  .surly-silo.t1 { height: 124px; }
+  .surly-silo.t2 { height: 116px; }
+  .surly-silo.t3 { height: 108px; }
+  /* Main building */
+  .surly-bldg {
+    position: absolute;
+    left: 0; right: 36%; bottom: 35%;
+    height: 95px;
+    background:
+      linear-gradient(180deg, #3a4148 0%, #2e353d 100%);
+    border-bottom: 4px solid #1d2127;
+  }
+  /* Roof gradient highlight */
+  .surly-bldg::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 18px;
+    background: linear-gradient(180deg, #4a525c 0%, transparent 100%);
+  }
+  /* Vertical siding lines */
+  .surly-bldg::after {
+    content: "";
+    position: absolute; inset: 4px 0 4px 0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 9px);
+    pointer-events: none;
+  }
+  .surly-text {
+    position: absolute;
+    left: 14px; top: 28px;
+    font-family: 'Space Grotesk', 'Impact', sans-serif;
+    font-weight: 900;
+    color: #f0f2f5;
+    font-size: 30px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.4);
+    z-index: 2;
+  }
+  .surly-num {
+    position: absolute;
+    left: 14px; top: 10px;
+    color: rgba(255,255,255,0.65);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    z-index: 2;
+  }
+  /* Foreground walkway */
+  .surly-fg {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 35%;
+    background:
+      linear-gradient(180deg, #6e7480 0%, #5b6168 6%, #7a808a 60%, #888e98 100%);
+  }
+  .surly-path {
+    position: absolute;
+    left: 0; right: 0; bottom: 0; height: 75%;
+    background-image:
+      repeating-linear-gradient(90deg, #b8bcc4 0 18px, #a4a8b0 18px 22px);
+    transform: perspective(120px) rotateX(45deg);
+    transform-origin: bottom;
+    opacity: 0.85;
+  }
+  /* Trees / shrubs */
+  .surly-shrub {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #6f9460 0%, #4d7340 70%, #3a5530 100%);
+  }
+  .surly-tree {
+    position: absolute;
+    bottom: 36%;
+    width: 6px; height: 38px;
+    background:
+      linear-gradient(180deg, transparent 0 14%, #5a4530 14% 100%);
+  }
+  .surly-tree::before {
+    content: "";
+    position: absolute; top: -6px; left: -8px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #7fa56e 0%, #4d7040 100%);
+  }
+  .surly-meta {
+    padding: 14px 16px 16px;
+  }
+  .surly-meta .label-pill {
+    display: inline-block;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px;
+    background: var(--gold); color: var(--midnight);
+  }
+  .surly-meta h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px; font-weight: 700;
+    margin-top: 8px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .surly-meta .addr {
+    margin-top: 6px; font-size: 12.5px; color: var(--muted);
+  }
+  .surly-meta .addr b { color: var(--ink); }
+  .surly-meta .host {
+    margin-top: 10px; font-size: 12.5px; color: #3a3d52;
+    padding-top: 10px; border-top: 1px solid var(--line);
+  }
+  .surly-meta .host b { color: var(--ink); }
+  .map-card {
+    position: absolute;
+    left: 12px; right: 12px; bottom: 70px;
+    background: white;
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(12,16,51,0.18);
+  }
+  .map-card .label { font-size: 9px; letter-spacing: 0.15em; color: var(--coral); text-transform: uppercase; font-weight: 700; }
+  .map-card .title { font-size: 13px; font-weight: 700; color: var(--ink); margin-top: 4px; }
+  .map-card .meta { font-size: 10px; color: var(--muted); margin-top: 4px; }
+  .map-card .meta b { color: var(--ink); }
+  .map-card .ctas { display: flex; gap: 6px; margin-top: 10px; }
+  .map-card .ctas button {
+    flex: 1; padding: 7px; border-radius: 8px; border: 0;
+    font-size: 10px; font-weight: 700; background: #f1f3f9; color: var(--ink);
+  }
+  .map-card .ctas .primary { background: var(--midnight); color: white; }
+
+  /* SPONSOR HUB SCREEN */
+  .sponsor-hero {
+    padding: 14px 16px 20px;
+    background:
+      radial-gradient(140% 90% at 100% 0%, rgba(245,200,66,0.4), transparent 60%),
+      linear-gradient(135deg, #0a1838, #142554);
+    color: white;
+    position: relative; overflow: hidden;
+  }
+  .sponsor-hero::after {
+    content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 18px;
+    background: linear-gradient(115deg,
+      transparent 0 30%, rgba(245,200,66,0.6) 30% 32%,
+      transparent 32% 55%, rgba(74,215,192,0.4) 55% 57%,
+      transparent 57%);
+  }
+  .sponsor-hero .lbl { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 700;}
+  .sponsor-hero h2 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; margin-top: 6px; line-height: 1.05; }
+  .tier-row { display: flex; gap: 8px; padding: 10px; overflow-x: auto; background: white; border-bottom: 1px solid #eef0f7;}
+  .tier-pill {
+    flex: 0 0 auto; padding: 6px 12px; border-radius: 999px;
+    background: #f1f3f9; font-size: 10px; font-weight: 700; color: var(--muted);
+  }
+  .tier-pill.active { background: var(--midnight); color: white; }
+  .sponsor-grid { padding: 12px; flex: 1; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }
+  .sp-card {
+    background: white;
+    border: 1px solid #ebedf5;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .sp-logo {
+    width: 60px; height: 60px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 13px; letter-spacing: -0.04em;
+    text-align: center; line-height: 1;
+  }
+  .sp-name { font-size: 10px; font-weight: 700; color: var(--ink); text-align: center; }
+  .sp-tier { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); font-weight: 700;}
+
+  /* DASHBOARD (web view) */
+  .dashboard {
+    background: white;
+    border-radius: 20px;
+    box-shadow:
+      0 40px 80px -30px rgba(12,16,51,0.35),
+      0 20px 40px -20px rgba(12,16,51,0.25);
+    overflow: hidden;
+    border: 1px solid #e6e7ef;
+  }
+  .dash-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px; background: #f1f3f9; border-bottom: 1px solid #e6e7ef;
+  }
+  .dash-bar .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dash-bar .dot.r { background: #ff5a6e; } .dash-bar .dot.y { background: #fbbf24; } .dash-bar .dot.g { background: #00d4b1; }
+  .dash-bar .url {
+    margin-left: 14px; flex: 1; padding: 6px 12px; border-radius: 8px;
+    background: white; font-size: 11px; color: var(--muted); border: 1px solid #e6e7ef;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .dash-bar .url b { color: var(--ink); }
+  .dash-body { display: grid; grid-template-columns: 200px 1fr; min-height: 560px; }
+  .dash-side {
+    background: #0c1033;
+    color: white;
+    padding: 20px 14px;
+  }
+  .dash-side .brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 13px; margin-bottom: 22px;
+  }
+  .dash-side .brand .mark {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: var(--gold);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--midnight);
+  }
+  .dash-side .brand .mark svg { width: 14px; height: 14px; }
+  .side-section { font-size: 9px; letter-spacing: 0.18em; color: rgba(255,255,255,0.45); text-transform: uppercase; margin: 14px 8px 8px; font-weight: 700; }
+  .side-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border-radius: 8px;
+    font-size: 12px; color: rgba(255,255,255,0.75);
+    margin-bottom: 2px;
+  }
+  .side-link.active { background: rgba(245,200,66,0.12); color: var(--gold-soft); border-left: 2px solid var(--gold); padding-left: 8px; }
+  .side-link .d { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+  .side-link.active .d { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+  .dash-main { padding: 24px 28px; background: #fafbfd; }
+  .dash-hd { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+  .dash-hd h1 {
+    font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .dash-hd .sub { color: var(--muted); font-size: 13px; margin-top: 3px; }
+  .dash-actions { display: flex; gap: 8px; }
+  .dash-actions button {
+    padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line);
+    background: white; font-size: 12px; font-weight: 600; color: var(--ink);
+  }
+  .dash-actions .primary { background: var(--midnight); color: white; border-color: var(--midnight); }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+  .kpi {
+    background: white; border: 1px solid var(--line);
+    border-radius: 14px; padding: 14px;
+  }
+  .kpi .l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
+  .kpi .v { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: var(--ink); margin-top: 4px; }
+  .kpi .delta { font-size: 11px; font-weight: 700; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; }
+  .delta.up { color: #0a8f5c; }
+  .delta.down { color: #b91c2c; }
+  .delta.gold { color: #92670a; }
+  .panels { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; margin-top: 16px; }
+  .panel {
+    background: white; border: 1px solid var(--line); border-radius: 14px; padding: 16px;
+  }
+  .panel h3 {
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: var(--ink);
+    letter-spacing: 0.04em; margin-bottom: 10px;
+  }
+  .chart {
+    height: 180px; position: relative; margin-top: 10px;
+  }
+  .chart svg { width: 100%; height: 100%; }
+  .legend { display: flex; gap: 12px; margin-top: 8px; font-size: 11px; color: var(--muted); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: middle; }
+
+  .placement-list { display: grid; gap: 8px; }
+  .placement-row {
+    display: grid; grid-template-columns: 1fr auto; gap: 8px;
+    padding: 10px 12px; background: #fafbfd; border-radius: 10px; border: 1px solid var(--line);
+  }
+  .placement-row .ttl { font-size: 12px; font-weight: 700; color: var(--ink); }
+  .placement-row .mt { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .placement-row .num { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: var(--ink); text-align: right; }
+  .placement-row .num small { font-weight: 500; font-size: 10px; color: var(--muted); display: block; }
+
+  .editor-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 8px; }
+  .field {
+    background: #fafbfd; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px;
+  }
+  .field .lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
+  .field .val { font-size: 12px; color: var(--ink); margin-top: 2px; font-weight: 500; }
+  .field.editing { border-color: var(--gold-deep); background: white; box-shadow: 0 0 0 3px rgba(245,200,66,0.22); }
+  .field.editing .val::after {
+    content: ""; display: inline-block; width: 1px; height: 12px; background: var(--gold-deep);
+    vertical-align: middle; margin-left: 2px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ============================ WEBSITE / APP-STORE SCREENS ============================ */
+  .website-frame {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 30px 60px -25px rgba(10,24,56,0.35), 0 18px 38px -18px rgba(10,24,56,0.22);
+    overflow: hidden; border: 1px solid #e6e7ef;
+  }
+  .web-hero {
+    padding: 40px 36px 44px;
+    position: relative; overflow: hidden;
+    background:
+      radial-gradient(70% 90% at 100% 0%, rgba(245,200,66,0.18), transparent 60%),
+      radial-gradient(60% 80% at 0% 100%, rgba(107,58,160,0.25), transparent 60%),
+      linear-gradient(135deg, #0a1838 0%, #142554 100%);
+    color: white;
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: center;
+  }
+  .web-hero::before, .web-hero::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 22px;
+    background: linear-gradient(115deg,
+      transparent 0 25%, rgba(245,200,66,0.5) 25% 27%,
+      transparent 27% 50%, rgba(74,215,192,0.35) 50% 52%,
+      transparent 52% 75%, rgba(107,58,160,0.55) 75% 77%,
+      transparent 77%);
+  }
+  .web-hero::before { left: 0; }
+  .web-hero::after { right: 0; transform: scaleX(-1); }
+  .web-hero-copy h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 34px; font-weight: 800; line-height: 1; color: var(--gold);
+    text-transform: uppercase; letter-spacing: -0.005em;
+    margin-bottom: 4px;
+  }
+  .web-hero-copy h1 .small {
+    display: block; font-size: 22px; color: var(--gold);
+  }
+  .web-hero-copy .eyebrow {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(245,200,66,0.7); font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .web-hero-copy .pitch {
+    color: rgba(255,255,255,0.78); font-size: 14px; margin-top: 12px; max-width: 380px;
+  }
+  .web-hero-copy .download-row {
+    display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap;
+  }
+  .store-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 14px; border-radius: 12px;
+    background: black; color: white;
+    text-decoration: none; font-family: 'Inter', sans-serif;
+  }
+  .store-badge .ic { width: 22px; height: 22px; flex: 0 0 22px; }
+  .store-badge .ic svg { width: 100%; height: 100%; fill: currentColor; }
+  .store-badge .txt { display: flex; flex-direction: column; line-height: 1; }
+  .store-badge .txt small { font-size: 8px; color: rgba(255,255,255,0.75); }
+  .store-badge .txt b { font-size: 13px; font-weight: 600; margin-top: 2px; }
+  .web-nav {
+    background: var(--midnight); padding: 14px 36px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .web-nav-left {
+    display: flex; align-items: center; gap: 10px;
+    color: white; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .web-nav-left .mn-mark { width: 26px; height: 28px; }
+  .web-nav-right {
+    display: flex; align-items: center; gap: 4px;
+    font-family: 'Inter', sans-serif;
+  }
+  .web-nav-right a {
+    color: rgba(255,255,255,0.78); text-decoration: none;
+    font-size: 12px; font-weight: 600;
+    padding: 7px 14px; border-radius: 999px;
+    letter-spacing: 0.02em;
+    transition: color 0.2s, background 0.2s;
+  }
+  .web-nav-right a:hover { color: white; background: rgba(255,255,255,0.06); }
+  .web-nav-right .cta {
+    color: var(--gold);
+    border: 1px solid rgba(245,200,66,0.55);
+    margin-left: 6px;
+  }
+  .web-nav-right .cta:hover {
+    background: rgba(245,200,66,0.12);
+    color: var(--gold);
+  }
+  .web-phone-cluster {
+    display: flex; align-items: flex-end; justify-content: center; gap: 18px;
+    transform: translateY(24px);
+  }
+  .web-phone-cluster .phone { width: 215px; padding: 8px; border-radius: 36px; }
+  .web-phone-cluster .phone .phone-screen { border-radius: 28px; }
+  .web-phone-cluster .phone.android { width: 200px; padding: 7px; border-radius: 32px; }
+  .web-phone-cluster .phone.android .phone-screen { border-radius: 24px; }
+  .web-phone-cluster .phone .notch { top: 5px; width: 70px; height: 16px; border-radius: 12px; }
+  .web-phone-cluster .phone .home-indicator { bottom: 4px; width: 60px; height: 3px; }
+  .web-phone-cluster .phone .hole-punch { top: 7px; width: 7px; height: 7px; }
+  .web-phone-cluster .phone .nav-pill-android { bottom: 4px; width: 70px; height: 3px; }
+  /* Compact scale for mini-app inside web hero phones */
+  .web-phone-cluster .status-bar {
+    padding: 6px 14px 2px; font-size: 8px;
+  }
+  .web-phone-cluster .status-bar .status-icons { font-size: 7px; gap: 2px; }
+  .web-phone-cluster .app-banner {
+    padding: 6px 10px 8px !important;
+  }
+  .web-phone-cluster .banner-top { font-size: 6.5px; }
+  .web-phone-cluster .banner-eyebrow { font-size: 6.5px; letter-spacing: 0.18em; }
+  .web-phone-cluster .banner-year { font-size: 7px; letter-spacing: 0.14em; }
+  .web-phone-cluster .banner-lockup { margin-top: 4px !important; }
+  .web-phone-cluster .banner-title { font-size: 13px !important; line-height: 0.86 !important; }
+  .web-phone-cluster .banner-title .accent { font-size: 11px !important; margin-top: 1px !important; }
+  .web-phone-cluster .banner-title::after { width: 18px; height: 2px; margin-top: 4px; }
+  .web-phone-cluster .banner-sub { font-size: 6.5px; margin-top: 4px; }
+  .web-phone-cluster .banner-sub .pulse { width: 4px; height: 4px; }
+  .web-phone-cluster .powered { display: none; }
+  .web-phone-cluster .banner-beta { display: none; }
+  .web-phone-cluster .day-strip {
+    padding: 5px 8px; gap: 4px;
+  }
+  .web-phone-cluster .day-chip { padding: 4px 7px; min-width: 32px; }
+  .web-phone-cluster .day-chip .d { font-size: 6.5px; }
+  .web-phone-cluster .day-chip .n { font-size: 10px; }
+  .web-phone-cluster .session-list { padding: 6px 8px; }
+  .web-phone-cluster .time-row {
+    font-size: 6.5px; margin: 4px 2px 3px;
+  }
+  .web-phone-cluster .session-card {
+    padding: 6px 7px; margin-bottom: 4px; border-radius: 9px;
+  }
+  .web-phone-cluster .sc-tags { gap: 2px; margin-bottom: 3px; }
+  .web-phone-cluster .sc-tag {
+    font-size: 5.5px; padding: 1.5px 3px; border-radius: 3px;
+  }
+  .web-phone-cluster .sc-title { font-size: 8px; line-height: 1.15; }
+  .web-phone-cluster .sc-speakers { font-size: 6.5px; margin-top: 3px; }
+  .web-phone-cluster .sc-meta { font-size: 6.5px; margin-top: 3px; gap: 4px; }
+  .web-phone-cluster .save-btn { width: 12px; height: 12px; font-size: 7px; border-radius: 4px; top: 6px; right: 6px; }
+  .web-phone-cluster .tab-bar { padding: 4px 4px 9px; }
+  .web-phone-cluster .tab-item { font-size: 5.5px; gap: 1px; padding: 3px 1px; }
+  .web-phone-cluster .tab-item .ic { width: 13px; height: 13px; }
+  .web-phone-cluster .tab-item .ic svg { width: 9px; height: 9px; }
+  .web-body-strip {
+    padding: 24px 36px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    background: white;
+  }
+  .web-feat {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .web-feat .num {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; color: var(--midnight);
+  }
+  .web-feat .lbl {
+    font-size: 11px; color: var(--muted); font-weight: 600;
+  }
+
+  /* App Store / Play Store inside phones */
+  .store-screen {
+    flex: 1; overflow-y: auto;
+    background: white;
+  }
+  .ios-store-header {
+    padding: 14px; border-bottom: 1px solid #f1f2f8;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .android-store-header {
+    padding: 12px 14px; border-bottom: 1px solid #f1f2f8;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .app-icon {
+    width: 64px; height: 64px; flex: 0 0 64px;
+    border-radius: 16px;
+    background: var(--midnight);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px -2px rgba(10,24,56,0.3);
+    position: relative; overflow: hidden;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    color: var(--gold);
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+  .app-icon::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(115deg, transparent 0 30%, rgba(245,200,66,0.4) 30% 32%, transparent 32% 55%, rgba(74,215,192,0.25) 55% 57%, transparent 57% 78%, rgba(107,58,160,0.35) 78% 79%, transparent 79%);
+  }
+  .app-icon span { position: relative; z-index: 1; }
+  .app-icon.android { border-radius: 50%; }
+  .store-app-info { flex: 1; min-width: 0; }
+  .store-app-info .ttl {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: var(--ink); line-height: 1.15;
+  }
+  .store-app-info .dev { font-size: 10px; color: var(--muted); margin-top: 2px;}
+  .store-app-info .meta {
+    font-size: 9.5px; color: var(--muted); margin-top: 4px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .store-app-info .meta b { color: var(--ink); }
+  .install-btn {
+    padding: 7px 18px; border-radius: 999px;
+    font-weight: 700; font-size: 11px; border: 0;
+    background: #007aff; color: white;
+  }
+  .install-btn.android { background: #01875f; }
+  .store-shots {
+    display: flex; gap: 8px; padding: 14px;
+    overflow-x: auto;
+  }
+  .store-shot {
+    flex: 0 0 110px; height: 200px;
+    border-radius: 14px;
+    background: linear-gradient(160deg, #0a1838 0%, #142554 100%);
+    position: relative; overflow: hidden;
+    border: 1px solid rgba(245,200,66,0.18);
+    display: flex; flex-direction: column;
+  }
+  .store-shot .mini-banner {
+    padding: 8px 8px 6px; color: var(--gold);
+    font-family: 'Space Grotesk', sans-serif; font-weight: 800;
+    font-size: 9.5px; line-height: 1; letter-spacing: -0.01em;
+    text-transform: uppercase; text-align: center;
+  }
+  .store-shot .mini-banner .small { display: block; font-size: 7.5px; opacity: 0.85; margin-top: 2px; }
+  .store-shot .mini-body {
+    flex: 1; background: white; margin: 6px;
+    border-radius: 8px; padding: 6px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .mini-pill { height: 6px; border-radius: 2px; background: #eef0f7; }
+  .mini-pill.gold { background: rgba(245,200,66,0.6); }
+  .mini-pill.dark { background: var(--midnight); }
+  .mini-pill.w70 { width: 70%; } .mini-pill.w50 { width: 50%; } .mini-pill.w90 { width: 90%; }
+  .store-foot {
+    padding: 12px 14px 14px;
+    border-top: 1px solid #f1f2f8;
+  }
+  .store-stat-row {
+    display: flex; justify-content: space-around; padding: 10px 0;
+    border-bottom: 1px solid #f1f2f8;
+  }
+  .store-stat {
+    text-align: center; flex: 1;
+    border-right: 1px solid #f1f2f8;
+  }
+  .store-stat:last-child { border-right: 0; }
+  .store-stat .v { font-family: 'Space Grotesk',sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .store-stat .l { font-size: 8.5px; color: var(--muted); font-weight: 600; letter-spacing: 0.06em; margin-top: 2px; }
+
+  /* Onboarding screen */
+  .onb-screen {
+    flex: 1; display: flex; flex-direction: column;
+    background: white;
+  }
+  .onb-hero {
+    padding: 40px 24px 24px;
+    background:
+      radial-gradient(120% 80% at 100% 0%, rgba(245,200,66,0.22), transparent 60%),
+      linear-gradient(160deg, #0a1838 0%, #142554 100%);
+    color: white; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .onb-hero::before, .onb-hero::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 14px;
+    background: linear-gradient(115deg,
+      transparent 0 30%, rgba(245,200,66,0.55) 30% 32%,
+      transparent 32% 60%, rgba(107,58,160,0.45) 60% 62%, transparent 62%);
+  }
+  .onb-hero::before { left: 0; }
+  .onb-hero::after { right: 0; transform: scaleX(-1); }
+  .onb-mark { display: inline-block; }
+  .onb-mark .mn-mark { width: 64px; height: 70px; margin-bottom: 12px; }
+  .onb-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 800; line-height: 0.9;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .onb-title .small { display: block; font-size: 18px; margin-top: 3px;}
+  .onb-sub {
+    margin-top: 12px; font-size: 11px;
+    color: rgba(255,255,255,0.78);
+  }
+  .onb-content {
+    flex: 1; padding: 18px 18px 14px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .onb-row {
+    display: flex; gap: 10px; padding: 10px 12px;
+    background: #fafbfd; border: 1px solid #f1f2f8;
+    border-radius: 14px;
+    align-items: center;
+  }
+  .onb-row .ic {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: var(--midnight); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 32px; font-size: 14px;
+  }
+  .onb-row .copy { flex: 1; }
+  .onb-row .copy .h { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+  .onb-row .copy .p { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .onb-cta {
+    padding: 12px 14px 20px;
+  }
+  .onb-cta button {
+    width: 100%; padding: 14px; border-radius: 999px; border: 0;
+    background: var(--midnight); color: var(--gold);
+    font-weight: 800; font-size: 13px; letter-spacing: 0.03em;
+  }
+  .onb-dots {
+    display: flex; gap: 5px; justify-content: center; margin: 4px 0 8px;
+  }
+  .onb-dot { width: 6px; height: 6px; border-radius: 50%; background: #d6d8e3; }
+  .onb-dot.active { background: var(--midnight); width: 18px; border-radius: 99px; }
+
+  /* ============================ ARCHITECTURE ============================ */
+  .arch-section {
+    background: linear-gradient(180deg, #ffffff 0%, #f4f5fa 100%);
+    padding: 80px 24px 96px;
+    border-top: 1px solid #e6e7ef;
+  }
+  .arch-inner { max-width: 1240px; margin: 0 auto; }
+  .arch-head { text-align: center; margin-bottom: 48px; }
+  .arch-head .scene-num {
+    display: inline-block; margin-bottom: 14px;
+  }
+  .arch-head h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px, 3.4vw, 42px);
+    font-weight: 700; color: var(--midnight);
+    letter-spacing: -0.02em; line-height: 1.05;
+  }
+  .arch-head p {
+    color: var(--muted); margin-top: 12px;
+    font-size: 16px; max-width: 680px; margin-left: auto; margin-right: auto;
+  }
+
+  /* Flow diagram */
+  .flow {
+    background: white;
+    border-radius: 20px;
+    padding: 36px 28px;
+    border: 1px solid var(--line);
+    box-shadow: 0 24px 50px -28px rgba(10,24,56,0.20), 0 14px 30px -20px rgba(10,24,56,0.10);
+    margin-bottom: 28px;
+  }
+  .flow-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 700; color: var(--gold-deep);
+    margin-bottom: 6px; text-align: center;
+  }
+  .flow-sub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 700; color: var(--midnight);
+    text-align: center; margin-bottom: 36px;
+    letter-spacing: -0.01em;
+  }
+  .flow-row {
+    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 14px; align-items: stretch;
+    margin-bottom: 18px;
+  }
+  .flow-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold-deep);
+    font-size: 28px; font-weight: 700;
+    line-height: 1; padding-top: 32px;
+  }
+  .flow-box {
+    background: white;
+    border: 2px solid var(--midnight);
+    border-radius: 14px;
+    padding: 16px 18px;
+    text-align: center;
+    display: flex; flex-direction: column; gap: 6px;
+    position: relative;
+  }
+  .flow-box.gold {
+    background: var(--midnight);
+    border-color: var(--midnight);
+    color: var(--gold-soft);
+  }
+  .flow-box.gold .label,
+  .flow-box.gold .name { color: var(--gold); }
+  .flow-box.gold .desc { color: rgba(255,255,255,0.78); }
+  .flow-box .icon {
+    font-size: 26px;
+    line-height: 1;
+    margin: 0 auto 4px;
+  }
+  .flow-box .label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .flow-box .name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px; font-weight: 700; color: var(--midnight);
+    line-height: 1.15;
+  }
+  .flow-box .desc {
+    font-size: 12px; color: #3a3d52; line-height: 1.35;
+    margin-top: 2px;
+  }
+  .flow-stack {
+    margin-top: 8px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  }
+  .stack-card {
+    background: #fafbfd;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .stack-card .role {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
+    color: var(--gold-deep); text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .stack-card .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 800;
+    color: var(--midnight);
+    line-height: 1; margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .stack-card .what {
+    font-size: 12px; color: #3a3d52; line-height: 1.4;
+  }
+  .stack-card .what b { color: var(--ink); font-weight: 700; }
+  /* Connector lines between flow stages */
+  .flow-stack-label {
+    text-align: center; margin: 28px 0 12px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+    color: var(--muted); text-transform: uppercase;
+    position: relative;
+  }
+  .flow-stack-label::before,
+  .flow-stack-label::after {
+    content: ""; position: absolute; top: 50%;
+    height: 1px; width: 30%;
+    background: linear-gradient(90deg, transparent, var(--line), transparent);
+  }
+  .flow-stack-label::before { left: 0; }
+  .flow-stack-label::after { right: 0; }
+
+  /* User Journey row */
+  .journey {
+    background: var(--midnight);
+    border-radius: 20px;
+    padding: 36px 28px;
+    color: white;
+    position: relative; overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .journey::before, .journey::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 16px;
+    background: linear-gradient(115deg,
+      transparent 0 25%, rgba(245,200,66,0.5) 25% 27%,
+      transparent 27% 50%, rgba(74,215,192,0.35) 50% 52%,
+      transparent 52% 75%, rgba(107,58,160,0.45) 75% 77%, transparent 77%);
+  }
+  .journey::before { left: 0; }
+  .journey::after { right: 0; transform: scaleX(-1); }
+  .journey-title { color: var(--gold); text-align: center; }
+  .journey-sub { color: white !important; }
+  .journey-row {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    position: relative; z-index: 1;
+  }
+  .step-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(245,200,66,0.22);
+    border-radius: 14px;
+    padding: 18px 16px;
+    position: relative;
+  }
+  .step-card .step-num {
+    position: absolute; top: -12px; left: 16px;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--gold); color: var(--midnight);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-card .step-icon {
+    font-size: 22px; margin-bottom: 8px;
+  }
+  .step-card .step-h {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--gold-soft); line-height: 1.2;
+  }
+  .step-card .step-p {
+    font-size: 11px; color: rgba(255,255,255,0.74);
+    margin-top: 6px; line-height: 1.45;
+  }
+  .step-card .step-tag {
+    display: inline-block; margin-top: 8px;
+    font-size: 8.5px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 7px; border-radius: 4px;
+    background: rgba(245,200,66,0.15); color: var(--gold-soft);
+    border: 1px solid rgba(245,200,66,0.3);
+  }
+
+  /* Two-column note for tech audience */
+  .arch-notes {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .arch-note {
+    background: white; border: 1px solid var(--line);
+    border-radius: 14px; padding: 22px 22px;
+  }
+  .arch-note h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px; color: var(--midnight); font-weight: 700;
+    margin-bottom: 8px; letter-spacing: 0.02em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .arch-note h4 .pill {
+    font-size: 9px; padding: 3px 8px; border-radius: 999px;
+    background: var(--midnight); color: var(--gold);
+    font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .arch-note p { font-size: 13px; color: #3a3d52; line-height: 1.55; }
+  .arch-note ul {
+    list-style: none; margin-top: 10px; display: grid; gap: 6px;
+  }
+  .arch-note li {
+    font-size: 12.5px; color: #3a3d52; padding-left: 18px; position: relative;
+  }
+  .arch-note li::before {
+    content: "→"; position: absolute; left: 0; top: 0; color: var(--gold-deep); font-weight: 700;
+  }
+
+  @media (max-width: 880px) {
+    .flow-row { grid-template-columns: 1fr; }
+    .flow-arrow { padding: 0; transform: rotate(90deg); }
+    .flow-stack, .journey-row, .arch-notes { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* footer */
+  footer {
+    background: #0a1838;
+    color: rgba(255,255,255,0.7);
+    padding: 40px 24px;
+    text-align: center;
+  }
+  footer .brand-mark { justify-content: center; margin-bottom: 12px; color: white; }
+  footer .small { font-size: 12px; }
+  footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+
+  /* TICKETS / EXTRAS */
+  .ticket-screen { padding: 14px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .ticket {
+    background: white; border-radius: 14px; padding: 14px;
+    border: 1px solid #ebedf5;
+    position: relative; overflow: hidden;
+  }
+  .ticket::after {
+    content: ""; position: absolute; right: 80px; top: 0; bottom: 0;
+    border-left: 2px dashed #d4d6e2;
+  }
+  .qr {
+    position: absolute; right: 14px; top: 14px;
+    width: 56px; height: 56px;
+    background:
+      conic-gradient(from 90deg, var(--ink) 0 25%, white 0 50%, var(--ink) 0 75%, white 0),
+      conic-gradient(from 0deg at 30% 30%, var(--ink), white, var(--ink), white);
+    background-blend-mode: multiply;
+    background-size: 14px 14px, 100% 100%;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+  }
+  .ticket .lb { font-size: 9px; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; }
+  .ticket .nm { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-top: 4px; }
+  .ticket .role { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .ticket .row2 { display: flex; gap: 14px; margin-top: 10px; }
+  .ticket .row2 div { font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
+  .ticket .row2 div b { display: block; font-size: 11px; color: var(--ink); font-weight: 700; letter-spacing: 0; text-transform: none; margin-top: 2px;}
+
+  .net-screen { padding: 12px; overflow-y: auto; flex: 1; }
+  .net-card {
+    background: white; border: 1px solid #ebedf5; border-radius: 14px;
+    padding: 10px; margin-bottom: 8px; display: flex; gap: 10px; align-items: center;
+  }
+  .net-card .av {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--midnight);
+    border: 2px solid var(--gold);
+    color: var(--gold); font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 40px;
+  }
+  .net-card .info { flex: 1; }
+  .net-card .name { font-size: 12px; font-weight: 700; color: var(--ink); }
+  .net-card .role { font-size: 10px; color: var(--muted); }
+  .net-card .match {
+    font-size: 9px; font-weight: 700; padding: 3px 6px;
+    background: #e0f7ee; color: #0a8f5c; border-radius: 4px;
+    margin-top: 4px; display: inline-block;
+  }
+  .net-card .btn-meet {
+    background: var(--midnight); color: var(--gold); border: 0;
+    padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: 700;
+  }
+  /* Opt-in directory card (replaces match-based meet card) */
+  .dir-card {
+    background: white; border: 1px solid #ebedf5; border-radius: 14px;
+    padding: 12px; margin-bottom: 10px;
+  }
+  .dir-top { display: flex; gap: 10px; align-items: flex-start; }
+  .dir-top .av {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--midnight);
+    border: 2px solid var(--gold);
+    color: var(--gold); font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 40px;
+  }
+  .dir-top .info { flex: 1; min-width: 0; }
+  .dir-top .name { font-size: 12.5px; font-weight: 700; color: var(--ink); }
+  .dir-top .role { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .dir-meta {
+    font-size: 10px; color: #3a3d52; margin-top: 4px; line-height: 1.35;
+  }
+  .dir-contacts {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px;
+    padding-top: 9px; border-top: 1px dashed #eef0f7;
+  }
+  .dir-link {
+    font-size: 10px; font-weight: 700;
+    padding: 5px 9px; border-radius: 999px;
+    background: #f4f5fa;
+    color: var(--midnight);
+    border: 1px solid #ebedf5;
+    text-decoration: none;
+  }
+  .dir-link:first-child {
+    background: var(--midnight); color: var(--gold); border-color: var(--midnight);
+  }
+  .dir-chev {
+    flex: 0 0 14px;
+    font-size: 22px; line-height: 1; font-weight: 400;
+    color: #b9bdcb;
+    align-self: center;
+    margin-left: 4px;
+  }
+  .dir-card.tappable { cursor: pointer; }
+  .dir-card.tappable .dir-top { gap: 10px; align-items: center; }
+
+  /* ============ Profile Detail Screen (Scene 07, phone 3) ============ */
+  .pd-screen { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: white; }
+  .pd-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 14px; background: white;
+    border-bottom: 1px solid #f1f2f8;
+  }
+  .pd-topbar .back, .pd-topbar .share {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #f4f5fa;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--midnight); font-size: 14px;
+  }
+  .pd-topbar .title {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .pd-hero {
+    padding: 22px 18px 18px;
+    background:
+      radial-gradient(120% 80% at 0% 100%, rgba(245,200,66,0.16), transparent 60%),
+      linear-gradient(150deg, #0a1838 0%, #142554 100%);
+    color: white;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+  }
+  .pd-hero::before, .pd-hero::after {
+    content: "";
+    position: absolute; top: 0; bottom: 0; width: 16px;
+    background: linear-gradient(115deg,
+      transparent 0 30%, rgba(245,200,66,0.5) 30% 32%,
+      transparent 32% 60%, rgba(74,215,192,0.35) 60% 62%, transparent 62%);
+  }
+  .pd-hero::before { left: 0; }
+  .pd-hero::after { right: 0; transform: scaleX(-1); }
+  .pd-avatar {
+    width: 76px; height: 76px; border-radius: 50%;
+    background: var(--midnight);
+    border: 3px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800; font-size: 26px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    position: relative; z-index: 1;
+  }
+  .pd-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 18px; line-height: 1.1;
+    color: white;
+    position: relative; z-index: 1;
+  }
+  .pd-title {
+    font-size: 11px; color: var(--gold);
+    margin-top: 3px; font-weight: 600;
+    letter-spacing: 0.04em;
+    position: relative; z-index: 1;
+  }
+  .pd-co {
+    font-size: 11px; color: rgba(255,255,255,0.75);
+    margin-top: 2px;
+    position: relative; z-index: 1;
+  }
+  .pd-loc {
+    font-size: 10px; color: rgba(255,255,255,0.65);
+    margin-top: 8px;
+    position: relative; z-index: 1;
+  }
+  .pd-chips {
+    display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;
+    margin-top: 10px;
+    position: relative; z-index: 1;
+  }
+  .pd-chip {
+    font-size: 8.5px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 8px; border-radius: 999px;
+    background: rgba(245,200,66,0.18);
+    color: var(--gold-soft);
+    border: 1px solid rgba(245,200,66,0.32);
+  }
+  .pd-section {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f2f8;
+  }
+  .pd-section .hd {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pd-section .body {
+    font-size: 12px; color: #2c2f44; line-height: 1.5;
+  }
+  .pd-list {
+    list-style: none; display: grid; gap: 6px; margin: 0;
+  }
+  .pd-list li {
+    font-size: 12px; color: #2c2f44; padding-left: 16px; position: relative;
+  }
+  .pd-list li::before {
+    content: "•"; color: var(--gold-deep);
+    position: absolute; left: 4px; top: 0;
+    font-weight: 700;
+  }
+  .pd-contact-banner {
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    background: #f0f7e9; border: 1px solid #cde0b8;
+    border-radius: 8px;
+    display: flex; gap: 6px; align-items: center;
+    font-size: 9.5px; color: #3a5f1f; line-height: 1.3;
+  }
+  .pd-contact-banner b { color: #2a4815; }
+  .pd-contacts {
+    display: grid; gap: 6px;
+  }
+  .pd-contact {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 11px;
+    background: white; border: 1px solid #ebedf5;
+    border-radius: 10px;
+  }
+  .pd-contact .ic {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--midnight); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex: 0 0 30px;
+  }
+  .pd-contact .lbl { flex: 1; min-width: 0; }
+  .pd-contact .lbl .k {
+    font-size: 9px; color: var(--muted); letter-spacing: 0.12em;
+    text-transform: uppercase; font-weight: 700;
+  }
+  .pd-contact .lbl .v {
+    font-size: 11.5px; font-weight: 600; color: var(--ink); margin-top: 1px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .pd-contact .arrow {
+    font-size: 14px; color: #b9bdcb; font-weight: 400;
+  }
+  .pd-contact-disabled {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 11px;
+    background: #fafbfd; border: 1px dashed #e2e4ed;
+    border-radius: 10px;
+    opacity: 0.65;
+  }
+  .pd-contact-disabled .ic {
+    width: 26px; height: 26px; border-radius: 7px;
+    background: #eef0f7; color: #b9bdcb;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex: 0 0 26px;
+  }
+  .pd-contact-disabled .lbl {
+    font-size: 10px; color: var(--muted);
+    flex: 1;
+  }
+  .pd-contact-disabled .lbl b { color: #6b7080; font-weight: 600; }
+  .pd-contact-disabled .tag {
+    font-size: 8px; padding: 2px 6px; border-radius: 4px;
+    background: #eef0f7; color: var(--muted);
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+  }
+
+  /* Mini caption under phones */
+  .phone-caption {
+    margin-top: 18px; text-align: center;
+    font-size: 12px; color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .phone-cluster { display: flex; flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+
+<!-- =================== HERO =================== -->
+<section class="hero">
+  <div class="right-stripes"></div>
+  <div class="hero-inner">
+    <div class="nav">
+      <div class="brand-mark">
+        TCSW · 2026 · Mobile Concept
+      </div>
+      <div class="nav-pill">Powered by <span style="color:var(--gold); margin-left:4px;">Attentio</span></div>
+    </div>
+    <h1 class="hero-title">
+      Five days. Three campuses. <em>One pocket-sized HQ</em> for the Twin Cities startup community.
+    </h1>
+    <p class="hero-sub">
+      A mobile companion concept for Twin Cities Startup Week. September 14–18, 2026.
+      Schedule discovery, sponsor visibility, and event ownership that BETA.MN actually controls,
+      year over year.
+    </p>
+    <div class="hero-meta">
+      <span class="meta-chip"><i class="dot"></i> Sept 14–18, 2026 · MSP</span>
+      <span class="meta-chip coral"><i class="dot"></i> 1,000+ attendees · 10 rooms / day</span>
+      <span class="meta-chip gold"><i class="dot"></i> Concept · Not yet shipped</span>
+    </div>
+  </div>
+</section>
+
+<!-- =================== DEMO STAGE =================== -->
+<section class="demo-stage">
+  <div class="stage-inner">
+
+    <!-- ============= SCENE 1: Download from event website ============= -->
+    <div class="scene">
+      <div class="scene-head">
+        <span class="scene-num">Scene 01</span>
+        <div>
+          <h2 class="scene-title">Maya's week starts with a single tap — on the TCSW website.</h2>
+          <p class="scene-sub">She lands on tcsw.beta.mn, sees the dates, buys her ticket on Eventbrite, and gets pointed straight to the app. Zero friction between "I'm going" and "I'm ready."</p>
+        </div>
+      </div>
+
+      <div class="website-frame">
+        <div class="dash-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <div class="url">🔒 <b>tcsw.beta.mn</b> / 2026</div>
+        </div>
+        <div class="web-nav">
+          <div class="web-nav-left">
+            TCSW 2026
+          </div>
+          <div class="web-nav-right">
+            <a>Schedule</a>
+            <a>Speakers</a>
+            <a>Sponsors</a>
+            <a>About</a>
+            <a class="cta">Get Tickets</a>
+          </div>
+        </div>
+        <div class="web-hero">
+          <div class="web-hero-copy">
+            <div class="eyebrow">Eighth Annual · Sept 14–18, 2026</div>
+            <h1>Twin Cities<br><span class="small">Startup Week</span></h1>
+            <div class="pitch">
+              Five days. Three campuses. One thousand entrepreneurs across Minneapolis &amp; St. Paul.
+              Download the official app to build your schedule, find your people, and never miss a session.
+            </div>
+            <div class="download-row">
+              <a class="store-badge">
+                <span class="ic"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg></span>
+                <span class="txt"><small>Download on the</small><b>App Store</b></span>
+              </a>
+              <a class="store-badge">
+                <span class="ic"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.1 2.55l11.36 11.36-3.2 3.2L3.1 21.45c-.45-.27-.75-.78-.75-1.39V3.94c0-.61.3-1.12.75-1.39zM15.78 11.74l3.5 2.02c.92.54.92 1.95 0 2.48l-3.5 2.03-3.6-3.27 3.6-3.26zm-1.42-1.27L4.81 1.85 16.06 8.36l-1.7 2.11zm0 6.06l1.7 2.1L4.81 26.15l9.55-8.62z"/></svg></span>
+                <span class="txt"><small>Get it on</small><b>Google Play</b></span>
+              </a>
+            </div>
+          </div>
+          <div class="web-phone-cluster">
+
+            <!-- iPhone preview: Sessions on Tuesday at UMN -->
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar dark"><span>9:41</span><div class="status-icons">●●● 5G ▮</div></div>
+                <div class="app-banner">
+                  <div class="banner-top">
+                    <div class="banner-eyebrow">Eighth Annual</div>
+                    <div class="banner-year">2026</div>
+                  </div>
+                  <div class="banner-lockup">
+                    <div class="banner-title">TWIN CITIES<span class="accent">STARTUP WEEK</span></div>
+                  </div>
+                  <div class="banner-sub"><span class="pulse"></span> Sept 14–18 · MSP</div>
+                </div>
+                <div class="app-body">
+                  <div class="day-strip">
+                    <div class="day-chip"><div class="d">MON</div><div class="n">14</div></div>
+                    <div class="day-chip active"><div class="d">TUE</div><div class="n">15</div></div>
+                    <div class="day-chip"><div class="d">WED</div><div class="n">16</div></div>
+                    <div class="day-chip"><div class="d">THU</div><div class="n">17</div></div>
+                    <div class="day-chip"><div class="d">FRI</div><div class="n">18</div></div>
+                  </div>
+                  <div class="session-list">
+                    <div class="time-row">9:00 AM · MAIN STAGE</div>
+                    <div class="session-card featured">
+                      <div class="save-btn saved">✓</div>
+                      <div class="sc-tags">
+                        <span class="sc-tag green">Keynote</span>
+                      </div>
+                      <div class="sc-title">Building in MN: Capital &amp; Talent</div>
+                      <div class="sc-meta"><span>📍 Coffman</span></div>
+                    </div>
+                    <div class="time-row">10:00 AM · BREAKOUTS</div>
+                    <div class="session-card sponsored">
+                      <div class="sc-tags">
+                        <span class="sc-tag gold">Sponsored</span>
+                        <span class="sc-tag indigo">FinTech</span>
+                      </div>
+                      <div class="sc-title">FinTech &amp; Access</div>
+                      <div class="sc-meta"><span>📍 Room 6</span></div>
+                    </div>
+                    <div class="session-card">
+                      <div class="sc-tags">
+                        <span class="sc-tag coral">AI &amp; Tech</span>
+                      </div>
+                      <div class="sc-title">Open-Source LLM Tooling</div>
+                      <div class="sc-meta"><span>📍 Room 4</span></div>
+                    </div>
+                    <div class="session-card">
+                      <div class="sc-title">MVP Demo Showcase</div>
+                      <div class="sc-meta"><span>📍 Room 2</span></div>
+                    </div>
+                  </div>
+                  <div class="tab-bar">
+                    <div class="tab-item active"><div class="ic">📅</div>Sessions</div>
+                    <div class="tab-item"><div class="ic">📋</div>Agenda</div>
+                    <div class="tab-item"><div class="ic">📍</div>Map</div>
+                    <div class="tab-item"><div class="ic">👥</div>Connect</div>
+                    <div class="tab-item"><div class="ic">🤝</div>Community</div>
+                    <div class="tab-item"><div class="ic">👤</div>Profile</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Android preview: Agenda view (My week) -->
+            <div class="phone android">
+              <div class="phone-screen">
+                <div class="hole-punch"></div>
+                <div class="nav-pill-android"></div>
+                <div class="status-bar dark"><span>9:41</span><div class="status-icons">●●● 5G ▮</div></div>
+                <div class="app-banner">
+                  <div class="banner-top">
+                    <div class="banner-eyebrow">Your Week</div>
+                    <div class="banner-year">2026</div>
+                  </div>
+                  <div class="banner-lockup">
+                    <div class="banner-title">TWIN CITIES<span class="accent">STARTUP WEEK</span></div>
+                  </div>
+                  <div class="banner-sub"><span class="pulse"></span> 12 sessions saved</div>
+                </div>
+                <div class="app-body">
+                  <div class="day-strip">
+                    <div class="day-chip"><div class="d">MON</div><div class="n">14</div></div>
+                    <div class="day-chip"><div class="d">TUE</div><div class="n">15</div></div>
+                    <div class="day-chip active"><div class="d">WED</div><div class="n">16</div></div>
+                    <div class="day-chip"><div class="d">THU</div><div class="n">17</div></div>
+                    <div class="day-chip"><div class="d">FRI</div><div class="n">18</div></div>
+                  </div>
+                  <div class="session-list">
+                    <div class="time-row">8:00 AM · ST. THOMAS</div>
+                    <div class="session-card">
+                      <div class="sc-title">Networking Breakfast</div>
+                      <div class="sc-meta"><span>📍 Schulze Hall</span></div>
+                    </div>
+                    <div class="time-row">9:00 AM · KEYNOTE</div>
+                    <div class="session-card featured">
+                      <div class="save-btn saved">✓</div>
+                      <div class="sc-tags">
+                        <span class="sc-tag green">Keynote</span>
+                      </div>
+                      <div class="sc-title">Future of Work in MN</div>
+                      <div class="sc-meta"><span>📍 Main Stage</span></div>
+                    </div>
+                    <div class="time-row">10:00 AM</div>
+                    <div class="session-card sponsored">
+                      <div class="sc-tags">
+                        <span class="sc-tag gold">B &amp; B VC</span>
+                      </div>
+                      <div class="sc-title">Investor Roundtable</div>
+                      <div class="sc-meta"><span>📍 Room 3</span></div>
+                    </div>
+                  </div>
+                  <div class="tab-bar">
+                    <div class="tab-item"><div class="ic">📅</div>Sessions</div>
+                    <div class="tab-item active"><div class="ic">📋</div>Agenda</div>
+                    <div class="tab-item"><div class="ic">📍</div>Map</div>
+                    <div class="tab-item"><div class="ic">👥</div>Connect</div>
+                    <div class="tab-item"><div class="ic">🤝</div>Community</div>
+                    <div class="tab-item"><div class="ic">👤</div>Profile</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="web-body-strip">
+          <div class="web-feat"><div class="num">5 Days</div><div class="lbl">Sept 14 → 18</div></div>
+          <div class="web-feat"><div class="num">3 Campuses</div><div class="lbl">UMN · St. Thomas · Mac</div></div>
+          <div class="web-feat"><div class="num">10 Rooms / Day</div><div class="lbl">10 breakout rooms per campus day</div></div>
+          <div class="web-feat"><div class="num">1,000+</div><div class="lbl">Expected attendees</div></div>
+        </div>
+      </div>
+
+      <div class="scene-copy" style="max-width: 820px; margin: 28px auto 0; text-align: center;">
+        <h3 style="text-align: center;">One clear path from "I bought a ticket" to "I'm in".</h3>
+        <p style="text-align: center;">
+          The website redirects attendees straight to the right store. Same brand. Same color palette.
+          No mystery about whether this is the official app.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============= SCENE 2: App Store + Play Store ============= -->
+    <div class="scene">
+      <div class="scene-head">
+        <span class="scene-num">Scene 02</span>
+        <div>
+          <h2 class="scene-title">Maya downloads in one tap. Every attendee does — on any phone.</h2>
+          <p class="scene-sub">She's on iPhone; Jordan, a fellow founder, is on a Pixel 8. Both hit a listing that looks unmistakably TCSW. Same brand, same codebase — wrapped by Capacitor for both stores.</p>
+        </div>
+      </div>
+      <div class="scene-grid" style="grid-template-columns: 1fr;">
+        <div class="phone-wrap dual" style="gap:48px; flex-wrap:wrap; flex-direction:row; align-items:flex-start;">
+
+          <div class="phone-cluster">
+            <div class="os-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#fde9a6"/></svg>
+              iOS · App Store
+            </div>
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar"><span>9:14</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div style="padding:8px 14px 4px; display:flex; align-items:center; gap: 10px; font-size:13px; color: var(--midnight);">
+                  <span style="font-size:16px; font-weight:600;">‹</span>
+                  <span style="color: var(--muted); font-size:11px;">Today</span>
+                </div>
+                <div class="store-screen">
+                  <div class="ios-store-header">
+                    <div class="app-icon"><span>TCSW</span></div>
+                    <div class="store-app-info">
+                      <div class="ttl">TCSW 2026</div>
+                      <div class="dev">Twin Cities Startup Week</div>
+                      <div class="meta"><span>★ 4.8</span><span>·</span><span>Events</span><span>·</span><span>In-App Purchases</span></div>
+                    </div>
+                    <button class="install-btn">GET</button>
+                  </div>
+                  <div class="store-stat-row">
+                    <div class="store-stat"><div class="v">4.8 ★</div><div class="l">2.1K Ratings</div></div>
+                    <div class="store-stat"><div class="v">17+</div><div class="l">Age</div></div>
+                    <div class="store-stat"><div class="v">#3</div><div class="l">Events</div></div>
+                    <div class="store-stat"><div class="v">22 MB</div><div class="l">Size</div></div>
+                  </div>
+                  <div class="store-shots">
+                    <div class="store-shot">
+                      <div class="mini-banner">TWIN CITIES<span class="small">STARTUP WEEK</span></div>
+                      <div class="mini-body">
+                        <div class="mini-pill gold w70"></div>
+                        <div class="mini-pill w90"></div>
+                        <div class="mini-pill w50"></div>
+                        <div class="mini-pill dark w70"></div>
+                        <div class="mini-pill w90"></div>
+                      </div>
+                    </div>
+                    <div class="store-shot">
+                      <div class="mini-banner">YOUR<span class="small">SCHEDULE</span></div>
+                      <div class="mini-body">
+                        <div class="mini-pill w90"></div>
+                        <div class="mini-pill dark w70"></div>
+                        <div class="mini-pill w50"></div>
+                        <div class="mini-pill gold w90"></div>
+                      </div>
+                    </div>
+                    <div class="store-shot">
+                      <div class="mini-banner">SPONSORS<span class="small">&amp; CONNECT</span></div>
+                      <div class="mini-body">
+                        <div class="mini-pill gold w90"></div>
+                        <div class="mini-pill w70"></div>
+                        <div class="mini-pill w90"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="store-foot" style="padding-bottom: 24px;">
+                    <div style="font-size:11px; font-weight:700; color:var(--ink); margin-bottom:4px;">The official Twin Cities Startup Week companion.</div>
+                    <div style="font-size:10px; color:var(--muted); line-height:1.5;">Build your week across UMN, St. Thomas &amp; Macalester. Save sessions, message attendees, and follow sponsor activations, all in the new TCSW look.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">iPhone · App Store</div>
+          </div>
+
+          <div class="phone-cluster">
+            <div class="os-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M3.1 2.55l11.36 11.36-3.2 3.2L3.1 21.45c-.45-.27-.75-.78-.75-1.39V3.94c0-.61.3-1.12.75-1.39zM15.78 11.74l3.5 2.02c.92.54.92 1.95 0 2.48l-3.5 2.03-3.6-3.27 3.6-3.26z" fill="#fde9a6"/></svg>
+              Android · Google Play
+            </div>
+            <div class="phone android">
+              <div class="phone-screen">
+                <div class="hole-punch"></div>
+                <div class="nav-pill-android"></div>
+                <div class="status-bar"><span>9:14</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div style="padding:6px 14px; display:flex; align-items:center; gap:10px; font-size:13px; color:var(--midnight); border-bottom:1px solid #f1f2f8;">
+                  <span style="font-size:18px;">←</span>
+                  <span style="font-weight:600;">Google Play</span>
+                </div>
+                <div class="store-screen">
+                  <div class="android-store-header">
+                    <div class="app-icon android"><span>TCSW</span></div>
+                    <div class="store-app-info">
+                      <div class="ttl">TCSW 2026</div>
+                      <div class="dev">BETA.MN · Events</div>
+                      <div class="meta"><span>4.8 ★</span><span>·</span><span><b>1K+</b> downloads</span></div>
+                    </div>
+                  </div>
+                  <div style="padding: 0 14px 12px;">
+                    <button class="install-btn android" style="width:100%; padding:10px;">Install</button>
+                  </div>
+                  <div class="store-stat-row">
+                    <div class="store-stat"><div class="v">4.8 ★</div><div class="l">1.8K Reviews</div></div>
+                    <div class="store-stat"><div class="v">1K+</div><div class="l">Downloads</div></div>
+                    <div class="store-stat"><div class="v">Editor</div><div class="l">Choice</div></div>
+                    <div class="store-stat"><div class="v">22 MB</div><div class="l">Size</div></div>
+                  </div>
+                  <div class="store-shots">
+                    <div class="store-shot">
+                      <div class="mini-banner">TWIN CITIES<span class="small">STARTUP WEEK</span></div>
+                      <div class="mini-body">
+                        <div class="mini-pill gold w70"></div>
+                        <div class="mini-pill w90"></div>
+                        <div class="mini-pill w50"></div>
+                        <div class="mini-pill dark w70"></div>
+                      </div>
+                    </div>
+                    <div class="store-shot">
+                      <div class="mini-banner">MAP &amp;<span class="small">HAPPY HOUR</span></div>
+                      <div class="mini-body">
+                        <div class="mini-pill w90"></div>
+                        <div class="mini-pill dark w70"></div>
+                        <div class="mini-pill gold w50"></div>
+                      </div>
+                    </div>
+                    <div class="store-shot">
+                      <div class="mini-banner">GIVE BACK<span class="small">HACK · FRI</span></div>
+                      <div class="mini-body">
+                        <div class="mini-pill gold w90"></div>
+                        <div class="mini-pill w70"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="store-foot" style="padding-bottom: 24px;">
+                    <div style="font-size:11px; font-weight:700; color:var(--ink); margin-bottom:4px;">About this app</div>
+                    <div style="font-size:10px; color:var(--muted); line-height:1.5;">The official companion for Twin Cities Startup Week 2026. Plan your week, find your people, and follow the Friday Give Back Hack, all in one place.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">Pixel 8 · Google Play</div>
+          </div>
+
+        </div>
+        <div class="scene-copy" style="max-width: 820px; margin: 32px auto 0; text-align: center;">
+          <h3 style="text-align: center;">Same TCSW identity, shipped to both stores.</h3>
+          <p style="text-align: center;">
+            One web codebase, wrapped with Capacitor and submitted to both the App Store and Google Play. The result feels like a mobile app on day one, without maintaining separate Swift and Kotlin builds, and the brand reads the same on a Pixel or an iPhone.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= SCENE 3-OLD (renumbered, but originally Scene 1) =============
+         Actually wait, the existing scenes already got renumbered to 03+ above. -->
+
+    <!-- ============= SCENE 1: Home / Schedule ============= -->
+    <div class="scene">
+      <div class="scene-head">
+        <span class="scene-num">Scene 03</span>
+        <div>
+          <h2 class="scene-title">Sessions is the catalogue. Maya picks what she wants to attend.</h2>
+          <p class="scene-sub">She browses every session on offer — AI, FinTech, capital, community — and signs up for the ones that fit her week. Those choices automatically populate her Agenda. No double-entry.</p>
+        </div>
+      </div>
+      <div class="scene-grid">
+        <div class="scene-copy">
+          <h3>The schedule, day-aware and friction-free</h3>
+          <p>
+            One tap on "TUE / 15" surfaces the day's keynote, the ten parallel breakout rooms, and the curated tracks
+            that match her profile. Sponsor-hosted and featured sessions are marked clearly, not buried, not in her face.
+          </p>
+          <ul class="bullet-list">
+            <li>Day chips for Sept 14–18 with live "happening now" badge</li>
+            <li>Hosts can update their own description &amp; speakers, no email-the-organizer dance</li>
+            <li>"Sponsored" and "Featured" tags follow accessible color contrast</li>
+            <li>Save to "My Schedule" with conflict detection in the background</li>
+          </ul>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone-cluster">
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar dark"><span>9:41</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div class="app-banner">
+                  <div class="banner-top">
+                    <div class="banner-eyebrow">Eighth Annual</div>
+                    <div class="banner-year">2026</div>
+                  </div>
+                  <div class="banner-lockup">
+                    <div class="banner-title">TWIN CITIES<span class="accent">STARTUP WEEK</span></div>
+                  </div>
+                  <div class="banner-sub"><span class="pulse"></span> Sept 14–18 · Minneapolis – St. Paul</div>
+                  <div class="banner-beta"><span class="beta-mark">β</span> Produced by BETA.MN</div>
+                  <div class="powered">Powered by <span class="attn">Attentio</span></div>
+                </div>
+                <div class="app-body">
+                  <div class="tabs">
+                    <div class="tab active">Schedule</div>
+                    <div class="tab">My Sched</div>
+                    <div class="tab">Now</div>
+                  </div>
+                  <div class="day-strip">
+                    <div class="day-chip"><div class="d">MON</div><div class="n">14</div></div>
+                    <div class="day-chip active"><div class="d">TUE</div><div class="n">15</div></div>
+                    <div class="day-chip"><div class="d">WED</div><div class="n">16</div></div>
+                    <div class="day-chip"><div class="d">THU</div><div class="n">17</div></div>
+                    <div class="day-chip"><div class="d">FRI</div><div class="n">18</div></div>
+                  </div>
+                  <div class="session-list">
+                    <div class="time-row">9:00 AM · Main Stage <div class="line"></div></div>
+                    <div class="session-card featured">
+                      <div class="save-btn saved">✓</div>
+                      <div class="sc-tags">
+                        <span class="sc-tag green">Keynote</span>
+                        <span class="sc-tag">Industry Day</span>
+                      </div>
+                      <div class="sc-title">Building in MN: Capital, Talent &amp; the Next Decade</div>
+                      <div class="sc-speakers"><b>Steve Grove</b> · CEO, Star Tribune Media</div>
+                      <div class="sc-meta">
+                        <span>📍 Coffman Union · UMN</span>
+                        <span>🎟 Open</span>
+                      </div>
+                    </div>
+
+                    <div class="time-row">10:00 AM · Breakouts <div class="line"></div></div>
+
+                    <div class="session-card sponsored">
+                      <div class="save-btn">＋</div>
+                      <div class="sc-tags">
+                        <span class="sc-tag gold">Sponsored · US Bank</span>
+                        <span class="sc-tag indigo">FinTech</span>
+                        <span class="sc-tag filling">Filling</span>
+                      </div>
+                      <div class="sc-title">FinTech &amp; Access: Banking the Next 10M</div>
+                      <div class="sc-speakers"><b>Priya Shah</b>, <b>Marcus Lee</b> +2</div>
+                      <div class="sc-meta">
+                        <span>📍 Room 6 · STSS Hall</span>
+                        <span>⏱ 45 min</span>
+                      </div>
+                    </div>
+
+                    <div class="session-card">
+                      <div class="save-btn">＋</div>
+                      <div class="sc-tags">
+                        <span class="sc-tag coral">AI &amp; Tech</span>
+                      </div>
+                      <div class="sc-title">Open-Source LLM Tooling for Lean Teams</div>
+                      <div class="sc-speakers"><b>Dr. Chen Liu</b> · Honeycrisp AI</div>
+                      <div class="sc-meta">
+                        <span>📍 Room 4 · Bruininks 230</span>
+                        <span>⏱ 45 min</span>
+                      </div>
+                    </div>
+
+                    <div class="session-card">
+                      <div class="save-btn saved">✓</div>
+                      <div class="sc-tags">
+                        <span class="sc-tag">Startup Demo Lab</span>
+                      </div>
+                      <div class="sc-title">MVP Showcase: Cohort F25 Demos</div>
+                      <div class="sc-meta">
+                        <span>📍 Room 2 · Coffman 324</span>
+                        <span>⏱ 45 min</span>
+                      </div>
+                    </div>
+
+                    <div class="time-row">12:00 PM · Lunch <div class="line"></div></div>
+                    <div class="session-card">
+                      <div class="save-btn">＋</div>
+                      <div class="sc-tags">
+                        <span class="sc-tag green">Food Court</span>
+                      </div>
+                      <div class="sc-title">Lunch &amp; Open Networking</div>
+                      <div class="sc-meta">
+                        <span>📍 Great Hall · Coffman</span>
+                        <span>🍽 Catered by Hen House Eatery</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-bar">
+                    <div class="tab-item active"><div class="ic">📅</div>Sessions</div>
+                    <div class="tab-item"><div class="ic">📋</div>Agenda</div>
+                    <div class="tab-item"><div class="ic">📍</div>Event Map</div>
+                    <div class="tab-item"><div class="ic">👥</div>Connect</div>
+                    <div class="tab-item"><div class="ic">🤝</div>Community</div>
+                    <div class="tab-item"><div class="ic">👤</div>Profile</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">Home · Tue / Sept 15</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= SCENE 2: Session Detail ============= -->
+    <div class="scene">
+      <div class="scene-head">
+        <span class="scene-num">Scene 04</span>
+        <div>
+          <h2 class="scene-title">She taps into the FinTech session.</h2>
+          <p class="scene-sub">Speakers, room, sponsor, and a "share to network" button so US Bank's session snowballs through her LinkedIn before lunch.</p>
+        </div>
+      </div>
+      <div class="scene-grid reverse">
+        <div class="phone-wrap">
+          <div class="phone-cluster">
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar dark"><span>9:42</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div class="app-body" style="flex:1;">
+                  <div class="sd-hero">
+                    <div class="sd-back">←</div>
+                  </div>
+                  <div class="sd-content">
+                    <div class="sd-tag-row">
+                      <span class="sc-tag gold">Sponsored · US Bank</span>
+                      <span class="sc-tag indigo">FinTech</span>
+                    </div>
+                    <div class="sd-title">FinTech &amp; Access: Banking the Next 10 Million</div>
+                    <div class="sd-row">
+                      <div class="ico">⏱</div>
+                      <div><b>Tue · Sept 15</b> · 10:00 – 10:45 AM</div>
+                    </div>
+                    <div class="sd-row">
+                      <div class="ico">📍</div>
+                      <div><b>Room 6 · STSS Hall 230</b> · UMN East Bank</div>
+                    </div>
+                    <div class="sd-row">
+                      <div class="ico">🎟</div>
+                      <div><b>54 of 80</b> seats filled</div>
+                    </div>
+                    <div class="sd-desc">
+                      Three operators &amp; one regulator on what it actually takes to build inclusive financial products
+                      in 2026, covering BNPL guardrails, embedded banking, and what the OCC is watching.
+                    </div>
+                    <div class="sd-speakers">
+                      <div class="speaker-card"><div class="avatar">PS</div><div><div class="name">Priya Shah</div><div class="role">Founder · Northstar Pay</div></div></div>
+                      <div class="speaker-card"><div class="avatar">ML</div><div><div class="name">Marcus Lee</div><div class="role">VP · US Bank</div></div></div>
+                      <div class="speaker-card"><div class="avatar">AO</div><div><div class="name">Amara Osei</div><div class="role">CEO · Lakefront Lending</div></div></div>
+                      <div class="speaker-card"><div class="avatar">JR</div><div><div class="name">Jane Rivera</div><div class="role">OCC · Moderator</div></div></div>
+                    </div>
+                    <div class="sponsor-band">
+                      <div class="sb-logo">USB</div>
+                      <div style="flex:1;">
+                        <div class="label">Track Sponsor</div>
+                        <div class="name">U.S. Bank · FinTech &amp; Access</div>
+                      </div>
+                      <div style="font-size:11px; color:var(--muted); font-weight:700;">View →</div>
+                    </div>
+                  </div>
+                  <div class="sd-cta">
+                    <button>Share ↗</button>
+                    <button class="primary">Save to My Schedule</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">Session Detail · Sponsored Track</div>
+          </div>
+        </div>
+        <div class="scene-copy">
+          <h3>Speakers can promote without asking the BETA team for help</h3>
+          <p>
+            Every session has a shareable card with the right branding baked in. Speakers and sponsors
+            invite their own communities — an organic snowball effect — without anyone on staff
+            having to write or design a single email.
+          </p>
+          <ul class="bullet-list">
+            <li>Hosts edit description, speakers, and image themselves (locked: time, room)</li>
+            <li>Sponsored tracks include the sponsor's logo, link, and a deep-link to their booth</li>
+            <li>One-tap share to LinkedIn, Email, or SMS with TCSW co-branding</li>
+            <li>Live seat counter prevents the overcrowded-room problem from years past</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= SCENE 3: My Schedule + Conflicts ============= -->
+    <div class="scene">
+      <div class="scene-head">
+        <span class="scene-num">Scene 05</span>
+        <div>
+          <h2 class="scene-title">Her Agenda is built automatically from the sessions she signed up for.</h2>
+          <p class="scene-sub">Every session Maya saved in the Sessions catalogue appears here as her personal timeline. She can see her whole week at a glance — and the app flags a conflict Wednesday at St. Thomas before it surprises her.</p>
+        </div>
+      </div>
+      <div class="scene-grid">
+        <div class="scene-copy">
+          <h3>Calendar ownership without spreadsheet chaos</h3>
+          <p>
+            Maya can see all 5 days at a glance, set notification preferences per session, and download the whole
+            thing to Apple/Google Calendar. Conflicts are flagged in real time, she can swap a session without losing her place.
+          </p>
+          <ul class="bullet-list">
+            <li>Conflict detection across overlapping 45-minute breakouts</li>
+            <li>"Walking time" estimates between Twin Cities campuses</li>
+            <li>Eventbrite ticket synced into the app, same QR Eventbrite already issues</li>
+          </ul>
+        </div>
+        <div class="phone-wrap">
+          <div class="phone-cluster">
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar dark"><span>9:43</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div class="app-body">
+                  <div class="ms-summary">
+                    <div class="lbl">My TCSW 2026</div>
+                    <div class="big">14 sessions saved</div>
+                    <div class="ms-stats">
+                      <div class="ms-stat"><div class="n">5</div><div class="l">Days</div></div>
+                      <div class="ms-stat"><div class="n">3</div><div class="l">Campuses</div></div>
+                      <div class="ms-stat"><div class="n">1</div><div class="l">Conflict</div></div>
+                    </div>
+                  </div>
+                  <div class="day-strip">
+                    <div class="day-chip"><div class="d">MON</div><div class="n">14</div></div>
+                    <div class="day-chip"><div class="d">TUE</div><div class="n">15</div></div>
+                    <div class="day-chip active"><div class="d">WED</div><div class="n">16</div></div>
+                    <div class="day-chip"><div class="d">THU</div><div class="n">17</div></div>
+                    <div class="day-chip"><div class="d">FRI</div><div class="n">18</div></div>
+                  </div>
+                  <div class="timeline">
+                    <div class="tl-item">
+                      <div class="tl-time"><b>8:00</b>AM</div>
+                      <div class="tl-card">
+                        <div class="tl-title">Networking Breakfast</div>
+                        <div class="tl-loc">Schulze Hall · St. Thomas</div>
+                      </div>
+                    </div>
+                    <div class="tl-item">
+                      <div class="tl-time"><b>9:00</b>AM</div>
+                      <div class="tl-card">
+                        <div class="tl-title">Keynote: The Future of Work in MN</div>
+                        <div class="tl-loc">Main Stage · Schulze 235</div>
+                      </div>
+                    </div>
+                    <div class="tl-item">
+                      <div class="tl-time"><b>10:00</b>AM</div>
+                      <div class="tl-card conflict">
+                        <div class="tl-title">AI &amp; Tech Workshop: Agent Eval</div>
+                        <div class="tl-loc">Room 4 · St. Thomas TMH</div>
+                        <span class="conflict-flag">⚠ Overlaps with MedTech Demos</span>
+                      </div>
+                    </div>
+                    <div class="tl-item">
+                      <div class="tl-time"><b>11:00</b>AM</div>
+                      <div class="tl-card sponsored">
+                        <div class="tl-title">Investor Roundtable · Sponsored by Bread &amp; Butter Ventures</div>
+                        <div class="tl-loc">Room 3 · Schulze 433</div>
+                      </div>
+                    </div>
+                    <div class="tl-item">
+                      <div class="tl-time"><b>4:00</b>PM</div>
+                      <div class="tl-card">
+                        <div class="tl-title">Happy Hour · Summit Brewing</div>
+                        <div class="tl-loc">910 Montreal Cir, St. Paul</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-bar">
+                    <div class="tab-item"><div class="ic">📅</div>Sessions</div>
+                    <div class="tab-item active"><div class="ic">📋</div>Agenda</div>
+                    <div class="tab-item"><div class="ic">📍</div>Event Map</div>
+                    <div class="tab-item"><div class="ic">👥</div>Connect</div>
+                    <div class="tab-item"><div class="ic">🤝</div>Community</div>
+                    <div class="tab-item"><div class="ic">👤</div>Profile</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">My Schedule · Wed / Sept 16</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= SCENE 6: Event Map (zoomed to Surly Brewing) ============= -->
+    <div class="scene">
+      <div class="scene-head">
+        <span class="scene-num">Scene 06</span>
+        <div>
+          <h2 class="scene-title">Tap a session, drop on the destination.</h2>
+          <p class="scene-sub">Maya taps Tuesday's happy hour. The Event Map zooms straight to Surly Brewing Co., 520 Malcolm Ave SE, with one pin, walking distance from the UMN East Bank.</p>
+        </div>
+      </div>
+      <div class="scene-grid reverse">
+        <div class="phone-wrap">
+          <div class="phone-cluster">
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar"><span>4:02</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div class="app-body">
+                  <div style="padding: 12px 14px; background: white; border-bottom: 1px solid #f1f2f8; display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                      <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:var(--ink);">Event Map</div>
+                      <div style="font-size:11px; color:var(--muted); margin-top:2px;">Surly Brewing Co. · Tue happy hour</div>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                      <div style="font-size:10px; padding:5px 9px; border-radius:999px; background:#f4f5fa; color:var(--muted); font-weight:600;">All</div>
+                      <div style="font-size:10px; padding:5px 9px; border-radius:999px; background:var(--midnight); color:var(--gold); font-weight:700;">Today</div>
+                    </div>
+                  </div>
+                  <div class="map-screen">
+                    <!-- Google-style street map centered on Surly Brewing -->
+                    <div class="gmap">
+                      <div class="blocks">
+                        <!-- Green park (upper-left) -->
+                        <div class="blk green" style="top: 4%; left: 6%; width: 22%; height: 14%; border-radius: 12px 50% 14px 8px;"></div>
+
+                        <!-- Surly Brewing complex (the central building, beige) -->
+                        <div class="blk" style="top: 32%; left: 22%; width: 30%; height: 12%; border-radius: 2px;"></div>
+                        <!-- Surly silo / tank pad (small white-striped block to right) -->
+                        <div class="blk parking" style="top: 33%; left: 53%; width: 22%; height: 14%;"></div>
+
+                        <!-- Buildings north of SE 5th -->
+                        <div class="blk" style="top: 6%; left: 32%; width: 16%; height: 11%;"></div>
+                        <div class="blk" style="top: 6%; left: 50%; width: 26%; height: 13%;"></div>
+                        <div class="blk" style="top: 22%; left: 70%; width: 12%; height: 11%;"></div>
+
+                        <!-- Buildings south of SE 5th -->
+                        <div class="blk" style="top: 60%; left: 6%; width: 24%; height: 17%;"></div>
+                        <div class="blk" style="top: 60%; left: 33%; width: 27%; height: 12%;"></div>
+                        <div class="blk" style="top: 62%; left: 64%; width: 22%; height: 18%;"></div>
+
+                        <!-- Roads (white horizontal: SE 5th St; vertical: Malcolm Ave SE) -->
+                        <div class="rd h" style="top: 53%;"></div>
+                        <div class="rd v" style="left: 4%;"></div>
+                        <div class="rd v" style="left: 87%;"></div>
+
+                        <!-- Light railway up top -->
+                        <div class="rd rail" style="top: 0;"></div>
+
+                        <!-- Labels -->
+                        <div class="label" style="top: 50%; left: 14%;">SE 5th St</div>
+                        <div class="label" style="top: 56%; left: 64%;">SE 5th St</div>
+                        <div class="label" style="top: 18%; left: 0%; transform: translate(-2px,-50%) rotate(-90deg); transform-origin: left center;">Malcolm Ave SE</div>
+
+                        <!-- Surly callout label (only labeled venue) -->
+                        <div class="biz" style="top: 36%; left: 28%; color: #c43c2c; font-size: 9px;">Surly Brewing Co</div>
+                      </div>
+
+                      <!-- The one and only pin, dead-centered on Surly -->
+                      <div class="gpin-pulse" style="top: 38%; left: 35%;"></div>
+                      <div class="gpin" style="top: 38%; left: 35%;">
+                        <svg viewBox="0 0 26 36" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M13 0 C 5 0, 0 6, 0 13 C 0 22, 13 36, 13 36 S 26 22, 26 13 C 26 6, 21 0, 13 0 Z" fill="#dc4434"/>
+                          <circle cx="13" cy="13" r="5" fill="white"/>
+                        </svg>
+                      </div>
+
+                      <!-- Zoom controls -->
+                      <div class="zoom-ctrl">
+                        <div class="zoom-btn">+</div>
+                        <div class="zoom-btn">−</div>
+                        <div class="zoom-btn locate">⊙</div>
+                      </div>
+                      <div class="map-scale">
+                        <div class="scale-bar"></div>
+                        <span>200 ft</span>
+                      </div>
+
+                      <div class="map-card">
+                        <div class="label" style="position:static; background:none; padding:0; font-size:9px; letter-spacing:0.15em; color:var(--coral); text-transform:uppercase; font-weight:700; transform:none;">📍 Featured · Tue Happy Hour</div>
+                        <div class="title">Surly Brewing Co.</div>
+                        <div class="meta">520 Malcolm Ave SE · <b>0.6 mi from UMN</b></div>
+                        <div class="meta">🍻 Hosted by <b>Bread &amp; Butter Ventures</b> · 4–6 PM</div>
+                        <div class="ctas">
+                          <button>Directions</button>
+                          <button class="primary">RSVP · 287 going</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-bar">
+                    <div class="tab-item"><div class="ic">📅</div>Sessions</div>
+                    <div class="tab-item"><div class="ic">📋</div>Agenda</div>
+                    <div class="tab-item active"><div class="ic">📍</div>Event Map</div>
+                    <div class="tab-item"><div class="ic">👥</div>Connect</div>
+                    <div class="tab-item"><div class="ic">🤝</div>Community</div>
+                    <div class="tab-item"><div class="ic">👤</div>Profile</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">Event Map · Surly Brewing · Tue 4 PM</div>
+          </div>
+        </div>
+        <div class="scene-copy">
+          <div class="surly-card">
+            <div class="surly-hero">
+              <div class="surly-silos">
+                <div class="surly-silo t1"></div>
+                <div class="surly-silo t2"></div>
+                <div class="surly-silo t3"></div>
+                <div class="surly-silo t2"></div>
+              </div>
+              <div class="surly-bldg">
+                <div class="surly-num">520</div>
+                <div class="surly-text">SURLY</div>
+              </div>
+              <div class="surly-fg">
+                <div class="surly-path"></div>
+              </div>
+              <div class="surly-tree" style="left: 22%;"></div>
+              <div class="surly-tree" style="left: 32%; bottom: 34%; transform: scale(0.85);"></div>
+              <div class="surly-tree" style="left: 44%;"></div>
+              <div class="surly-shrub" style="left: 18%; bottom: 6px;"></div>
+              <div class="surly-shrub" style="left: 60%; bottom: 8px; width: 18px; height: 12px;"></div>
+            </div>
+            <div class="surly-meta">
+              <span class="label-pill">Tuesday · 4–6 PM</span>
+              <h4>Surly Brewing Co. · Beer Hall</h4>
+              <div class="addr">520 Malcolm Ave SE, Minneapolis · <b>0.6 mi from UMN East Bank</b></div>
+              <div class="host">🍻 Hosted by <b>Bread &amp; Butter Ventures</b> · open bar 4–5 PM · 287 going</div>
+            </div>
+          </div>
+          <h3>Real venues. Real walking distances.</h3>
+          <p>
+            Map data comes from open-source OpenStreetMap, styled to match TCSW. Each event in the schedule deep-links straight to the venue. One pin, one destination, no guesswork.
+          </p>
+          <ul class="bullet-list">
+            <li>Tap any session or happy hour to drop a single pin on the destination</li>
+            <li>Walking-time and transit estimates from the attendee's current campus</li>
+            <li>RSVP and Directions actions live on the map card itself</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= SCENE 5: Community Tab + Connect ============= -->
+    <div class="scene">
+      <div class="scene-head">
+        <span class="scene-num">Scene 07</span>
+        <div>
+          <h2 class="scene-title">The Community tab and Connect: sponsors, ecosystem partners, and fellow founders.</h2>
+          <p class="scene-sub">Community puts every sponsor profile one tap away. Connect is the opt-in attendee directory — only founders who want to be found show up. Both respect privacy without making discovery feel like work.</p>
+        </div>
+      </div>
+      <div class="scene-grid" style="grid-template-columns: 1fr;">
+        <div class="phone-wrap dual" style="gap:32px; flex-wrap:wrap; flex-direction: row; align-items: flex-start; justify-content: center;">
+
+          <!-- Phone 1: Community tab — ecosystem sponsors -->
+          <div class="phone-cluster">
+            <div class="os-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#fde9a6"/></svg>
+              iOS · Community tab
+            </div>
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar dark"><span>11:14</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div class="app-body">
+                  <div class="sponsor-hero">
+                    <div class="lbl">TCSW 2026 Community</div>
+                    <h2>The ecosystem<br>behind the week.</h2>
+                  </div>
+                  <div class="tier-row">
+                    <div class="tier-pill">All</div>
+                    <div class="tier-pill">Presenting</div>
+                    <div class="tier-pill">Stage</div>
+                    <div class="tier-pill">Track</div>
+                    <div class="tier-pill active">Community</div>
+                  </div>
+                  <div class="sponsor-grid">
+                    <div class="sp-card">
+                      <div class="sp-logo" style="background:linear-gradient(135deg,#b8a4ff,#2c3196);">M8</div>
+                      <div class="sp-name">Matchstick Ventures</div>
+                      <div class="sp-tier">Track · AI</div>
+                    </div>
+                    <div class="sp-card">
+                      <div class="sp-logo" style="background:linear-gradient(135deg,#0c1033,#2c3196);">USB</div>
+                      <div class="sp-name">U.S. Bank</div>
+                      <div class="sp-tier">Presenting</div>
+                    </div>
+                    <div class="sp-card">
+                      <div class="sp-logo" style="background:linear-gradient(135deg,#00d4b1,#03a98c);">B&amp;B</div>
+                      <div class="sp-name">Bread &amp; Butter VC</div>
+                      <div class="sp-tier">Stage Sponsor</div>
+                    </div>
+                    <div class="sp-card">
+                      <div class="sp-logo" style="background:linear-gradient(135deg,#fbbf24,#ff5a6e);">SPS</div>
+                      <div class="sp-name">SPS Commerce</div>
+                      <div class="sp-tier">Stage Sponsor</div>
+                    </div>
+                    <div class="sp-card">
+                      <div class="sp-logo" style="background:linear-gradient(135deg,#ff5a6e,#92670a);">3M</div>
+                      <div class="sp-name">3M Ventures</div>
+                      <div class="sp-tier">Track · MedTech</div>
+                    </div>
+                    <div class="sp-card">
+                      <div class="sp-logo" style="background:linear-gradient(135deg,#03a98c,#0c1033);">UMN</div>
+                      <div class="sp-name">UMN Ventures</div>
+                      <div class="sp-tier">Community</div>
+                    </div>
+                  </div>
+                  <div class="tab-bar">
+                    <div class="tab-item"><div class="ic">📅</div>Sessions</div>
+                    <div class="tab-item"><div class="ic">📋</div>Agenda</div>
+                    <div class="tab-item"><div class="ic">📍</div>Event Map</div>
+                    <div class="tab-item"><div class="ic">👥</div>Connect</div>
+                    <div class="tab-item active"><div class="ic">🤝</div>Community</div>
+                    <div class="tab-item"><div class="ic">👤</div>Profile</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">Community · Ecosystem Partners</div>
+          </div>
+
+          <!-- Phone 2: Community sponsor profile (Matchstick Ventures) -->
+          <div class="phone-cluster">
+            <div class="os-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#fde9a6"/></svg>
+              iOS · Sponsor profile
+            </div>
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar"><span>11:15</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div class="app-body">
+                  <div class="pd-screen">
+                    <div class="pd-topbar">
+                      <div class="back">‹</div>
+                      <div class="title">Community Partner</div>
+                      <div class="share">↗</div>
+                    </div>
+                    <div class="pd-hero" style="background:radial-gradient(circle at 30% 50%, rgba(107,58,160,0.9) 0%, #0a1838 100%);">
+                      <div class="pd-avatar" style="background:linear-gradient(135deg,#b8a4ff,#4a2c9a); font-size:18px; font-family:'Space Grotesk',sans-serif; font-weight:700; border-color:rgba(184,164,255,0.5);">M8</div>
+                      <div class="pd-name">Matchstick Ventures</div>
+                      <div class="pd-title">Track Sponsor · AI</div>
+                      <div class="pd-co">Minneapolis, MN · Seed &amp; Pre-Seed</div>
+                      <div class="pd-chips">
+                        <span class="pd-chip">VC Fund</span>
+                        <span class="pd-chip">AI Track</span>
+                        <span class="pd-chip">MN + Midwest</span>
+                      </div>
+                    </div>
+                    <div class="pd-section">
+                      <div class="hd">About</div>
+                      <div class="body">
+                        Minneapolis-based early-stage fund backing the most ambitious founders in the Upper Midwest. Built the TCSW AI Track to find great companies earlier.
+                      </div>
+                    </div>
+                    <div class="pd-section">
+                      <div class="hd">At TCSW 2026</div>
+                      <ul class="pd-list">
+                        <li>AI Track host · All 5 days</li>
+                        <li>Open office hours Mon + Wed · Room 6</li>
+                        <li>"Pre-Seed in 2026" session · Wed 1 PM</li>
+                      </ul>
+                    </div>
+                    <div class="pd-section">
+                      <div class="hd">Connect</div>
+                      <div class="pd-contacts">
+                        <div class="pd-contact">
+                          <div class="ic">🌐</div>
+                          <div class="lbl">
+                            <div class="k">Website</div>
+                            <div class="v">matchstick.vc</div>
+                          </div>
+                          <div class="arrow">›</div>
+                        </div>
+                        <div class="pd-contact">
+                          <div class="ic">in</div>
+                          <div class="lbl">
+                            <div class="k">LinkedIn</div>
+                            <div class="v">linkedin.com/company/matchstick-vc</div>
+                          </div>
+                          <div class="arrow">›</div>
+                        </div>
+                        <div class="pd-contact">
+                          <div class="ic">✉</div>
+                          <div class="lbl">
+                            <div class="k">Pitch us</div>
+                            <div class="v">matchstick.vc/founders</div>
+                          </div>
+                          <div class="arrow">›</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-bar">
+                    <div class="tab-item"><div class="ic">📅</div>Sessions</div>
+                    <div class="tab-item"><div class="ic">📋</div>Agenda</div>
+                    <div class="tab-item"><div class="ic">📍</div>Event Map</div>
+                    <div class="tab-item"><div class="ic">👥</div>Connect</div>
+                    <div class="tab-item active"><div class="ic">🤝</div>Community</div>
+                    <div class="tab-item"><div class="ic">👤</div>Profile</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">Community · Matchstick Ventures</div>
+          </div>
+
+          <!-- Phone 3: Connect opt-in directory -->
+          <div class="phone-cluster">
+            <div class="os-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#fde9a6"/></svg>
+              iOS · Connect directory
+            </div>
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar dark"><span>11:17</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div class="app-body">
+                  <div style="padding: 14px 16px 10px; background:white; border-bottom:1px solid #f1f2f8;">
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:var(--ink);">Connect</div>
+                    <div style="font-size:11px; color:var(--muted); margin-top:2px;">328 attendees opted in to the public directory</div>
+                  </div>
+                  <div style="padding: 10px 14px; background:#fff7d6; border-bottom:1px solid rgba(245,200,66,0.4); display:flex; align-items:center; gap:8px;">
+                    <div style="font-size:14px;">🛡️</div>
+                    <div style="font-size:10px; line-height:1.35; color:#5a4a10;">
+                      <b>Opt-in directory.</b> Only attendees who chose to publish their profile appear here. Edit yours anytime in Profile.
+                    </div>
+                  </div>
+                  <div class="net-screen">
+                    <div class="dir-card tappable">
+                      <div class="dir-top">
+                        <div class="av">JT</div>
+                        <div class="info">
+                          <div class="name">Jordan Takagi</div>
+                          <div class="role">Founder · ShipRoot (Logistics AI)</div>
+                          <div class="dir-meta">Looking for: design partners, seed investors</div>
+                        </div>
+                        <div class="dir-chev">›</div>
+                      </div>
+                    </div>
+                    <div class="dir-card tappable">
+                      <div class="dir-top">
+                        <div class="av" style="background: var(--gold); color: var(--midnight); border-color: var(--midnight);">EM</div>
+                        <div class="info">
+                          <div class="name">Esi Mensah</div>
+                          <div class="role">GP · Bread &amp; Butter VC</div>
+                          <div class="dir-meta">Open to: pre-seed pitches in B2B SaaS, climate</div>
+                        </div>
+                        <div class="dir-chev">›</div>
+                      </div>
+                    </div>
+                    <div class="dir-card tappable">
+                      <div class="dir-top">
+                        <div class="av" style="background: var(--indigo);">RA</div>
+                        <div class="info">
+                          <div class="name">Rahul Aggarwal</div>
+                          <div class="role">CTO · Honeycrisp AI</div>
+                          <div class="dir-meta">Talking shop on: agent eval, LLM ops</div>
+                        </div>
+                        <div class="dir-chev">›</div>
+                      </div>
+                    </div>
+                    <div class="dir-card tappable">
+                      <div class="dir-top">
+                        <div class="av" style="background: var(--midnight);">DK</div>
+                        <div class="info">
+                          <div class="name">Dana Kowalski</div>
+                          <div class="role">Director · MN DEED Innovation</div>
+                          <div class="dir-meta">Helps with: state grants &amp; non-dilutive capital</div>
+                        </div>
+                        <div class="dir-chev">›</div>
+                      </div>
+                    </div>
+                    <div class="dir-card tappable">
+                      <div class="dir-top">
+                        <div class="av" style="background: var(--gold); color: var(--midnight); border-color: var(--midnight);">CT</div>
+                        <div class="info">
+                          <div class="name">Camille Thao</div>
+                          <div class="role">Founder · Northstar Pay</div>
+                          <div class="dir-meta">Open to: BNPL partners, fintech advisors</div>
+                        </div>
+                        <div class="dir-chev">›</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-bar">
+                    <div class="tab-item"><div class="ic">📅</div>Sessions</div>
+                    <div class="tab-item"><div class="ic">📋</div>Agenda</div>
+                    <div class="tab-item"><div class="ic">📍</div>Event Map</div>
+                    <div class="tab-item active"><div class="ic">👥</div>Connect</div>
+                    <div class="tab-item"><div class="ic">🤝</div>Community</div>
+                    <div class="tab-item"><div class="ic">👤</div>Profile</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">Connect · Opt-in Directory</div>
+          </div>
+
+        </div>
+        <div class="scene-copy" style="max-width: 760px; margin: 24px auto 0; text-align: center;">
+          <h3>Community keeps sponsors visible. Connect keeps founders findable.</h3>
+          <p>
+            The Community tab gives every sponsor a full profile page — browse by tier or track, tap in, see who they are and how to reach them. The Connect directory is entirely opt-in: only attendees who choose to be discoverable appear, and they share only the contact methods they want others to use.
+          </p>
+          <ul class="bullet-list" style="text-align: left; grid-template-columns: 1fr 1fr; display: grid;">
+            <li>Community tab: dedicated profiles for every sponsor, filterable by tier and track</li>
+            <li>Sponsors self-manage their profile — no BETA staff writing copy for 30 companies</li>
+            <li>Connect directory is 100% opt-in — nobody appears who hasn't published their profile</li>
+            <li>Each profile shows only the contact methods the attendee chose to share</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= SCENE 6: Ticket / Badge ============= -->
+    <div class="scene">
+      <div class="scene-head">
+        <span class="scene-num">Scene 08</span>
+        <div>
+          <h2 class="scene-title">Check-in, badge, and the parts that stay on Eventbrite.</h2>
+          <p class="scene-sub">Ticketing stays on Eventbrite. The app syncs the ticket directly and presents the same QR Eventbrite already issues, so check-in works on day one without supporting Apple Wallet, Google Wallet, or a custom pass system.</p>
+        </div>
+      </div>
+      <div class="scene-grid reverse">
+        <div class="phone-wrap">
+          <div class="phone-cluster">
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="notch"></div><div class="home-indicator"></div>
+                <div class="status-bar dark"><span>7:48</span><div class="status-icons">●●●● 5G ▮</div></div>
+                <div class="app-banner" style="padding-bottom:14px;">
+                  <div class="banner-top">
+                    <div class="banner-eyebrow">Your Badge</div>
+                    <div class="banner-year">2026</div>
+                  </div>
+                  <div class="banner-lockup">
+                    <div class="banner-title" style="font-size:18px;">TWIN CITIES<span class="accent">STARTUP WEEK</span></div>
+                  </div>
+                  <div class="banner-beta"><span class="beta-mark">β</span> Produced by BETA.MN</div>
+                  <div class="powered">Powered by <span class="attn">Attentio</span></div>
+                </div>
+                <div class="app-body">
+                  <div class="ticket-screen">
+                    <div class="ticket">
+                      <div class="qr"></div>
+                      <div class="lb">All-Access · Founder</div>
+                      <div class="nm">Maya Okafor</div>
+                      <div class="role">Founder · Aurora Freight</div>
+                      <div class="row2">
+                        <div>Day<b>Tue 9/15</b></div>
+                        <div>Campus<b>UMN</b></div>
+                        <div>Wristband<b>#A0241</b></div>
+                      </div>
+                    </div>
+                    <div style="background:white; border:1px solid #ebedf5; border-radius:14px; padding:12px;">
+                      <div style="font-size:9px; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; font-weight:700;">Next Up</div>
+                      <div style="font-size:13px; font-weight:700; color:var(--ink); margin-top:4px;">Morning Keynote · Coffman Great Hall</div>
+                      <div style="font-size:10.5px; color:var(--muted); margin-top:4px;">Starts in 12 min · 8 min walk from East Bank shuttle</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg, #0c1033, #2c3196); color:white; border-radius:14px; padding:12px; position:relative; overflow:hidden;">
+                      <div style="font-size:9px; letter-spacing:0.15em; color:rgba(255,255,255,0.7); text-transform:uppercase; font-weight:700;">Presenting Sponsor</div>
+                      <div style="font-size:14px; font-weight:700; margin-top:4px;">Coffee &amp; check-in compliments of U.S. Bank.</div>
+                      <div style="font-size:10.5px; color:rgba(255,255,255,0.78); margin-top:6px;">Stop by the Welcome Wall in Coffman lobby for swag &amp; the founder photo booth.</div>
+                    </div>
+                  </div>
+                  <div class="tab-bar">
+                    <div class="tab-item"><div class="ic">📅</div>Sessions</div>
+                    <div class="tab-item"><div class="ic">📋</div>Agenda</div>
+                    <div class="tab-item"><div class="ic">📍</div>Event Map</div>
+                    <div class="tab-item"><div class="ic">👥</div>Connect</div>
+                    <div class="tab-item"><div class="ic">🤝</div>Community</div>
+                    <div class="tab-item active"><div class="ic">👤</div>Profile</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-caption">Badge · Eventbrite Sync</div>
+          </div>
+        </div>
+        <div class="scene-copy">
+          <h3>One badge. Five days. Three campuses.</h3>
+          <p>
+            Attendees check in with the QR code Eventbrite already gives them. The app pulls that QR via Eventbrite's API and presents it in-app, so volunteers scan the same code at the door whether the attendee opens Eventbrite or TCSW.
+          </p>
+          <ul class="bullet-list">
+            <li>Eventbrite owns purchase, refunds, and ticket data, no parallel store to maintain</li>
+            <li>App syncs ticket state via Eventbrite API: paid, checked-in, transferred, refunded</li>
+            <li>No Apple Wallet or Google Wallet passes (one less surface to support and approve)</li>
+            <li>Presenting sponsor visibility on the personal badge surface (one slot, capped)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= SCENE 7: Sponsor Dashboard (web) ============= -->
+    <div class="scene">
+      <div class="scene-head">
+        <span class="scene-num">Scene 09</span>
+        <div>
+          <h2 class="scene-title">Meanwhile, U.S. Bank's marketing lead opens the sponsor dashboard.</h2>
+          <p class="scene-sub">Edit your sponsor page and see real page-view counts. Every time an attendee loads a sponsored session or your dedicated sponsor page, it counts as one verified view, no guesswork about hallway impressions.</p>
+        </div>
+      </div>
+
+      <div class="dashboard">
+        <div class="dash-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <div class="url">🔒 partners.tcsw.beta.mn / <b>us-bank / page-views</b></div>
+        </div>
+        <div class="dash-body">
+          <aside class="dash-side">
+            <div class="brand"><span class="mark"></span> TCSW Sponsor Hub</div>
+            <div class="side-section">U.S. Bank · Presenting</div>
+            <div class="side-link"><span class="d"></span> Overview</div>
+            <div class="side-link active"><span class="d"></span> Page Views &amp; Reach</div>
+            <div class="side-link"><span class="d"></span> Sponsored Sessions</div>
+            <div class="side-link"><span class="d"></span> Booth &amp; Activations</div>
+            <div class="side-link"><span class="d"></span> Edit Sponsor Page</div>
+            <div class="side-link"><span class="d"></span> Lead Capture (opt-in)</div>
+            <div class="side-section">Account</div>
+            <div class="side-link"><span class="d"></span> Team</div>
+            <div class="side-link"><span class="d"></span> Fulfillment Recap</div>
+          </aside>
+          <main class="dash-main">
+            <div class="dash-hd">
+              <div>
+                <h1>Page Views &amp; Reach · Live</h1>
+                <div class="sub">Tuesday · Sept 15, 2026 · Auto-refresh every 60s</div>
+              </div>
+              <div class="dash-actions">
+                <button>Export CSV</button>
+                <button class="primary">Edit Sponsor Page</button>
+              </div>
+            </div>
+
+            <div class="kpis">
+              <div class="kpi">
+                <div class="l">Page Views</div>
+                <div class="v">22,418</div>
+                <div class="delta up">▲ 23% vs. promised</div>
+              </div>
+              <div class="kpi">
+                <div class="l">Unique App Viewers</div>
+                <div class="v">962</div>
+                <div class="delta up">▲ 96% of attendees</div>
+              </div>
+              <div class="kpi">
+                <div class="l">Session RSVPs</div>
+                <div class="v">284</div>
+                <div class="delta up">▲ 142 vs. day 1</div>
+              </div>
+              <div class="kpi">
+                <div class="l">Booth Tap-Ins</div>
+                <div class="v">412</div>
+                <div class="delta gold">★ Track Sponsor avg: 198</div>
+              </div>
+            </div>
+
+            <div class="panels">
+              <div class="panel">
+                <h3>Page Views by Surface · Last 24h</h3>
+                <div class="chart">
+                  <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#f5c842" stop-opacity="0.55"/>
+                        <stop offset="100%" stop-color="#f5c842" stop-opacity="0"/>
+                      </linearGradient>
+                      <linearGradient id="g2" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#0a1838" stop-opacity="0.4"/>
+                        <stop offset="100%" stop-color="#0a1838" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <g stroke="#eef0f7" stroke-width="1">
+                      <line x1="0" y1="40"  x2="600" y2="40"/>
+                      <line x1="0" y1="80"  x2="600" y2="80"/>
+                      <line x1="0" y1="120" x2="600" y2="120"/>
+                      <line x1="0" y1="160" x2="600" y2="160"/>
+                    </g>
+                    <path d="M0,180 C40,170 80,150 120,120 C160,90 200,70 240,55 C280,42 320,40 360,55 C400,70 440,90 480,80 C520,68 560,40 600,35 L600,200 L0,200 Z"
+                      fill="url(#g1)"/>
+                    <path d="M0,180 C40,170 80,150 120,120 C160,90 200,70 240,55 C280,42 320,40 360,55 C400,70 440,90 480,80 C520,68 560,40 600,35"
+                      stroke="#d9a916" stroke-width="2.5" fill="none"/>
+
+                    <path d="M0,190 C40,185 80,178 120,160 C160,145 200,130 240,118 C280,108 320,100 360,108 C400,115 440,130 480,128 C520,126 560,118 600,110 L600,200 L0,200 Z"
+                      fill="url(#g2)"/>
+                    <path d="M0,190 C40,185 80,178 120,160 C160,145 200,130 240,118 C280,108 320,100 360,108 C400,115 440,130 480,128 C520,126 560,118 600,110"
+                      stroke="#0a1838" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/>
+
+                    <g fill="#6b6f86" font-size="9" font-family="Inter">
+                      <text x="0"   y="195">12a</text>
+                      <text x="100" y="195">4a</text>
+                      <text x="200" y="195">8a</text>
+                      <text x="300" y="195">12p</text>
+                      <text x="400" y="195">4p</text>
+                      <text x="500" y="195">8p</text>
+                    </g>
+                  </svg>
+                </div>
+                <div class="legend">
+                  <span><i style="background:#f5c842;"></i> Sponsored Session views</span>
+                  <span><i style="background:#0a1838;"></i> Sponsor page views</span>
+                </div>
+              </div>
+
+              <div class="panel">
+                <h3>Top Placements</h3>
+                <div class="placement-list">
+                  <div class="placement-row">
+                    <div>
+                      <div class="ttl">U.S. Bank Sponsor Page</div>
+                      <div class="mt">Tapped from sponsored sessions &amp; track header</div>
+                    </div>
+                    <div class="num">8,420<small>page views</small></div>
+                  </div>
+                  <div class="placement-row">
+                    <div>
+                      <div class="ttl">Sponsored Session · "Banking the Next 10M"</div>
+                      <div class="mt">Tue 10:00 AM · Room 6 · counted per detail-view</div>
+                    </div>
+                    <div class="num">4,540<small>page views</small></div>
+                  </div>
+                  <div class="placement-row">
+                    <div>
+                      <div class="ttl">FinTech Track Header</div>
+                      <div class="mt">Sponsor logo tapped through to page</div>
+                    </div>
+                    <div class="num">3,180<small>page views</small></div>
+                  </div>
+                  <div class="placement-row">
+                    <div>
+                      <div class="ttl">Sponsor Hub · Presenting Tier</div>
+                      <div class="mt">Default sponsor page entry</div>
+                    </div>
+                    <div class="num">2,788<small>page views</small></div>
+                  </div>
+                  <div class="placement-row">
+                    <div>
+                      <div class="ttl">Sponsored Map Pin (Welcome Booth)</div>
+                      <div class="mt">UMN, St. Thomas, Macalester</div>
+                    </div>
+                    <div class="num">1,490<small>page views</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panels" style="grid-template-columns: 1fr 1fr; margin-top:12px;">
+              <div class="panel">
+                <h3>Reach by Day · Sept 14–18</h3>
+                <div style="display:grid; gap:10px; margin-top:10px;">
+                  <div style="display:grid; grid-template-columns: 56px 1fr 56px; gap:10px; align-items:center; font-size:12px;">
+                    <div style="font-weight:700; color:var(--ink);">MON 14</div>
+                    <div style="height:10px; background:#eef0f7; border-radius:99px; overflow:hidden;"><div style="width:48%; height:100%; background:linear-gradient(90deg, var(--midnight), var(--gold));"></div></div>
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; text-align:right; color:var(--ink);">14.2K</div>
+                  </div>
+                  <div style="display:grid; grid-template-columns: 56px 1fr 56px; gap:10px; align-items:center; font-size:12px;">
+                    <div style="font-weight:700; color:var(--ink);">TUE 15</div>
+                    <div style="height:10px; background:#eef0f7; border-radius:99px; overflow:hidden;"><div style="width:92%; height:100%; background:linear-gradient(90deg, var(--midnight), var(--gold));"></div></div>
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; text-align:right; color:var(--ink);">38.4K</div>
+                  </div>
+                  <div style="display:grid; grid-template-columns: 56px 1fr 56px; gap:10px; align-items:center; font-size:12px;">
+                    <div style="font-weight:700; color:var(--ink);">WED 16</div>
+                    <div style="height:10px; background:#eef0f7; border-radius:99px; overflow:hidden;"><div style="width:78%; height:100%; background:linear-gradient(90deg, var(--midnight), var(--gold));"></div></div>
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; text-align:right; color:var(--ink);">31.9K</div>
+                  </div>
+                  <div style="display:grid; grid-template-columns: 56px 1fr 56px; gap:10px; align-items:center; font-size:12px;">
+                    <div style="font-weight:700; color:var(--ink);">THU 17</div>
+                    <div style="height:10px; background:#eef0f7; border-radius:99px; overflow:hidden;"><div style="width:84%; height:100%; background:linear-gradient(90deg, var(--midnight), var(--gold));"></div></div>
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; text-align:right; color:var(--ink);">35.1K</div>
+                  </div>
+                  <div style="display:grid; grid-template-columns: 56px 1fr 56px; gap:10px; align-items:center; font-size:12px;">
+                    <div style="font-weight:700; color:var(--ink);">FRI 18</div>
+                    <div style="height:10px; background:#eef0f7; border-radius:99px; overflow:hidden;"><div style="width:64%; height:100%; background:linear-gradient(90deg, var(--midnight), var(--gold));"></div></div>
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; text-align:right; color:var(--ink);">27.7K</div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel">
+                <h3>Audience Breakdown</h3>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
+                  <div style="background:#fafbfd; border:1px solid var(--line); border-radius:10px; padding:10px;">
+                    <div style="font-size:9px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; font-weight:700;">Founders</div>
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; color:var(--midnight); margin-top:2px;">487</div>
+                    <div style="font-size:11px; color:var(--muted); margin-top:2px;">51% of attendees</div>
+                  </div>
+                  <div style="background:#fafbfd; border:1px solid var(--line); border-radius:10px; padding:10px;">
+                    <div style="font-size:9px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; font-weight:700;">Investors</div>
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; color:var(--midnight); margin-top:2px;">142</div>
+                    <div style="font-size:11px; color:var(--muted); margin-top:2px;">15%. VC, angel, family office</div>
+                  </div>
+                  <div style="background:#fafbfd; border:1px solid var(--line); border-radius:10px; padding:10px;">
+                    <div style="font-size:9px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; font-weight:700;">Operators</div>
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; color:var(--midnight); margin-top:2px;">218</div>
+                    <div style="font-size:11px; color:var(--muted); margin-top:2px;">23%, eng, product, GTM</div>
+                  </div>
+                  <div style="background:#fafbfd; border:1px solid var(--line); border-radius:10px; padding:10px;">
+                    <div style="font-size:9px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; font-weight:700;">Students &amp; Other</div>
+                    <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; color:var(--midnight); margin-top:2px;">109</div>
+                    <div style="font-size:11px; color:var(--muted); margin-top:2px;">11%. UMN, St. Thomas, Mac</div>
+                  </div>
+                </div>
+                <div style="margin-top:12px; padding:10px; background:linear-gradient(135deg, var(--midnight), var(--indigo)); color: var(--gold); border-radius:10px; font-size:11px; font-weight:600;">
+                  <div style="font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,200,66,0.7); font-weight:700;">Fulfillment Status</div>
+                  <div style="color:white; margin-top:4px; font-size:12.5px;">Presenting tier deliverables: <b style="color:var(--gold);">8 of 8</b> met or exceeded.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" style="margin-top:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;">
+                <h3 style="margin-bottom:0;">Sponsor Page · Editor Preview</h3>
+                <div style="font-size:11px; color:var(--muted);">Last saved 2 minutes ago · auto-publishes on save</div>
+              </div>
+              <div class="editor-row" style="grid-template-columns: 1fr 1fr; gap:12px;">
+                <div class="field editing">
+                  <div class="lbl">Headline</div>
+                  <div class="val">Helping Minnesota founders bank smarter, faster.</div>
+                </div>
+                <div class="field">
+                  <div class="lbl">Tagline</div>
+                  <div class="val">Presenting Sponsor · TCSW 2026</div>
+                </div>
+                <div class="field">
+                  <div class="lbl">Booth Location</div>
+                  <div class="val">📍 Coffman Lobby · Welcome Wall (Tue–Thu)</div>
+                </div>
+                <div class="field">
+                  <div class="lbl">CTA Button</div>
+                  <div class="val">Talk to our small-business team →</div>
+                </div>
+                <div class="field" style="grid-column: 1 / -1;">
+                  <div class="lbl">Sponsored Sessions (3 of 4 used)</div>
+                  <div class="val">FinTech &amp; Access · Tue · Investor Roundtable · Wed · Welcome Reception · Thu</div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      <div class="scene-copy" style="max-width:760px; margin: 28px auto 0;">
+        <p style="text-align:center; color:var(--muted);">
+          The dashboard solves sponsor fulfillment before it becomes a risk. They can see what they paid for,
+          edit their own content, and trust that next year's pitch deck has numbers behind it.
+        </p>
+      </div>
+    </div>
+
+
+  </div>
+</section>
+
+<!-- =================== PROPOSED ARCHITECTURE =================== -->
+<section class="arch-section">
+  <div class="arch-inner">
+
+    <div class="arch-head">
+      <span class="scene-num">How it's built</span>
+      <h2>Proposed architecture.</h2>
+      <p>A plain-English picture for the team, plus a one-page stack diagram for anyone curious about the engine. We're not building everything from scratch, we're connecting four trusted tools.</p>
+    </div>
+
+    <!-- ============ Functional flow (for non-technical audience) ============ -->
+    <div class="flow">
+      <div class="flow-title">The Picture · For Everyone</div>
+      <div class="flow-sub">From an attendee's phone to a working event, in three layers.</div>
+
+      <div class="flow-row">
+        <div class="flow-box">
+          <div class="icon">👤</div>
+          <div class="label">Layer 1 · Who</div>
+          <div class="name">Attendees, Speakers &amp; Sponsors</div>
+          <div class="desc">Up to 1,000+ people across 5 days on their iPhones and Android phones.</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box gold">
+          <div class="icon">📱</div>
+          <div class="label">Layer 2 · What they see</div>
+          <div class="name">The TCSW App</div>
+          <div class="desc">Sessions · Agenda · Event Map · Connect · Community · Profile. Same look on both stores.</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">
+          <div class="icon">⚙️</div>
+          <div class="label">Layer 3 · What powers it</div>
+          <div class="name">Four integrated tools</div>
+          <div class="desc">Off-the-shelf services we wire together. None of them get reinvented.</div>
+        </div>
+      </div>
+
+      <div class="flow-stack-label">The four tools we plug into</div>
+
+      <div class="flow-stack">
+        <div class="stack-card">
+          <div class="role">App Wrapper</div>
+          <div class="logo">Capacitor</div>
+          <div class="what">Wraps the TCSW web app into an <b>iOS</b> and <b>Android</b> build so it can be downloaded from the App Store and Google Play.</div>
+        </div>
+        <div class="stack-card">
+          <div class="role">Tickets &amp; Check-in</div>
+          <div class="logo">Eventbrite</div>
+          <div class="what">Keeps doing what BETA already uses it for: <b>ticket sales, refunds, and the QR code</b> attendees scan at the door.</div>
+        </div>
+        <div class="stack-card">
+          <div class="role">Maps &amp; Pins</div>
+          <div class="logo">Mapbox</div>
+          <div class="what">Powers the <b>Event Map</b>: real streets, real buildings, real walking directions to Surly Brewing.</div>
+        </div>
+        <div class="stack-card">
+          <div class="role">Data &amp; Accounts</div>
+          <div class="logo">Supabase</div>
+          <div class="what">Stores <b>sessions, profiles, sponsor pages, RSVPs</b>, and signs people in. The behind-the-scenes brain.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ User journey ============ -->
+    <div class="journey">
+      <div class="flow-title journey-title">An attendee's path · Step by step</div>
+      <div class="flow-sub journey-sub">What Maya actually does, from buying a ticket to walking into Surly Brewing.</div>
+
+      <div class="journey-row">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-icon">🎟️</div>
+          <div class="step-h">Maya buys her ticket</div>
+          <div class="step-p">On Eventbrite, like every year. Standard checkout, no new accounts needed.</div>
+          <div class="step-tag">Eventbrite</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-icon">📥</div>
+          <div class="step-h">Downloads the app</div>
+          <div class="step-p">Taps "Get App" on the TCSW website — goes straight to her store.</div>
+          <div class="step-tag">Capacitor</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-icon">📅</div>
+          <div class="step-h">Browses Sessions, builds Agenda</div>
+          <div class="step-p">She picks sessions from the catalogue. They land automatically in Agenda — no double-entry.</div>
+          <div class="step-tag">Supabase</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div class="step-icon">📍</div>
+          <div class="step-h">Finds the venue</div>
+          <div class="step-p">Taps a session → one pin drops on the real Twin Cities map.</div>
+          <div class="step-tag">Mapbox</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <div class="step-icon">✅</div>
+          <div class="step-h">Checks in on-site</div>
+          <div class="step-p">Same Eventbrite QR she'd use anyway, now inside the TCSW app.</div>
+          <div class="step-tag">Eventbrite</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Two-column "for tech folks" callout ============ -->
+    <div class="arch-notes">
+      <div class="arch-note">
+        <h4>What's new for BETA <span class="pill">Owned</span></h4>
+        <p>The pieces BETA owns and reuses year over year:</p>
+        <ul>
+          <li>One TCSW web app codebase, deployed to Vercel (or similar)</li>
+          <li>Supabase project: sessions, speakers, sponsors, RSVPs, profiles</li>
+          <li>TCSW design system: navy + gold, diagonal stripes, MN-arrow brand</li>
+          <li>Sponsor dashboard with page-view counts (Judd's flag-on-load idea)</li>
+        </ul>
+      </div>
+      <div class="arch-note">
+        <h4>What we don't have to build <span class="pill">Trusted</span></h4>
+        <p>The pieces we let trusted services handle, so we don't reinvent them:</p>
+        <ul>
+          <li><b>Eventbrite</b>: ticketing, refunds, on-site QR check-in</li>
+          <li><b>Capacitor</b>: iOS &amp; Android packaging, push notifications, store submission</li>
+          <li><b>Mapbox</b>: street data, search, walking directions</li>
+          <li><b>Supabase Auth</b>: sign-in via email or Eventbrite SSO</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="brand-mark">
+    Twin Cities Startup Week 2026 · Mobile Concept
+  </div>
+  <div class="small">
+    Built for BETA.MN by <a href="#">Attentio</a> · Concept walkthrough only. Sept 14–18, 2026
+  </div>
+</footer>
+
+</body>
+</html>

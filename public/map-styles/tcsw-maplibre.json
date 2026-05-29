@@ -1,0 +1,58 @@
+{
+  "version": 8,
+  "name": "TCSW Open Streets",
+  "metadata": {
+    "description": "Source-of-truth fallback style for TCSW attendee routing prototype.",
+    "sourceTruth": {
+      "visualIntent": "Google-style street map centered on destination certainty, not ornamental cartography.",
+      "coreSignals": [
+        "real streets",
+        "real buildings",
+        "single destination pin",
+        "soft gray-blue base",
+        "white roads",
+        "green parks",
+        "muted rail and parking"
+      ],
+      "brandOverlays": {
+        "pin": "#f5c842",
+        "ctaPrimary": "#0a1838",
+        "ctaAccent": "#ff6b6b"
+      },
+      "notes": "Keep map restrained. Brand lives in card chrome, pin treatment, and app shell more than basemap itself."
+    }
+  },
+  "sources": {
+    "osm-raster": {
+      "type": "raster",
+      "tiles": [
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+      ],
+      "tileSize": 256,
+      "attribution": "© OpenStreetMap contributors"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#dde6ef"
+      }
+    },
+    {
+      "id": "osm-raster-layer",
+      "type": "raster",
+      "source": "osm-raster",
+      "minzoom": 0,
+      "maxzoom": 19,
+      "paint": {
+        "raster-opacity": 1,
+        "raster-saturation": -0.28,
+        "raster-contrast": 0.05,
+        "raster-brightness-min": 0.08,
+        "raster-brightness-max": 0.97
+      }
+    }
+  ]
+}
