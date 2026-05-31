@@ -18,7 +18,7 @@ export type InterestTag =
   | "Health"
   | "Systems";
 
-export type AppRole = "attendee" | "sponsor" | "host" | "admin";
+export type AppRole = "attendee" | "speaker" | "sponsor" | "host" | "admin";
 
 export type SubmissionStatus =
   | "submitted"

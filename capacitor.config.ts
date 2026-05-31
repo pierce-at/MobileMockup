@@ -1,4 +1,5 @@
 import type { CapacitorConfig } from "@capacitor/cli";
+import { KeyboardResize } from "@capacitor/keyboard";
 
 const config: CapacitorConfig = {
   appId: "mn.beta.tcsw",
@@ -11,6 +12,22 @@ const config: CapacitorConfig = {
   },
   android: {
     backgroundColor: "#08142f"
+  },
+  plugins: {
+    SplashScreen: {
+      launchAutoHide: false,
+      backgroundColor: "#08142f",
+      showSpinner: false
+    },
+    StatusBar: {
+      style: "DARK",
+      backgroundColor: "#08142f",
+      overlaysWebView: false
+    },
+    Keyboard: {
+      resize: KeyboardResize.Native,
+      resizeOnFullScreen: true
+    }
   }
 };
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo } from "react";
 
@@ -18,7 +18,7 @@ export default function VolunteerPage() {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-[32px] bg-[linear-gradient(135deg,#0a1838,#142554)] p-6 text-white shadow-card">
+      <div className="rounded-[18px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] p-6 text-white shadow-card">
         <p className="text-xs uppercase tracking-[0.28em] text-gold">Volunteer</p>
         <h1 className="mt-3 font-display text-4xl font-semibold">Volunteer desk</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-white/72">
@@ -27,14 +27,14 @@ export default function VolunteerPage() {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[0.95fr,1.05fr]">
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">My assignments</p>
           <div className="mt-4 grid gap-3">
             {myAssignments.length ? (
               myAssignments.map((assignment) => {
                 const venue = venues.find((item) => item.id === assignment.venueId);
                 return (
-                  <div key={assignment.id} className="rounded-[22px] bg-mist p-4">
+                  <div key={assignment.id} className="rounded-[12px] bg-mist p-4">
                     <div className="flex items-center justify-between gap-3">
                       <p className="font-display text-xl font-semibold text-midnight">
                         {assignment.assignedRole ?? assignment.requestedRole}
@@ -44,11 +44,11 @@ export default function VolunteerPage() {
                       </span>
                     </div>
                     <p className="mt-2 text-sm text-midnight/68">
-                      {assignment.day.toUpperCase()} · {assignment.startTime} - {assignment.endTime}
+                      {assignment.day.toUpperCase()} - {assignment.startTime} - {assignment.endTime}
                     </p>
                     {venue ? (
                       <p className="mt-2 text-sm leading-6 text-midnight/70">
-                        {venue.name} · {venue.address}
+                        {venue.name} - {venue.address}
                       </p>
                     ) : null}
                     {assignment.notes ? (
@@ -58,20 +58,20 @@ export default function VolunteerPage() {
                 );
               })
             ) : (
-              <div className="rounded-[22px] border border-dashed border-midnight/10 bg-mist p-4 text-sm text-midnight/68">
+              <div className="rounded-[12px] border border-dashed border-midnight/10 bg-mist p-4 text-sm text-midnight/68">
                 No shift is tied to this profile yet. Operations can still assign you manually.
               </div>
             )}
           </div>
         </article>
 
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Coverage board</p>
           <div className="mt-4 grid gap-3">
             {volunteerAssignments.map((assignment) => {
               const venue = venues.find((item) => item.id === assignment.venueId);
               return (
-                <div key={assignment.id} className="rounded-[22px] border border-midnight/8 p-4">
+                <div key={assignment.id} className="rounded-[12px] border border-midnight/8 p-4">
                   <div className="flex items-center justify-between gap-3">
                     <p className="font-display text-xl font-semibold text-midnight">
                       {assignment.assignedRole ?? assignment.requestedRole}
@@ -81,7 +81,7 @@ export default function VolunteerPage() {
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-midnight/68">
-                    {assignment.name} · {assignment.day.toUpperCase()} · {assignment.startTime} -{" "}
+                    {assignment.name} - {assignment.day.toUpperCase()} - {assignment.startTime} -{" "}
                     {assignment.endTime}
                   </p>
                   {venue ? (

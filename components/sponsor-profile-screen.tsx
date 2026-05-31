@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useRef } from "react";
@@ -25,7 +25,7 @@ export function SponsorProfileScreen({ slug }: { slug: string }) {
 
   if (!sponsor) {
     return (
-      <section className="rounded-[28px] border border-midnight/8 bg-white p-6 shadow-card">
+      <section className="rounded-[14px] border border-midnight/8 bg-white p-6 shadow-card">
         <h1 className="font-display text-3xl font-semibold text-midnight">Sponsor not found</h1>
       </section>
     );
@@ -42,7 +42,7 @@ export function SponsorProfileScreen({ slug }: { slug: string }) {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-[32px] bg-[linear-gradient(135deg,#0a1838,#142554)] p-6 text-white shadow-card">
+      <div className="rounded-[18px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] p-6 text-white shadow-card">
         <p className="text-xs uppercase tracking-[0.28em] text-gold">{sponsor.tier}</p>
         <h1 className="mt-3 font-display text-4xl font-semibold">{sponsor.name}</h1>
         <p className="mt-2 text-sm uppercase tracking-[0.24em] text-white/55">
@@ -52,14 +52,14 @@ export function SponsorProfileScreen({ slug }: { slug: string }) {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[1fr,0.92fr]">
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Featured sessions</p>
           <div className="mt-4 grid gap-3">
             {sessions.map((session) => (
               <Link
                 key={session.id}
                 href={`/app/sessions/${session.slug}`}
-                className="rounded-[22px] bg-mist p-4 transition hover:bg-[#ece8dd]"
+                className="rounded-[12px] bg-mist p-4 transition hover:bg-[#e6eef1]"
               >
                 <p className="font-display text-xl font-semibold text-midnight">{session.title}</p>
                 <p className="mt-1 text-sm text-midnight/64">
@@ -70,7 +70,7 @@ export function SponsorProfileScreen({ slug }: { slug: string }) {
           </div>
         </article>
 
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Connect with sponsor</p>
           <div className="mt-4 grid gap-3">
             {contactEntries.map(([field, value]) => {
@@ -91,7 +91,7 @@ export function SponsorProfileScreen({ slug }: { slug: string }) {
                       destination: value
                     });
                   }}
-                  className="flex items-center justify-between rounded-[22px] border border-midnight/8 px-4 py-4 transition hover:border-midnight/16 hover:bg-mist"
+                  className="flex items-center justify-between rounded-[12px] border border-midnight/8 px-4 py-4 transition hover:border-midnight/16 hover:bg-mist"
                 >
                   <div>
                     <p className="font-semibold text-midnight">{fieldLabels[field]}</p>
@@ -108,7 +108,7 @@ export function SponsorProfileScreen({ slug }: { slug: string }) {
       </div>
 
       {materials.length ? (
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Sponsor materials</p>
           <div className="mt-4 grid gap-2">
             {materials.map((material) => (

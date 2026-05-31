@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import type { SessionSubmission, SubmissionStatus } from "@/lib/domain/types";
+import type { DayKey, SessionSubmission, SubmissionStatus } from "@/lib/domain/types";
 import { useAppState } from "@/lib/state/app-state";
 
 const statusOptions: SubmissionStatus[] = [
@@ -15,12 +15,22 @@ const statusOptions: SubmissionStatus[] = [
 ];
 
 const statusTone: Record<SubmissionStatus, string> = {
-  submitted: "bg-[rgba(10,24,56,0.08)] text-midnight",
+  submitted: "bg-[rgba(12,73,90,0.08)] text-midnight",
   needs_info: "bg-[rgba(220,98,64,0.14)] text-coral",
-  in_review: "bg-[rgba(245,200,66,0.2)] text-midnight",
+  in_review: "bg-[rgba(251,189,25,0.2)] text-midnight",
   approved: "bg-[rgba(53,143,95,0.16)] text-[#215b3c]",
   rejected: "bg-[rgba(220,98,64,0.14)] text-coral",
-  scheduled: "bg-[rgba(22,85,140,0.16)] text-[#17456f]"
+  scheduled: "bg-[rgba(12,73,90,0.14)] text-[#0c495a]"
+};
+
+const dayOrder: Array<DayKey | "open"> = ["mon", "tue", "wed", "thu", "fri", "open"];
+const dayLabels: Record<DayKey | "open", string> = {
+  mon: "Mon",
+  tue: "Tue",
+  wed: "Wed",
+  thu: "Thu",
+  fri: "Fri",
+  open: "Open"
 };
 
 function buildDefaultReviewState(submission: SessionSubmission | undefined) {
@@ -75,6 +85,39 @@ export default function AdminPage() {
       })),
     [submissions]
   );
+
+  const schedulingBuckets = useMemo(
+    () =>
+      dayOrder.map((day) => {
+        const entries = submissions.filter((submission) =>
+          day === "open" ? !submission.requestedDay : submission.requestedDay === day
+        );
+        return {
+          day,
+          entries,
+          readyCount: entries.filter((entry) => entry.status === "approved" || entry.status === "scheduled").length,
+          needsOpsCount: entries.filter(
+            (entry) => entry.logisticsNeeds.trim() || entry.status === "needs_info"
+          ).length
+        };
+      }),
+    [submissions]
+  );
+
+  const trackBuckets = useMemo(() => {
+    const grouped = new Map<string, SessionSubmission[]>();
+    submissions.forEach((submission) => {
+      const key = submission.track || "Unassigned";
+      grouped.set(key, [...(grouped.get(key) ?? []), submission]);
+    });
+    return [...grouped.entries()]
+      .map(([track, entries]) => ({
+        track,
+        entries,
+        ready: entries.filter((entry) => entry.status === "approved" || entry.status === "scheduled").length
+      }))
+      .sort((left, right) => right.entries.length - left.entries.length);
+  }, [submissions]);
 
   async function setStatus(status: SubmissionStatus) {
     if (!selectedSubmission || !isAdmin) return;
@@ -134,7 +177,7 @@ export default function AdminPage() {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-[32px] bg-[linear-gradient(135deg,#0a1838,#142554)] p-6 text-white shadow-card">
+      <div className="rounded-[18px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] p-6 text-white shadow-card">
         <p className="text-xs uppercase tracking-[0.28em] text-gold">Admin console</p>
         <h1 className="mt-3 font-display text-4xl font-semibold">Editorial and publish control</h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-white/72">
@@ -143,7 +186,7 @@ export default function AdminPage() {
       </div>
 
       {!isAdmin ? (
-        <div className="rounded-[24px] border border-coral/18 bg-white p-5 shadow-card">
+        <div className="rounded-[12px] border border-coral/18 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Read only</p>
           <p className="mt-2 font-display text-2xl font-semibold text-midnight">
             This surface is reserved for admin reviewers.
@@ -158,7 +201,7 @@ export default function AdminPage() {
         {cards.map((card) => (
           <article
             key={card.label}
-            className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card"
+            className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card"
           >
             <p className="text-xs uppercase tracking-[0.24em] text-coral">{card.label}</p>
             <p className="mt-3 font-display text-4xl font-semibold text-midnight">{card.value}</p>
@@ -168,7 +211,7 @@ export default function AdminPage() {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[0.9fr,1.1fr]">
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.24em] text-coral">Schedule control</p>
@@ -180,7 +223,7 @@ export default function AdminPage() {
               className={`rounded-full px-4 py-2 text-sm font-semibold ${
                 scheduleControl.isPublished
                   ? "bg-[rgba(53,143,95,0.16)] text-[#215b3c]"
-                  : "bg-[rgba(10,24,56,0.08)] text-midnight"
+                  : "bg-[rgba(12,73,90,0.08)] text-midnight"
               }`}
             >
               {scheduleControl.isPublished ? "Live" : "Draft"}
@@ -192,7 +235,7 @@ export default function AdminPage() {
           </p>
 
           <div className="mt-5 grid gap-3 md:grid-cols-2">
-            <div className="rounded-[22px] bg-mist p-4">
+            <div className="rounded-[12px] bg-mist p-4">
               <p className="text-xs uppercase tracking-[0.22em] text-midnight/45">Published</p>
               <p className="mt-2 font-display text-lg font-semibold text-midnight">
                 {scheduleControl.publishedAt
@@ -200,7 +243,7 @@ export default function AdminPage() {
                   : "Not published yet"}
               </p>
             </div>
-            <div className="rounded-[22px] bg-mist p-4">
+            <div className="rounded-[12px] bg-mist p-4">
               <p className="text-xs uppercase tracking-[0.22em] text-midnight/45">Locked</p>
               <p className="mt-2 font-display text-lg font-semibold text-midnight">
                 {scheduleControl.lockedAt
@@ -248,7 +291,92 @@ export default function AdminPage() {
           </div>
         </article>
 
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
+          <p className="text-xs uppercase tracking-[0.24em] text-coral">Scheduling intake</p>
+          <h2 className="mt-2 font-display text-3xl font-semibold text-midnight">
+            Sort the pile before it becomes chaos
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-midnight/68">
+            Use day, track, status, and logistics flags to triage lots of incoming entries before linking them to final sessions.
+          </p>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {schedulingBuckets.map((bucket) => (
+              <button
+                key={bucket.day}
+                type="button"
+                onClick={() => {
+                  const next = bucket.entries[0];
+                  if (next) setSelectedId(next.id);
+                }}
+                className="rounded-[12px] border border-midnight/8 bg-mist p-4 text-left transition hover:border-midnight/20"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-display text-2xl font-semibold text-midnight">
+                    {dayLabels[bucket.day]}
+                  </p>
+                  <span className="rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-midnight/60">
+                    {bucket.entries.length} entries
+                  </span>
+                </div>
+                <p className="mt-3 text-sm text-midnight/68">
+                  {bucket.readyCount} ready, {bucket.needsOpsCount} need ops review
+                </p>
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            <div className="rounded-[12px] border border-midnight/8 bg-white p-4">
+              <p className="text-xs uppercase tracking-[0.22em] text-midnight/45">Track load</p>
+              <div className="mt-3 grid gap-2">
+                {trackBuckets.map((bucket) => (
+                  <div key={bucket.track} className="rounded-[10px] bg-mist px-3 py-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm font-semibold text-midnight">{bucket.track}</p>
+                      <p className="text-xs font-semibold text-midnight/56">
+                        {bucket.ready}/{bucket.entries.length} ready
+                      </p>
+                    </div>
+                    <div className="mt-2 h-2 overflow-hidden rounded-full bg-white">
+                      <div
+                        className="h-full rounded-full bg-[#0c495a]"
+                        style={{
+                          width: `${bucket.entries.length ? (bucket.ready / bucket.entries.length) * 100 : 0}%`
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[12px] border border-midnight/8 bg-white p-4">
+              <p className="text-xs uppercase tracking-[0.22em] text-midnight/45">Fast actions</p>
+              <div className="mt-3 grid gap-2">
+                {submissions
+                  .filter((submission) => submission.status === "submitted" || submission.status === "needs_info")
+                  .slice(0, 4)
+                  .map((submission) => (
+                    <button
+                      key={submission.id}
+                      type="button"
+                      onClick={() => setSelectedId(submission.id)}
+                      className="rounded-[10px] bg-mist px-3 py-3 text-left"
+                    >
+                      <p className="text-sm font-semibold text-midnight">{submission.title}</p>
+                      <p className="mt-1 text-xs text-midnight/58">
+                        {submission.track} - {submission.requestedDay?.toUpperCase() ?? "OPEN"} - {submission.status.replace("_", " ")}
+                      </p>
+                    </button>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Submission funnel</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {counts.map((entry) => (
@@ -268,7 +396,7 @@ export default function AdminPage() {
                   key={submission.id}
                   type="button"
                   onClick={() => setSelectedId(submission.id)}
-                  className={`rounded-[22px] border px-4 py-4 text-left transition ${
+                  className={`rounded-[12px] border px-4 py-4 text-left transition ${
                     selectedSubmission?.id === submission.id
                       ? "border-midnight bg-mist"
                       : "border-midnight/8 bg-white hover:border-midnight/16"
@@ -280,7 +408,7 @@ export default function AdminPage() {
                         {submission.title}
                       </p>
                       <p className="mt-1 text-sm text-midnight/64">
-                        {submission.submitterName} · {submission.company}
+                        {submission.submitterName} - {submission.company}
                       </p>
                     </div>
                     <span
@@ -294,13 +422,13 @@ export default function AdminPage() {
             </div>
 
             {selectedSubmission ? (
-              <div className="rounded-[24px] bg-mist p-4">
+              <div className="rounded-[12px] bg-mist p-4">
                 <p className="text-xs uppercase tracking-[0.24em] text-coral">Selected submission</p>
                 <h3 className="mt-2 font-display text-3xl font-semibold text-midnight">
                   {selectedSubmission.title}
                 </h3>
                 <p className="mt-2 text-sm text-midnight/68">
-                  {selectedSubmission.submitterName} · {selectedSubmission.submitterEmail}
+                  {selectedSubmission.submitterName} - {selectedSubmission.submitterEmail}
                 </p>
                 <div className="mt-4 grid gap-2 text-sm text-midnight/72 md:grid-cols-3">
                   <p>Track: {selectedSubmission.track}</p>
@@ -308,7 +436,7 @@ export default function AdminPage() {
                   <p>Requested day: {selectedSubmission.requestedDay?.toUpperCase() ?? "Open"}</p>
                 </div>
 
-                <div className="mt-4 space-y-4 rounded-[20px] bg-white/80 p-4">
+                <div className="mt-4 space-y-4 rounded-[10px] bg-white/80 p-4">
                   <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-midnight/45">Summary</p>
                     <p className="mt-2 text-sm leading-6 text-midnight/76">
@@ -334,7 +462,7 @@ export default function AdminPage() {
                         {selectedSubmission.themes.map((theme) => (
                           <span
                             key={theme}
-                            className="rounded-full bg-[rgba(10,24,56,0.08)] px-3 py-1 text-xs font-semibold text-midnight"
+                            className="rounded-full bg-[rgba(12,73,90,0.08)] px-3 py-1 text-xs font-semibold text-midnight"
                           >
                             {theme}
                           </span>
@@ -399,7 +527,7 @@ export default function AdminPage() {
                           assignedReviewer: event.target.value
                         }))
                       }
-                      className="rounded-[20px] border border-midnight/10 bg-white px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                      className="rounded-[10px] border border-midnight/10 bg-white px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
                     />
                   </label>
 
@@ -413,7 +541,7 @@ export default function AdminPage() {
                           linkedSessionId: event.target.value
                         }))
                       }
-                      className="rounded-[20px] border border-midnight/10 bg-white px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                      className="rounded-[10px] border border-midnight/10 bg-white px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
                     >
                       <option value="">Create draft session on approval</option>
                       {sessions.map((session) => (
@@ -437,7 +565,7 @@ export default function AdminPage() {
                       }))
                     }
                     rows={5}
-                    className="rounded-[20px] border border-midnight/10 bg-white px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                    className="rounded-[10px] border border-midnight/10 bg-white px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
                   />
                 </label>
 
@@ -453,7 +581,7 @@ export default function AdminPage() {
                       }))
                     }
                     rows={4}
-                    className="rounded-[20px] border border-midnight/10 bg-white px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                    className="rounded-[10px] border border-midnight/10 bg-white px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
                   />
                 </label>
 
@@ -475,17 +603,16 @@ export default function AdminPage() {
               </div>
             ) : null}
           </div>
-        </article>
-      </div>
+      </article>
 
       <div className="grid gap-4 xl:grid-cols-[0.95fr,1.05fr]">
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Release summary</p>
           <div className="mt-4 grid gap-3">
             {scheduleChanges.slice(0, 6).map((change) => {
               const session = sessions.find((item) => item.id === change.sessionId);
               return (
-                <div key={change.id} className="rounded-[22px] bg-mist p-4">
+                <div key={change.id} className="rounded-[12px] bg-mist p-4">
                   <div className="flex items-center justify-between gap-3">
                     <p className="font-display text-xl font-semibold text-midnight">
                       {session?.title ?? change.sessionId}
@@ -501,7 +628,7 @@ export default function AdminPage() {
           </div>
         </article>
 
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-xs uppercase tracking-[0.24em] text-coral">Ops hardening</p>
@@ -527,10 +654,10 @@ export default function AdminPage() {
           </div>
           <div className="mt-4 grid gap-3">
             {auditLogs.map((entry) => (
-              <div key={entry.id} className="rounded-[22px] bg-mist p-4">
+              <div key={entry.id} className="rounded-[12px] bg-mist p-4">
                 <p className="font-display text-xl font-semibold text-midnight">{entry.action}</p>
                 <p className="mt-2 text-sm text-midnight/68">
-                  {entry.actor} · {entry.subject}
+                  {entry.actor} - {entry.subject}
                 </p>
                 <p className="mt-2 text-xs text-midnight/52">
                   {new Date(entry.createdAt).toLocaleString()}
@@ -541,13 +668,13 @@ export default function AdminPage() {
         </article>
       </div>
 
-      <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+      <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
         <p className="text-xs uppercase tracking-[0.24em] text-coral">Volunteer coverage</p>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {volunteerAssignments.map((assignment) => {
             const venue = venues.find((item) => item.id === assignment.venueId);
             return (
-              <div key={assignment.id} className="rounded-[22px] bg-mist p-4">
+              <div key={assignment.id} className="rounded-[12px] bg-mist p-4">
                 <div className="flex items-center justify-between gap-3">
                   <p className="font-display text-xl font-semibold text-midnight">
                     {assignment.assignedRole ?? assignment.requestedRole}
@@ -557,7 +684,7 @@ export default function AdminPage() {
                   </span>
                 </div>
                 <p className="mt-2 text-sm text-midnight/68">
-                  {assignment.name} · {assignment.day.toUpperCase()} · {assignment.startTime} - {assignment.endTime}
+                  {assignment.name} - {assignment.day.toUpperCase()} - {assignment.startTime} - {assignment.endTime}
                 </p>
                 {venue ? (
                   <p className="mt-2 text-sm leading-6 text-midnight/70">{venue.name}</p>

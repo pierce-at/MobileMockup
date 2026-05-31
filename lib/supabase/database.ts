@@ -20,7 +20,7 @@ export type Database = {
           sponsor_id: string | null;
           updated_at: string;
           visible_contact_fields: string[];
-          app_role: "attendee" | "sponsor" | "host" | "admin";
+          app_role: "attendee" | "speaker" | "sponsor" | "host" | "admin";
         };
         Insert: Partial<Database["public"]["Tables"]["profiles"]["Row"]> & {
           avatar: string;
@@ -32,7 +32,7 @@ export type Database = {
           name: string;
           role: string;
           visible_contact_fields: string[];
-          app_role: "attendee" | "sponsor" | "host" | "admin";
+          app_role: "attendee" | "speaker" | "sponsor" | "host" | "admin";
         };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Row"]>;
       };

@@ -1,4 +1,4 @@
-import { SessionDetailScreen } from "@/components/session-detail-screen";
+﻿import { SessionDetailScreen } from "@/components/session-detail-screen";
 import { defaultAppState } from "@/lib/data/mock-data";
 
 type SessionDetailPageProps = {

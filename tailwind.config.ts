@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+﻿import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
@@ -21,8 +21,8 @@ const config: Config = {
         body: ["var(--font-inter)", "sans-serif"]
       },
       boxShadow: {
-        card: "0 18px 40px rgba(10, 24, 56, 0.16)",
-        glow: "0 0 0 1px rgba(245, 200, 66, 0.16), 0 16px 40px rgba(10, 24, 56, 0.2)"
+        card: "0 18px 40px rgba(12, 73, 90, 0.14)",
+        glow: "0 0 0 1px rgba(251, 189, 25, 0.18), 0 16px 40px rgba(12, 73, 90, 0.22)"
       }
     }
   },

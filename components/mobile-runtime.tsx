@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 
 export function MobileRuntime() {
   useEffect(() => {
     let active = true;
+    const removeListeners: Array<() => Promise<void>> = [];
 
     async function setupNativeShell() {
       const { Capacitor } = await import("@capacitor/core");
@@ -20,15 +21,38 @@ export function MobileRuntime() {
 
       if (!isNative) return;
 
-      const [{ StatusBar, Style }, { Keyboard, KeyboardResize }, { SplashScreen }] = await Promise.all([
-        import("@capacitor/status-bar"),
-        import("@capacitor/keyboard"),
-        import("@capacitor/splash-screen")
-      ]);
+      const [{ App }, { StatusBar, Style }, { Keyboard, KeyboardResize }, { SplashScreen }] =
+        await Promise.all([
+          import("@capacitor/app"),
+          import("@capacitor/status-bar"),
+          import("@capacitor/keyboard"),
+          import("@capacitor/splash-screen")
+        ]);
+
+      const keyboardShowListener = await Keyboard.addListener("keyboardWillShow", () => {
+        document.body.classList.add("keyboard-open");
+      });
+      removeListeners.push(() => keyboardShowListener.remove());
+
+      const keyboardHideListener = await Keyboard.addListener("keyboardWillHide", () => {
+        document.body.classList.remove("keyboard-open");
+      });
+      removeListeners.push(() => keyboardHideListener.remove());
+
+      const backButtonListener = await App.addListener("backButton", ({ canGoBack }) => {
+        if (canGoBack && window.history.length > 1) {
+          window.history.back();
+          return;
+        }
+
+        void App.minimizeApp();
+      });
+      removeListeners.push(() => backButtonListener.remove());
 
       await Promise.allSettled([
+        StatusBar.setOverlaysWebView({ overlay: false }),
         StatusBar.setStyle({ style: Style.Dark }),
-        StatusBar.setBackgroundColor({ color: "#08142f" }),
+        StatusBar.setBackgroundColor({ color: "#0c495a" }),
         Keyboard.setResizeMode({ mode: KeyboardResize.Native }),
         Keyboard.setScroll({ isDisabled: false }),
         SplashScreen.hide()
@@ -40,6 +64,8 @@ export function MobileRuntime() {
     return () => {
       active = false;
       document.body.classList.remove("capacitor-app");
+      document.body.classList.remove("keyboard-open");
+      void Promise.allSettled(removeListeners.map((remove) => remove()));
     };
   }, []);
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -8,7 +8,6 @@ import { DaySwitcher } from "@/components/day-switcher";
 import { SessionCard } from "@/components/session-card";
 import type { DayKey, Session } from "@/lib/domain/types";
 import { useAppState } from "@/lib/state/app-state";
-import { buildMultiSessionIcs, downloadIcs } from "@/lib/utils/calendar";
 import { sortSessionsByTime } from "@/lib/utils/time";
 
 const FILTER_STORAGE_KEY = "tcsw-schedule-filters-v1";
@@ -38,6 +37,8 @@ export default function SchedulePage() {
   const [capacityFilter, setCapacityFilter] = useState<CapacityFilter>("all");
   const [activeFormat, setActiveFormat] = useState("all");
   const [activeSponsorId, setActiveSponsorId] = useState("all");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [chipsCollapsed, setChipsCollapsed] = useState(false);
 
   const tags = ["All", "Sponsored", "Featured", "AI", "FinTech", "Community", "Social"];
   const canPreviewDraft = currentUser.appRole === "admin" || currentUser.appRole === "host";
@@ -88,6 +89,18 @@ export default function SchedulePage() {
       })
     );
   }, [activeFormat, activeSponsorId, activeTag, activeVenueId, capacityFilter, savedOnly, search]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    function handleScroll() {
+      setChipsCollapsed(window.scrollY > 120);
+    }
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const availableVenues = useMemo(
     () =>
@@ -168,8 +181,6 @@ export default function SchedulePage() {
   const sponsorOptions = sponsors.filter((sponsor) =>
     sessions.some((session) => session.sponsorId === sponsor.id)
   );
-  const exportableSessions = filteredSessions.slice(0, 20);
-
   const toggleSavedSession = (sessionId: string) => {
     const toggle = isSaved(sessionId) ? removeSavedSession : saveSession;
     return toggle(sessionId);
@@ -211,7 +222,7 @@ export default function SchedulePage() {
       </div>
 
       {!scheduleIsPublic ? (
-        <div className="rounded-[28px] border border-midnight/8 bg-white p-6 shadow-card">
+        <div className="rounded-[14px] border border-midnight/8 bg-white p-6 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Schedule pending</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-midnight">
             The final schedule is still being prepared.
@@ -231,12 +242,37 @@ export default function SchedulePage() {
         <>
           <ConflictBanner count={conflictCount} />
 
-          <div className="sticky-day-rail rounded-[28px] border border-midnight/8 bg-white p-4 shadow-card">
+          <div className="sticky-day-rail p-4">
             <DaySwitcher activeDay={activeDay} onChange={setActiveDay} />
+            <div className="mt-3 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setFiltersOpen((value) => !value)}
+                aria-expanded={filtersOpen}
+                aria-controls="schedule-filter-panel"
+                aria-label={filtersOpen ? "Close filters" : "Open filters"}
+                className="fixed right-4 top-[calc(var(--safe-top)+6.75rem)] z-40 inline-flex h-11 w-11 items-center justify-center rounded-full border border-midnight/10 bg-white/92 text-midnight shadow-card transition hover:bg-[#e6eef1] md:right-8"
+              >
+                {filtersOpen ? (
+                  <span className="text-[18px] font-semibold leading-none">×</span>
+                ) : (
+                  <span className="relative block h-[14px] w-[16px]" aria-hidden="true">
+                    <span className="absolute left-0 top-[1px] h-[2px] w-full rounded-full bg-current" />
+                    <span className="absolute left-[2px] top-[6px] h-[2px] w-[12px] rounded-full bg-current" />
+                    <span className="absolute left-[5px] top-[11px] h-[2px] w-[6px] rounded-full bg-current" />
+                  </span>
+                )}
+              </button>
+            </div>
 
-            <div className="mt-3 grid gap-2 sm:grid-cols-[1.2fr,0.8fr]">
+            <div
+              id="schedule-filter-panel"
+              className={`${filtersOpen ? "mt-3 grid" : "hidden"} gap-2 sm:grid-cols-[1.2fr,0.8fr]`}
+            >
               <label className="flex min-w-0 items-center gap-2 rounded-[16px] border border-midnight/8 bg-mist px-3 py-2.5">
-                <span className="text-[12px] text-midnight/48">⌕</span>
+                <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-midnight/48">
+                  Search
+                </span>
                 <input
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
@@ -264,7 +300,7 @@ export default function SchedulePage() {
               </label>
             </div>
 
-            <div className="mt-2 grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
+            <div className={`${filtersOpen ? "mt-2 grid" : "hidden"} gap-2 sm:grid-cols-2 xl:grid-cols-5`}>
               <label className="flex min-w-0 items-center gap-2 rounded-[16px] border border-midnight/8 bg-mist px-3 py-2.5">
                 <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-midnight/48">
                   Capacity
@@ -337,63 +373,37 @@ export default function SchedulePage() {
                 Clear filters
               </button>
 
-              {exportableSessions.length ? (
-                <button
-                  type="button"
-                  onClick={() =>
-                    downloadIcs(
-                      "tcsw-schedule.ics",
-                      buildMultiSessionIcs(
-                        exportableSessions.map((session) => ({
-                          session,
-                          venue: venues.find((venue) => venue.id === session.venueId)
-                        }))
-                      )
-                    )
-                  }
-                  className="rounded-[16px] border border-midnight/8 bg-white px-3 py-2.5 text-[12px] font-semibold text-midnight/68 transition hover:bg-mist"
-                >
-                  Export to Apple / Android
-                </button>
-              ) : null}
             </div>
 
-            <div className="no-scrollbar mt-3 flex gap-1.5 overflow-x-auto">
+            <div
+              className={`no-scrollbar overflow-x-auto transition-all duration-200 ${
+                chipsCollapsed
+                  ? "mt-0 max-h-0 opacity-0 pointer-events-none"
+                  : "mt-3 max-h-16 opacity-100"
+              }`}
+            >
+              <div className="flex gap-1.5">
               {tags.map((tag) => (
                 <button
                   key={tag}
                   type="button"
                   onClick={() => setActiveTag(tag)}
-                  className={`rounded-full px-3 py-1.5 text-[12px] font-medium ${
+                  className={`rounded-full px-3 py-1 text-[10px] font-medium ${
                     activeTag === tag
-                      ? "bg-[rgba(245,200,66,0.2)] text-midnight"
+                      ? "bg-[rgba(251,189,25,0.2)] text-midnight"
                       : "bg-mist text-midnight/64"
                   }`}
                 >
                   {tag}
                 </button>
               ))}
-            </div>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Link
-                href="/app/updates"
-                className="rounded-full border border-midnight/8 bg-white px-3 py-1.5 text-[12px] font-semibold text-midnight/72"
-              >
-                Update feed
-              </Link>
-              <Link
-                href="/app/ticket"
-                className="rounded-full border border-midnight/8 bg-white px-3 py-1.5 text-[12px] font-semibold text-midnight/72"
-              >
-                Ticket / Eventbrite
-              </Link>
+              </div>
             </div>
           </div>
 
-          <div className="rounded-[28px] border border-midnight/8 bg-white p-3 shadow-card sm:p-4">
+          <div className="rounded-[14px] border border-midnight/8 bg-white p-3 shadow-card sm:p-4">
             {!isReady ? (
-              <div className="grid min-h-[220px] place-items-center rounded-[22px] bg-mist/55 text-center">
+              <div className="grid min-h-[220px] place-items-center rounded-[12px] bg-mist/55 text-center">
                 <div>
                   <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
                     Loading
@@ -440,7 +450,7 @@ export default function SchedulePage() {
                 </div>
               ))
             ) : (
-              <div className="grid min-h-[220px] place-items-center rounded-[22px] border border-dashed border-midnight/10 bg-mist/55 px-6 text-center">
+              <div className="grid min-h-[220px] place-items-center rounded-[12px] border border-dashed border-midnight/10 bg-mist/55 px-6 text-center">
                 <div>
                   <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
                     No results
@@ -482,3 +492,4 @@ function getTimeBlockLabel(
   if (sessions.some((session) => session.isSponsored)) return "Sponsored";
   return "Sessions";
 }
+

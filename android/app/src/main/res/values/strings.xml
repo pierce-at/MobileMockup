@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">TCSW 2026</string>
+    <string name="title_activity_main">TCSW 2026</string>
+    <string name="package_name">mn.beta.tcsw</string>
+    <string name="custom_url_scheme">mn.beta.tcsw</string>
+</resources>

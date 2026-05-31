@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
 
@@ -52,10 +52,10 @@ export default function ConnectPage() {
         </div>
       </div>
 
-      <div className="rounded-[28px] border border-midnight/8 bg-white p-4 shadow-card">
+      <div className="rounded-[14px] border border-midnight/8 bg-white p-4 shadow-card">
         <div className="grid gap-2 sm:grid-cols-[1.1fr,0.8fr,0.9fr]">
           <label className="flex min-w-0 items-center gap-2 rounded-[16px] border border-midnight/8 bg-mist px-3 py-2.5">
-            <span className="text-[12px] text-midnight/48">⌕</span>
+            <span className="text-[12px] text-midnight/48">Search</span>
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
@@ -101,7 +101,7 @@ export default function ConnectPage() {
       </div>
 
       {!isReady ? (
-        <div className="grid min-h-[220px] place-items-center rounded-[28px] border border-midnight/8 bg-white/70 p-6 text-center shadow-card">
+        <div className="grid min-h-[220px] place-items-center rounded-[14px] border border-midnight/8 bg-white/70 p-6 text-center shadow-card">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
               Loading
@@ -116,10 +116,10 @@ export default function ConnectPage() {
           {profiles.map((profile) => (
             <article
               key={profile.id}
-              className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card"
+              className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card"
             >
               <div className="flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-midnight font-semibold text-white">
+                <div className="grid h-12 w-12 place-items-center rounded-[10px] bg-midnight font-semibold text-white">
                   {profile.avatar}
                 </div>
                 <div className="min-w-0">
@@ -127,7 +127,7 @@ export default function ConnectPage() {
                     {profile.name}
                   </h2>
                   <p className="text-sm text-midnight/64">
-                    {profile.role} · {profile.company}
+                    {profile.role} - {profile.company}
                   </p>
                 </div>
               </div>
@@ -146,7 +146,7 @@ export default function ConnectPage() {
           ))}
         </div>
       ) : (
-        <div className="grid min-h-[220px] place-items-center rounded-[28px] border border-dashed border-midnight/10 bg-white/70 p-6 text-center shadow-card">
+        <div className="grid min-h-[220px] place-items-center rounded-[14px] border border-dashed border-midnight/10 bg-white/70 p-6 text-center shadow-card">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
               No matches

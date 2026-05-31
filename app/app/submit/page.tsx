@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState, type FormEvent } from "react";
 
@@ -52,7 +52,7 @@ export default function SubmitPage() {
   const [requestedDay, setRequestedDay] = useState<DayKey>("wed");
   const [themeDraft, setThemeDraft] = useState("Operations, Systems");
   const [speakerDetails, setSpeakerDetails] = useState(
-    `${currentUser.name} · ${currentUser.role} at ${currentUser.company}`
+    `${currentUser.name} - ${currentUser.role} at ${currentUser.company}`
   );
   const [logisticsNeeds, setLogisticsNeeds] = useState("");
   const [resourceDraft, setResourceDraft] = useState("");
@@ -91,7 +91,7 @@ export default function SubmitPage() {
     setFullDescription("");
     setIntendedAudience("");
     setThemeDraft(track);
-    setSpeakerDetails(`${currentUser.name} · ${currentUser.role} at ${currentUser.company}`);
+    setSpeakerDetails(`${currentUser.name} - ${currentUser.role} at ${currentUser.company}`);
     setLogisticsNeeds("");
     setResourceDraft("");
     setMessage(
@@ -101,7 +101,7 @@ export default function SubmitPage() {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-[32px] bg-[linear-gradient(135deg,#0a1838,#142554)] p-6 text-white shadow-card">
+      <div className="rounded-[18px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] p-6 text-white shadow-card">
         <p className="text-xs uppercase tracking-[0.28em] text-gold">Submit session</p>
         <h1 className="mt-3 font-display text-4xl font-semibold">Bring a real session into the week.</h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-white/72">
@@ -109,7 +109,7 @@ export default function SubmitPage() {
         </p>
       </div>
 
-      <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+      <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="grid gap-4 md:grid-cols-[1.1fr,0.9fr]">
             <label className="grid gap-2">
@@ -118,7 +118,7 @@ export default function SubmitPage() {
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
                 required
-                className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
               />
             </label>
             <label className="grid gap-2">
@@ -126,7 +126,7 @@ export default function SubmitPage() {
               <select
                 value={requestedDay}
                 onChange={(event) => setRequestedDay(event.target.value as DayKey)}
-                className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
               >
                 {dayOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -144,7 +144,7 @@ export default function SubmitPage() {
                 value={company}
                 onChange={(event) => setCompany(event.target.value)}
                 required
-                className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
               />
             </label>
             <label className="grid gap-2">
@@ -152,7 +152,7 @@ export default function SubmitPage() {
               <select
                 value={track}
                 onChange={(event) => setTrack(event.target.value)}
-                className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
               >
                 {trackOptions.map((option) => (
                   <option key={option} value={option}>
@@ -166,7 +166,7 @@ export default function SubmitPage() {
               <select
                 value={format}
                 onChange={(event) => setFormat(event.target.value)}
-                className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
               >
                 {formatOptions.map((option) => (
                   <option key={option} value={option}>
@@ -184,7 +184,7 @@ export default function SubmitPage() {
               onChange={(event) => setSummary(event.target.value)}
               rows={3}
               required
-              className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+              className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
             />
           </label>
 
@@ -195,7 +195,7 @@ export default function SubmitPage() {
               onChange={(event) => setFullDescription(event.target.value)}
               rows={6}
               required
-              className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+              className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
             />
           </label>
 
@@ -207,7 +207,7 @@ export default function SubmitPage() {
                 onChange={(event) => setIntendedAudience(event.target.value)}
                 rows={3}
                 required
-                className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
               />
             </label>
             <label className="grid gap-2">
@@ -218,7 +218,7 @@ export default function SubmitPage() {
                 rows={3}
                 required
                 placeholder="Operations, Systems, Growth"
-                className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
               />
             </label>
           </div>
@@ -231,7 +231,7 @@ export default function SubmitPage() {
                 onChange={(event) => setSpeakerDetails(event.target.value)}
                 rows={4}
                 required
-                className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
               />
             </label>
             <label className="grid gap-2">
@@ -241,7 +241,7 @@ export default function SubmitPage() {
                 onChange={(event) => setLogisticsNeeds(event.target.value)}
                 rows={4}
                 required
-                className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
               />
             </label>
           </div>
@@ -253,7 +253,7 @@ export default function SubmitPage() {
               onChange={(event) => setResourceDraft(event.target.value)}
               rows={4}
               placeholder="Deck outline | https://example.com/resource"
-              className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+              className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
             />
             <span className="text-xs text-midnight/54">
               One per line. Use `Label | URL`.
@@ -262,7 +262,7 @@ export default function SubmitPage() {
 
           <button
             type="submit"
-            className="rounded-[20px] bg-midnight px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#132b5b]"
+            className="rounded-[10px] bg-midnight px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#0e5a70]"
           >
             Submit to review queue
           </button>

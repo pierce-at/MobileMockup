@@ -231,19 +231,12 @@ function buildFallbackProfile(email: string, name?: string | null): AttendeeProf
 function buildGuestProfile(): AttendeeProfile {
   return {
     ...defaultAppState.currentUser,
-    id: "guest-local",
-    name: "Guest Attendee",
-    role: "Guest",
-    appRole: "attendee",
-    company: "Visiting",
-    bio: "Exploring the event experience before signing in.",
-    avatar: "GA",
     email: undefined,
     sponsorId: undefined,
-    contactLinks: {},
-    visibleContactFields: [],
-    interests: [],
-    isDiscoverable: false
+    contactLinks: {
+      ...defaultAppState.currentUser.contactLinks,
+      email: undefined
+    }
   };
 }
 

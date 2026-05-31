@@ -1,4 +1,4 @@
-import { AppShell } from "@/components/app-shell";
+﻿import { AppShell } from "@/components/app-shell";
 import { AppStateProvider } from "@/lib/state/app-state";
 
 export default function AttendeeLayout({

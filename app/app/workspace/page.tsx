@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -60,6 +60,14 @@ export default function WorkspacePage() {
   const sessionAttachments = selectedSession
     ? attachments.filter((attachment) => attachment.ownerType === "session" && attachment.ownerId === selectedSession.id)
     : [];
+  const totalMaterials = ownedSessions.reduce(
+    (count, session) =>
+      count +
+      attachments.filter((attachment) => attachment.ownerType === "session" && attachment.ownerId === session.id)
+        .length,
+    0
+  );
+  const sessionsWithLogistics = ownedSessions.filter((session) => session.logisticsNotes?.trim()).length;
 
   useEffect(() => {
     setSelectedSpeakerId(speakerOptions[0]?.id ?? "");
@@ -119,9 +127,9 @@ export default function WorkspacePage() {
   if (!ownedSessions.length) {
     return (
       <section className="space-y-6">
-        <div className="rounded-[32px] bg-[linear-gradient(135deg,#0a1838,#142554)] p-6 text-white shadow-card">
+        <div className="rounded-[18px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] p-6 text-white shadow-card">
           <p className="text-xs uppercase tracking-[0.28em] text-gold">Workspace</p>
-          <h1 className="mt-3 font-display text-4xl font-semibold">Session owner desk</h1>
+          <h1 className="mt-3 font-display text-4xl font-semibold">Speaker desk</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-white/72">
             No owned sessions are linked to {currentUser.name} yet.
           </p>
@@ -132,16 +140,36 @@ export default function WorkspacePage() {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-[32px] bg-[linear-gradient(135deg,#0a1838,#142554)] p-6 text-white shadow-card">
+      <div className="rounded-[18px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] p-6 text-white shadow-card">
         <p className="text-xs uppercase tracking-[0.28em] text-gold">Workspace</p>
-        <h1 className="mt-3 font-display text-4xl font-semibold">Session owner desk</h1>
+        <h1 className="mt-3 font-display text-4xl font-semibold">
+          {currentUser.appRole === "speaker" ? "Speaker desk" : "Session owner desk"}
+        </h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-white/72">
-          Limited self-service for speakers and hosts: tighten copy, confirm room details, and hand ops what they need.
+          Tighten copy, confirm room details, add materials, and hand ops what they need before schedule lock.
         </p>
       </div>
 
+      <div className="grid gap-3 md:grid-cols-3">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
+          <p className="text-xs uppercase tracking-[0.22em] text-coral">Owned sessions</p>
+          <p className="mt-3 font-display text-4xl font-semibold text-midnight">{ownedSessions.length}</p>
+          <p className="mt-2 text-sm text-midnight/64">Talks, panels, or workshops linked to this profile.</p>
+        </article>
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
+          <p className="text-xs uppercase tracking-[0.22em] text-coral">Materials</p>
+          <p className="mt-3 font-display text-4xl font-semibold text-midnight">{totalMaterials}</p>
+          <p className="mt-2 text-sm text-midnight/64">Links added for slides, prep docs, or attendee follow-up.</p>
+        </article>
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
+          <p className="text-xs uppercase tracking-[0.22em] text-coral">Ops notes</p>
+          <p className="mt-3 font-display text-4xl font-semibold text-midnight">{sessionsWithLogistics}</p>
+          <p className="mt-2 text-sm text-midnight/64">Sessions with AV, mic, room, or handoff details captured.</p>
+        </article>
+      </div>
+
       <div className="grid gap-4 xl:grid-cols-[0.78fr,1.22fr]">
-        <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Owned sessions</p>
           <div className="mt-4 grid gap-3">
             {ownedSessions.map((session) => (
@@ -152,7 +180,7 @@ export default function WorkspacePage() {
                   setSelectedId(session.id);
                   setMessage(null);
                 }}
-                className={`rounded-[22px] border px-4 py-4 text-left transition ${
+                className={`rounded-[12px] border px-4 py-4 text-left transition ${
                   selectedSession?.id === session.id
                     ? "border-midnight bg-mist"
                     : "border-midnight/8 bg-white hover:border-midnight/16"
@@ -160,7 +188,7 @@ export default function WorkspacePage() {
               >
                 <p className="font-display text-xl font-semibold text-midnight">{session.title}</p>
                 <p className="mt-2 text-sm text-midnight/64">
-                  {session.day.toUpperCase()} · {session.startTime} · {session.room}
+                  {session.day.toUpperCase()} - {session.startTime} - {session.room}
                 </p>
               </button>
             ))}
@@ -169,7 +197,7 @@ export default function WorkspacePage() {
 
         {selectedSession ? (
           <div className="grid gap-4">
-            <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+            <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
               <p className="text-xs uppercase tracking-[0.24em] text-coral">Editable session surface</p>
               <div className="mt-4 grid gap-4">
                 <label className="grid gap-2">
@@ -177,7 +205,7 @@ export default function WorkspacePage() {
                   <input
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
-                    className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                    className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
                   />
                 </label>
 
@@ -187,7 +215,7 @@ export default function WorkspacePage() {
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
                     rows={6}
-                    className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                    className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
                   />
                 </label>
 
@@ -196,7 +224,7 @@ export default function WorkspacePage() {
                   <input
                     value={room}
                     readOnly
-                    className="rounded-[20px] border border-midnight/10 bg-mist px-4 py-3 text-sm text-midnight/62 outline-none"
+                    className="rounded-[10px] border border-midnight/10 bg-mist px-4 py-3 text-sm text-midnight/62 outline-none"
                   />
                   <span className="text-xs text-midnight/52">
                     Locked for hosts. Admin controls time and location.
@@ -209,7 +237,7 @@ export default function WorkspacePage() {
                     value={logisticsNotes}
                     onChange={(event) => setLogisticsNotes(event.target.value)}
                     rows={4}
-                    className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                    className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
                   />
                 </label>
 
@@ -219,21 +247,21 @@ export default function WorkspacePage() {
                     value={hostNotes}
                     onChange={(event) => setHostNotes(event.target.value)}
                     rows={4}
-                    className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                    className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
                   />
                 </label>
 
                 <button
                   type="button"
                   onClick={() => void saveWorkspace()}
-                  className="rounded-[20px] bg-midnight px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#132b5b]"
+                  className="rounded-[10px] bg-midnight px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#0e5a70]"
                 >
                   Save workspace changes
                 </button>
               </div>
             </article>
 
-            <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+            <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
               <p className="text-xs uppercase tracking-[0.24em] text-coral">Session materials</p>
               <div className="mt-4 grid gap-3">
                 <div className="grid gap-3 md:grid-cols-[0.9fr,1.1fr,auto]">
@@ -241,18 +269,18 @@ export default function WorkspacePage() {
                     value={materialTitle}
                     onChange={(event) => setMaterialTitle(event.target.value)}
                     placeholder="Resource title"
-                    className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                    className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
                   />
                   <input
                     value={materialUrl}
                     onChange={(event) => setMaterialUrl(event.target.value)}
                     placeholder="https://example.com/resource"
-                    className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                    className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
                   />
                   <button
                     type="button"
                     onClick={() => void addMaterial()}
-                    className="rounded-[20px] bg-midnight px-4 py-3 text-sm font-semibold text-white"
+                    className="rounded-[10px] bg-midnight px-4 py-3 text-sm font-semibold text-white"
                   >
                     Add
                   </button>
@@ -279,7 +307,7 @@ export default function WorkspacePage() {
               </div>
             </article>
 
-            <article className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+            <article className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
               <p className="text-xs uppercase tracking-[0.24em] text-coral">Speaker card editor</p>
               {speakerOptions.length ? (
                 <div className="mt-4 grid gap-4">
@@ -310,7 +338,7 @@ export default function WorkspacePage() {
                         <input
                           value={speakerName}
                           onChange={(event) => setSpeakerName(event.target.value)}
-                          className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                          className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
                         />
                       </label>
 
@@ -320,7 +348,7 @@ export default function WorkspacePage() {
                           <input
                             value={speakerRole}
                             onChange={(event) => setSpeakerRole(event.target.value)}
-                            className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                            className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
                           />
                         </label>
                         <label className="grid gap-2">
@@ -328,7 +356,7 @@ export default function WorkspacePage() {
                           <input
                             value={speakerCompany}
                             onChange={(event) => setSpeakerCompany(event.target.value)}
-                            className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                            className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
                           />
                         </label>
                         <label className="grid gap-2">
@@ -337,7 +365,7 @@ export default function WorkspacePage() {
                             value={speakerAvatar}
                             onChange={(event) => setSpeakerAvatar(event.target.value)}
                             maxLength={2}
-                            className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
+                            className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm text-midnight outline-none focus:border-midnight/24"
                           />
                         </label>
                       </div>
@@ -348,14 +376,14 @@ export default function WorkspacePage() {
                           value={speakerBio}
                           onChange={(event) => setSpeakerBio(event.target.value)}
                           rows={5}
-                          className="rounded-[20px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
+                          className="rounded-[10px] border border-midnight/10 px-4 py-3 text-sm leading-6 text-midnight outline-none focus:border-midnight/24"
                         />
                       </label>
 
                       <button
                         type="button"
                         onClick={() => void saveSpeaker()}
-                        className="rounded-[20px] bg-midnight px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#132b5b]"
+                        className="rounded-[10px] bg-midnight px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#0e5a70]"
                       >
                         Save speaker card
                       </button>

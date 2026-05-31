@@ -1,4 +1,4 @@
-type ConflictBannerProps = {
+﻿type ConflictBannerProps = {
   count: number;
 };
 
@@ -7,7 +7,7 @@ export function ConflictBanner({ count }: ConflictBannerProps) {
 
   return (
     <div
-      className="rounded-[24px] border border-[rgba(220,98,64,0.18)] bg-[rgba(220,98,64,0.08)] px-4 py-3 text-sm text-midnight"
+      className="rounded-[12px] border border-[rgba(220,98,64,0.18)] bg-[rgba(220,98,64,0.08)] px-4 py-3 text-sm text-midnight"
       data-testid="conflict-banner"
     >
       <p className="font-display text-base font-semibold">Schedule overlap to review</p>

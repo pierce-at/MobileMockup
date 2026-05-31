@@ -1,4 +1,4 @@
-import { SponsorProfileScreen } from "@/components/sponsor-profile-screen";
+﻿import { SponsorProfileScreen } from "@/components/sponsor-profile-screen";
 import { defaultAppState } from "@/lib/data/mock-data";
 
 type SponsorProfilePageProps = {

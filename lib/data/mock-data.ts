@@ -279,6 +279,23 @@ export const defaultAppState: AppState = {
       }
     },
     {
+      id: "speaker-priya-profile",
+      name: "Priya Shah",
+      role: "Founder",
+      appRole: "speaker",
+      company: "Northstar Pay",
+      bio: "Payments founder focused on regional SMB cashflow tools and clear stage-ready fintech education.",
+      avatar: "PS",
+      interests: ["FinTech", "Operations", "Growth"],
+      isDiscoverable: true,
+      visibleContactFields: ["email", "linkedin"],
+      email: "priya@northstarpay.com",
+      contactLinks: {
+        email: "priya@northstarpay.com",
+        linkedin: "linkedin.com/in/priya-shah"
+      }
+    },
+    {
       id: "attendee-rina",
       name: "Rina Patel",
       role: "CTO",
@@ -327,6 +344,22 @@ export const defaultAppState: AppState = {
       contactLinks: {
         email: "avery@beta.mn"
       }
+    },
+    {
+      id: "demo-admin-jordan",
+      name: "Jordan Lee",
+      role: "Demo Admin",
+      appRole: "admin",
+      company: "BETA",
+      bio: "A seeded operator account for live demos of schedule publishing, submission review, and partner operations.",
+      avatar: "JL",
+      interests: ["Operations", "Systems", "Community"],
+      isDiscoverable: false,
+      visibleContactFields: ["email"],
+      email: "jordan.demo@beta.mn",
+      contactLinks: {
+        email: "jordan.demo@beta.mn"
+      }
     }
   ],
   sessions: [
@@ -351,6 +384,8 @@ export const defaultAppState: AppState = {
           company: "Northstar Pay",
           bio: "Payments founder focused on regional SMB cashflow tools.",
           avatar: "PS",
+          email: "priya@northstarpay.com",
+          profileId: "speaker-priya-profile",
           updatedAt: "2026-05-27T15:05:00.000Z"
         },
         {

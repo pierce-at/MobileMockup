@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -28,7 +28,7 @@ function HubSection({
   links: HubLink[];
 }) {
   return (
-    <section className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+    <section className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
       <p className="text-[10px] uppercase tracking-[0.24em] text-coral">{eyebrow}</p>
       <h2 className="mt-3 font-display text-2xl font-semibold text-midnight">{title}</h2>
       <div className="mt-4 grid gap-3">
@@ -36,7 +36,7 @@ function HubSection({
           <Link
             key={`${title}-${link.href}`}
             href={link.href}
-            className="rounded-[22px] border border-midnight/8 bg-[linear-gradient(180deg,#fffdf9,#f7f3ea)] px-4 py-4 transition hover:border-midnight/16 hover:bg-mist"
+            className="rounded-[12px] border border-midnight/8 bg-[linear-gradient(180deg,#fffdf9,#f7f3ea)] px-4 py-4 transition hover:border-midnight/16 hover:bg-mist"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -48,7 +48,7 @@ function HubSection({
               </div>
               <div className="flex shrink-0 flex-col items-end gap-2">
                 {link.pill ? (
-                  <span className="rounded-full bg-[rgba(245,200,66,0.18)] px-3 py-1 text-[11px] font-semibold text-[#8f6a02]">
+                  <span className="rounded-full bg-[rgba(251,189,25,0.18)] px-3 py-1 text-[11px] font-semibold text-[#8f6a02]">
                     {link.pill}
                   </span>
                 ) : null}
@@ -155,6 +155,11 @@ export default function HubPage() {
       note: "Auth state, privacy controls, contact sharing, and role jumps."
     },
     {
+      href: "/app/onboarding",
+      label: "Onboarding",
+      note: "Dedicated setup page for role switching, first-run tasks, and demo prep."
+    },
+    {
       href: "/app/updates",
       label: "Updates",
       note: "Schedule changes, release notes, and attendee-facing notifications."
@@ -240,8 +245,8 @@ export default function HubPage() {
   const opsLinks: HubLink[] = [
     {
       href: "/app/workspace",
-      label: "Host workspace",
-      note: "Speaker/host editing for owned sessions."
+      label: "Speaker desk",
+      note: "Speaker and host editing for owned sessions, materials, and logistics."
     },
     {
       href: "/app/admin",
@@ -261,6 +266,7 @@ export default function HubPage() {
     {
       label: "Attendee app",
       children: [
+        { label: "Onboarding", href: "/app/onboarding" },
         { label: "Schedule", href: "/app/schedule" },
         { label: "My Week", href: "/app/my-schedule" },
         { label: "Map", href: "/app/map" },
@@ -300,7 +306,7 @@ export default function HubPage() {
 
   return (
     <section className="space-y-4">
-      <div className="rounded-[32px] bg-[linear-gradient(135deg,#0a1838,#142554)] p-6 text-white shadow-card">
+      <div className="rounded-[18px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] p-6 text-white shadow-card">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.28em] text-gold">Route directory</p>
@@ -310,7 +316,7 @@ export default function HubPage() {
               just keeping your bearings while the app grows.
             </p>
           </div>
-          <div className="rounded-[24px] border border-white/10 bg-white/6 px-4 py-3 text-right">
+          <div className="rounded-[12px] border border-white/10 bg-white/6 px-4 py-3 text-right">
             <p className="text-xs uppercase tracking-[0.24em] text-white/55">Current role</p>
             <p className="mt-2 font-display text-xl font-semibold text-gold">
               {currentUser.appRole}
@@ -330,13 +336,13 @@ export default function HubPage() {
         <HubSection title="Operations" eyebrow="Team" links={opsLinks} />
       </div>
 
-      <section className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+      <section className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
         <p className="text-[10px] uppercase tracking-[0.24em] text-coral">Tree</p>
         <h2 className="mt-3 font-display text-2xl font-semibold text-midnight">Route tree</h2>
         <p className="mt-2 text-sm leading-6 text-midnight/64">
           Same hub, but as a nested tree so user can see structure without memorizing URLs.
         </p>
-        <div className="mt-5 rounded-[24px] bg-[linear-gradient(180deg,#fffdf9,#f7f3ea)] p-4">
+        <div className="mt-5 rounded-[12px] bg-[linear-gradient(180deg,#fffdf9,#f7f3ea)] p-4">
           <HubTree nodes={treeNodes} />
         </div>
       </section>

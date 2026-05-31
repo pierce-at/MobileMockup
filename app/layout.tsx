@@ -1,5 +1,5 @@
-import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+﻿import type { Metadata, Viewport } from "next";
+import { Inter, Montserrat } from "next/font/google";
 
 import { MobileRuntime } from "@/components/mobile-runtime";
 
@@ -10,7 +10,7 @@ const inter = Inter({
   subsets: ["latin"]
 });
 
-const spaceGrotesk = Space_Grotesk({
+const montserrat = Montserrat({
   variable: "--font-space-grotesk",
   subsets: ["latin"]
 });
@@ -30,7 +30,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#08142f"
+  themeColor: "#0c495a"
 };
 
 export default function RootLayout({
@@ -40,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-body antialiased`}>
+      <body className={`${inter.variable} ${montserrat.variable} font-body antialiased`}>
         <MobileRuntime />
         {children}
       </body>

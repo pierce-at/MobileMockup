@@ -1,9 +1,10 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 
 import { buildGoogleCalendarUrl, buildSessionIcs, downloadIcs } from "@/lib/utils/calendar";
 import { useAppState } from "@/lib/state/app-state";
+import { getSessionRegistrationUrl } from "@/lib/integrations";
 
 export function SessionDetailScreen({ slug }: { slug: string }) {
   const {
@@ -48,7 +49,7 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
 
   if (!session) {
     return (
-      <section className="rounded-[28px] border border-midnight/8 bg-white p-6 shadow-card">
+      <section className="rounded-[14px] border border-midnight/8 bg-white p-6 shadow-card">
         <h1 className="font-display text-3xl font-semibold text-midnight">Session not found</h1>
       </section>
     );
@@ -59,8 +60,8 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
 
   async function shareSession() {
     const shareData = {
-      title: session!.title,
-      text: `${session!.title} � ${venue?.name ?? session!.room}`,
+      title: activeSession.title,
+      text: `${activeSession.title} · ${venue?.name ?? activeSession.room}`,
       url: typeof window !== "undefined" ? window.location.href : undefined
     };
 
@@ -76,32 +77,34 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-[32px] bg-[linear-gradient(135deg,#0a1838,#142554)] p-6 text-white shadow-card">
+      <div className="rounded-[18px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] p-6 text-white shadow-card">
         <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
           {sponsor ? (
-            <span className="rounded-full bg-[rgba(245,200,66,0.16)] px-3 py-1 text-gold">
+            <span className="rounded-full bg-[rgba(251,189,25,0.16)] px-3 py-1 text-gold">
               Sponsored · {sponsor.name}
             </span>
           ) : null}
-          {conflictingSessionIds.has(session.id) ? (
+          {conflictingSessionIds.has(activeSession.id) ? (
             <span className="rounded-full bg-[rgba(220,98,64,0.18)] px-3 py-1 text-[#ffb59d]">
               Overlaps your week
             </span>
           ) : null}
-          {session.updatedAt ? (
+          {activeSession.updatedAt ? (
             <span className="rounded-full bg-white/10 px-3 py-1 text-white/80">
-              Updated {new Date(session.updatedAt).toLocaleString()}
+              Updated {new Date(activeSession.updatedAt).toLocaleString()}
             </span>
           ) : null}
         </div>
         <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight md:text-5xl">
-          {session.title}
+          {activeSession.title}
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-white/72">{session.description}</p>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-white/72">{activeSession.description}</p>
         <div className="mt-6 flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={() => (saved ? removeSavedSession(session.id) : saveSession(session.id))}
+            onClick={() =>
+              saved ? removeSavedSession(activeSession.id) : saveSession(activeSession.id)
+            }
             className="rounded-full bg-gold px-5 py-3 font-semibold text-midnight"
           >
             {saved ? "Remove from My Week" : "Save to My Week"}
@@ -116,7 +119,7 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
           <button
             type="button"
             onClick={() =>
-              downloadIcs(`${session.slug}.ics`, buildSessionIcs(session, venue))
+              downloadIcs(`${activeSession.slug}.ics`, buildSessionIcs(activeSession, venue))
             }
             className="rounded-full border border-white/12 bg-white/8 px-5 py-3 font-semibold text-white"
           >
@@ -134,15 +137,15 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
       </div>
 
       <div className="grid gap-4 md:grid-cols-[1.1fr,0.9fr]">
-        <div className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+        <div className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Speakers</p>
           <div className="mt-4 grid gap-3">
-            {session.speakers.map((speaker) => (
+            {activeSession.speakers.map((speaker) => (
               <div
                 key={speaker.id}
-                className="flex items-start gap-3 rounded-[22px] bg-mist p-4"
+                className="flex items-start gap-3 rounded-[12px] bg-mist p-4"
               >
-                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-midnight font-semibold text-white">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-[10px] bg-midnight font-semibold text-white">
                   {speaker.avatar}
                 </div>
                 <div>
@@ -158,10 +161,10 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+          <div className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
             <p className="text-xs uppercase tracking-[0.24em] text-midnight/46">Venue</p>
             <h2 className="mt-2 font-display text-2xl font-semibold text-midnight">{venue?.name}</h2>
-            <p className="mt-2 text-sm text-midnight/68">{session.room}</p>
+            <p className="mt-2 text-sm text-midnight/68">{activeSession.room}</p>
             <p className="mt-4 text-sm leading-6 text-midnight/72">{venue?.address}</p>
             {venue?.campus ? (
               <p className="mt-2 text-sm text-midnight/64">Campus: {venue.campus}</p>
@@ -169,9 +172,9 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
             {venue?.accessibilityNotes ? (
               <p className="mt-4 text-sm leading-6 text-midnight/72">{venue.accessibilityNotes}</p>
             ) : null}
-            {session.externalRegistrationUrl ? (
+            {activeSession.externalRegistrationUrl ? (
               <a
-                href={session.externalRegistrationUrl}
+                href={getSessionRegistrationUrl(activeSession)}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-4 inline-flex rounded-full bg-midnight px-4 py-2 text-sm font-semibold text-white"
@@ -181,7 +184,7 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
             ) : null}
           </div>
           {materials.length ? (
-            <div className="rounded-[28px] border border-midnight/8 bg-white p-5 shadow-card">
+            <div className="rounded-[14px] border border-midnight/8 bg-white p-5 shadow-card">
               <p className="text-xs uppercase tracking-[0.24em] text-coral">Materials</p>
               <div className="mt-4 grid gap-2">
                 {materials.map((material) => (
@@ -199,10 +202,10 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
             </div>
           ) : null}
           {sponsor ? (
-            <div className="rounded-[28px] bg-[linear-gradient(135deg,rgba(245,200,66,0.14),rgba(255,255,255,0.8))] p-5 shadow-card">
+            <div className="rounded-[14px] bg-[linear-gradient(135deg,rgba(251,189,25,0.14),rgba(255,255,255,0.8))] p-5 shadow-card">
               <p className="text-xs uppercase tracking-[0.24em] text-coral">Track sponsor</p>
               <div className="mt-3 flex items-center gap-3">
-                <div className="grid h-14 w-14 place-items-center rounded-2xl bg-midnight font-display text-lg font-semibold text-gold">
+                <div className="grid h-14 w-14 place-items-center rounded-[10px] bg-midnight font-display text-lg font-semibold text-gold">
                   {sponsor.logo}
                 </div>
                 <div>
@@ -220,4 +223,3 @@ export function SessionDetailScreen({ slug }: { slug: string }) {
     </section>
   );
 }
-

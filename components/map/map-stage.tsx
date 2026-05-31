@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -31,10 +31,10 @@ function FallbackMap({
   const visiblePins = pins.length ? pins : [{ venue, session, active: true }];
 
   return (
-    <div className="relative overflow-hidden rounded-[32px] border border-midnight/10 bg-[linear-gradient(180deg,#dde6ef_0%,#d4dfeb_40%,#ecf2e8_40%,#ecf2e8_100%)] p-5 shadow-card">
-      <div className="absolute inset-0 opacity-50 [background-image:linear-gradient(rgba(10,24,56,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(10,24,56,0.08)_1px,transparent_1px)] [background-size:28px_28px]" />
+    <div className="relative overflow-hidden rounded-[18px] border border-midnight/10 bg-[linear-gradient(180deg,#dde6ef_0%,#d4dfeb_40%,#ecf2e8_40%,#ecf2e8_100%)] p-5 shadow-card">
+      <div className="absolute inset-0 opacity-50 [background-image:linear-gradient(rgba(12,73,90,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(12,73,90,0.08)_1px,transparent_1px)] [background-size:28px_28px]" />
       <div className="relative flex min-h-[420px] flex-col justify-between">
-        <div className="max-w-sm rounded-[28px] bg-white/88 p-4 shadow-card backdrop-blur">
+        <div className="max-w-sm rounded-[14px] bg-white/88 p-4 shadow-card">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-coral">
             Personal route view
           </p>
@@ -43,7 +43,7 @@ function FallbackMap({
           </h2>
           <p className="mt-2 text-sm leading-6 text-midnight/72">{venue.address}</p>
           <p className="mt-3 text-sm text-midnight/68">
-            {session.startTime} · {session.title}
+            {session.startTime} - {session.title}
           </p>
         </div>
 
@@ -66,7 +66,7 @@ function FallbackMap({
               </div>
             </button>
           ))}
-          <div className="rounded-2xl bg-white/80 px-3 py-2 text-right text-xs font-semibold text-midnight/68">
+          <div className="rounded-[10px] bg-white/80 px-3 py-2 text-right text-xs font-semibold text-midnight/68">
             {visiblePins.length} visible stop{visiblePins.length === 1 ? "" : "s"}
           </div>
         </div>
@@ -155,5 +155,5 @@ export function MapStage({
     );
   }
 
-  return <div ref={ref} className="h-[420px] overflow-hidden rounded-[32px] shadow-card" />;
+  return <div ref={ref} className="h-[420px] overflow-hidden rounded-[18px] shadow-card" />;
 }

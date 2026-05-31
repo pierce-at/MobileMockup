@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -165,7 +165,7 @@ export default function MapPage() {
     <section className="w-full max-w-full space-y-4 overflow-x-clip">
       <h1 className="sr-only">Event map</h1>
 
-      <div className="sticky-day-rail w-full max-w-full rounded-[28px] border border-midnight/8 bg-white p-4 shadow-card">
+      <div className="sticky-day-rail w-full max-w-full rounded-[14px] border border-midnight/8 bg-white p-4 shadow-card">
         <DaySwitcher activeDay={activeDay} onChange={setActiveDay} />
         <div className="mt-3 flex flex-wrap items-center gap-2">
           {[
@@ -197,7 +197,7 @@ export default function MapPage() {
       />
 
       <div className="grid w-full max-w-full gap-4 xl:grid-cols-[1.05fr,0.95fr]">
-        <article className="min-w-0 rounded-[28px] border border-midnight/8 bg-white p-4 shadow-card sm:p-5">
+        <article className="min-w-0 rounded-[14px] border border-midnight/8 bg-white p-4 shadow-card sm:p-5">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">
             {pinMode === "all" ? "Venue spread" : pinMode === "now" ? "Live route" : "My route venues"}
           </p>
@@ -211,7 +211,7 @@ export default function MapPage() {
                   key={venue.id}
                   type="button"
                   onClick={() => handleVenueSelect(venue.id, "list")}
-                  className={`w-full min-w-0 rounded-[22px] border px-4 py-4 text-left transition ${
+                  className={`w-full min-w-0 rounded-[12px] border px-4 py-4 text-left transition ${
                     selectedVenue.id === venue.id
                       ? "border-midnight bg-mist"
                       : "border-midnight/8 bg-white hover:border-midnight/16"
@@ -223,12 +223,12 @@ export default function MapPage() {
                         {venue.name}
                       </p>
                       <p className="mt-1 break-words text-[12px] leading-5 text-midnight/64">
-                        {session.day ? `${DAY_LABELS[session.day]} · ` : ""}
+                        {session.day ? `${DAY_LABELS[session.day]} - ` : ""}
                         {venue.address}
                       </p>
                     </div>
                     <div className="inline-flex shrink-0 self-start rounded-full bg-white px-3 py-2 text-xs font-semibold text-midnight">
-                      {savedCount} mine · {totalCount} total
+                      {savedCount} mine - {totalCount} total
                     </div>
                   </div>
                 </button>
@@ -237,7 +237,7 @@ export default function MapPage() {
           </div>
         </article>
 
-        <article className="min-w-0 rounded-[28px] border border-midnight/8 bg-white p-4 shadow-card sm:p-5">
+        <article className="min-w-0 rounded-[14px] border border-midnight/8 bg-white p-4 shadow-card sm:p-5">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">Selected venue</p>
           <h2 className="mt-2 break-words font-display text-[1.8rem] font-semibold leading-tight text-midnight sm:text-3xl">
             {selectedVenue.name}
@@ -262,7 +262,7 @@ export default function MapPage() {
           ) : null}
 
           {nextStop ? (
-            <div className="mt-4 rounded-[22px] bg-mist px-4 py-4">
+            <div className="mt-4 rounded-[12px] bg-mist px-4 py-4">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
                 Next stop
               </p>
@@ -270,13 +270,13 @@ export default function MapPage() {
                 {nextStop.title}
               </p>
               <p className="mt-1 text-[12px] text-midnight/64">
-                {DAY_LABELS[nextStop.day]} · {nextStop.startTime} · {nextStop.room}
+                {DAY_LABELS[nextStop.day]} - {nextStop.startTime} - {nextStop.room}
               </p>
             </div>
           ) : null}
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[22px] bg-mist px-4 py-4">
+            <div className="rounded-[12px] bg-mist px-4 py-4">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
                 My saved here
               </p>
@@ -284,7 +284,7 @@ export default function MapPage() {
                 {selectedVenueSavedSessions.length}
               </p>
             </div>
-            <div className="rounded-[22px] bg-mist px-4 py-4">
+            <div className="rounded-[12px] bg-mist px-4 py-4">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-coral">
                 Total sessions here
               </p>
@@ -326,37 +326,37 @@ export default function MapPage() {
       </div>
 
       <div className="grid w-full max-w-full gap-4 xl:grid-cols-[0.9fr,1.1fr]">
-        <article className="min-w-0 rounded-[28px] border border-midnight/8 bg-white p-4 shadow-card sm:p-5">
+        <article className="min-w-0 rounded-[14px] border border-midnight/8 bg-white p-4 shadow-card sm:p-5">
           <p className="text-xs uppercase tracking-[0.24em] text-coral">My events here</p>
           <div className="mt-4 grid gap-2.5">
             {!isReady ? (
-              <div className="rounded-[22px] border border-dashed border-midnight/10 bg-mist px-5 py-8 text-center text-sm text-midnight/64">
+              <div className="rounded-[12px] border border-dashed border-midnight/10 bg-mist px-5 py-8 text-center text-sm text-midnight/64">
                 Loading venue schedule.
               </div>
             ) : selectedVenueSavedSessions.length ? (
               selectedVenueSavedSessions.map((session) => (
                 <div
                   key={session.id}
-                  className="min-w-0 rounded-[22px] border border-midnight/8 bg-mist px-4 py-4"
+                  className="min-w-0 rounded-[12px] border border-midnight/8 bg-mist px-4 py-4"
                 >
                   <p className="break-words font-display text-[15px] font-semibold leading-[1.2] text-midnight">
                     {session.title}
                   </p>
                   <p className="mt-1 break-words text-[12px] leading-5 text-midnight/64">
-                    {DAY_LABELS[session.day]} · {session.startTime} - {session.endTime}
+                    {DAY_LABELS[session.day]} - {session.startTime} - {session.endTime}
                   </p>
                   <p className="mt-1 break-words text-[12px] text-midnight/60">{session.room}</p>
                 </div>
               ))
             ) : (
-              <div className="rounded-[22px] border border-dashed border-midnight/10 bg-mist px-5 py-8 text-center text-sm text-midnight/64">
+              <div className="rounded-[12px] border border-dashed border-midnight/10 bg-mist px-5 py-8 text-center text-sm text-midnight/64">
                 You do not have any saved sessions at this venue yet.
               </div>
             )}
           </div>
         </article>
 
-        <article className="min-w-0 rounded-[28px] border border-midnight/8 bg-white p-4 shadow-card sm:p-5">
+        <article className="min-w-0 rounded-[14px] border border-midnight/8 bg-white p-4 shadow-card sm:p-5">
           <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
             <div className="min-w-0">
               <p className="text-xs uppercase tracking-[0.24em] text-coral">All events at venue</p>
@@ -381,7 +381,7 @@ export default function MapPage() {
                 return (
                   <div
                     key={session.id}
-                    className="min-w-0 rounded-[22px] border border-midnight/8 px-4 py-4"
+                    className="min-w-0 rounded-[12px] border border-midnight/8 px-4 py-4"
                   >
                     <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div className="min-w-0">
@@ -389,7 +389,7 @@ export default function MapPage() {
                           {session.title}
                         </p>
                         <p className="mt-1 break-words text-[12px] leading-5 text-midnight/64">
-                          {session.startTime} - {session.endTime} · {session.room}
+                          {session.startTime} - {session.endTime} - {session.room}
                         </p>
                       </div>
                       <button
@@ -397,7 +397,7 @@ export default function MapPage() {
                         onClick={() => (saved ? removeSavedSession(session.id) : saveSession(session.id))}
                         className={`inline-flex shrink-0 self-start rounded-[10px] px-3 py-2 text-[12px] font-semibold ${
                           saved
-                            ? "bg-[rgba(245,200,66,0.18)] text-[#8f6a02]"
+                            ? "bg-[rgba(251,189,25,0.18)] text-[#8f6a02]"
                             : "bg-midnight text-white"
                         }`}
                       >
@@ -408,7 +408,7 @@ export default function MapPage() {
                 );
               })
             ) : (
-              <div className="rounded-[22px] border border-dashed border-midnight/10 bg-mist px-5 py-8 text-center text-sm text-midnight/64">
+              <div className="rounded-[12px] border border-dashed border-midnight/10 bg-mist px-5 py-8 text-center text-sm text-midnight/64">
                 No sessions scheduled at this venue on {DAY_LABELS[venueCalendarDay]}.
               </div>
             )}

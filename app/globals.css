@@ -1,15 +1,30 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --color-midnight: #0a1838;
-  --color-indigo: #142554;
-  --color-gold: #f5c842;
-  --color-coral: #dc6240;
-  --color-mist: #eef2f7;
-  --color-ink: #132038;
-  --background: #f6f3ea;
+  --font-inter:
+    "Inter Variable",
+    "Inter",
+    "Segoe UI",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  --font-space-grotesk:
+    "Montserrat",
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+  --color-midnight: #0c495a;
+  --color-indigo: #0e5a70;
+  --color-gold: #fbbd19;
+  --color-coral: #ff6b6b;
+  --color-mist: #e6eef1;
+  --color-ink: #1a1a1a;
+  --color-paper: #f5f7f8;
+  --color-line: #dbe4e8;
+  --color-muted: #5a6a72;
+  --background: #f5f7f8;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -27,7 +42,11 @@ html {
 
 body {
   margin: 0;
-  background: var(--background);
+  background:
+    linear-gradient(rgba(12, 73, 90, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(12, 73, 90, 0.035) 1px, transparent 1px),
+    var(--background);
+  background-size: 32px 32px;
   color: var(--color-ink);
   min-height: 100dvh;
   overscroll-behavior-y: none;
@@ -59,6 +78,10 @@ body.capacitor-app {
   user-select: none;
 }
 
+body.capacitor-app.keyboard-open {
+  padding-bottom: 0;
+}
+
 body.capacitor-app input,
 body.capacitor-app textarea,
 body.capacitor-app [contenteditable="true"] {
@@ -82,13 +105,11 @@ body.capacitor-app [contenteditable="true"] {
 }
 
 .gold-stripe {
-  background-image: repeating-linear-gradient(
-    135deg,
-    rgba(245, 200, 66, 0.16) 0,
-    rgba(245, 200, 66, 0.16) 10px,
-    transparent 10px,
-    transparent 22px
-  );
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(120% 90% at 100% 0%, rgba(251, 189, 25, 0.14), transparent 58%);
+  background-size: 26px 26px, 26px 26px, auto;
 }
 
 .app-banner {
@@ -97,9 +118,8 @@ body.capacitor-app [contenteditable="true"] {
   padding: 14px 16px 18px;
   color: white;
   background:
-    radial-gradient(120% 90% at 0% 100%, rgba(107, 58, 160, 0.45), transparent 60%),
-    radial-gradient(140% 80% at 100% 0%, rgba(74, 215, 192, 0.18), transparent 60%),
-    linear-gradient(135deg, #0a1838 0%, #142554 55%, #0a1838 100%);
+    radial-gradient(130% 90% at 100% 0%, rgba(251, 189, 25, 0.14), transparent 55%),
+    linear-gradient(135deg, #0c495a 0%, #0e5365 55%, #0c495a 100%);
 }
 
 .app-banner > * {
@@ -115,62 +135,26 @@ body.capacitor-app [contenteditable="true"] {
 }
 
 .app-banner::before {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 32px;
+  inset: 0;
   z-index: 1;
-  background:
-    linear-gradient(
-      115deg,
-      transparent 0 18%,
-      rgba(245, 200, 66, 0.65) 18% 20%,
-      transparent 20% 38%,
-      rgba(74, 215, 192, 0.55) 38% 40%,
-      transparent 40% 58%,
-      rgba(245, 200, 66, 0.35) 58% 60%,
-      transparent 60% 100%
-    );
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(130% 110% at 100% 0%, #000 35%, transparent 82%);
+  -webkit-mask-image: radial-gradient(130% 110% at 100% 0%, #000 35%, transparent 82%);
 }
 
 .app-banner::after {
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 38px;
+  inset: 0;
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(
-      180deg,
-      rgba(8, 20, 47, 0) 0%,
-      rgba(8, 20, 47, 0.12) 28%,
-      rgba(248, 246, 239, 0.34) 64%,
-      rgba(255, 255, 255, 0.88) 88%,
-      rgba(255, 255, 255, 1) 100%
-    );
-  filter: blur(8px);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='620' height='360'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.09' stroke-width='1'%3E%3Crect x='390' y='-35' width='210' height='150' rx='12' transform='rotate(20 495 40)'/%3E%3Crect x='455' y='150' width='180' height='132' rx='12' transform='rotate(26 545 216)'/%3E%3Crect x='44' y='226' width='150' height='108' rx='12' transform='rotate(-18 119 280)'/%3E%3C/g%3E%3C/svg%3E") right -60px top -34px / 620px auto no-repeat;
 }
 
 .banner-lockup::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: -12px;
-  bottom: -12px;
-  width: 32px;
-  pointer-events: none;
-  background:
-    linear-gradient(
-      245deg,
-      transparent 0 18%,
-      rgba(245, 200, 66, 0.65) 18% 20%,
-      transparent 20% 38%,
-      rgba(74, 215, 192, 0.55) 38% 40%,
-      transparent 40% 58%,
-      rgba(245, 200, 66, 0.35) 58% 60%,
-      transparent 60% 100%
-    );
+  content: none;
 }
 
 .banner-top {
@@ -180,16 +164,16 @@ body.capacitor-app [contenteditable="true"] {
 }
 
 .banner-eyebrow {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(245, 200, 66, 0.85);
+  color: rgba(251, 189, 25, 0.85);
 }
 
 .banner-year {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -203,7 +187,7 @@ body.capacitor-app [contenteditable="true"] {
 
 .banner-title {
   display: inline-block;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 30px;
   font-weight: 800;
   line-height: 0.86;
@@ -227,7 +211,7 @@ body.capacitor-app [contenteditable="true"] {
   margin-top: 8px;
   border-radius: 99px;
   background: var(--color-gold);
-  box-shadow: 0 0 8px rgba(245, 200, 66, 0.5);
+  box-shadow: 0 0 8px rgba(251, 189, 25, 0.5);
 }
 
 .banner-sub {
@@ -255,9 +239,9 @@ body.capacitor-app [contenteditable="true"] {
   gap: 8px;
   margin-top: 10px;
   padding: 5px 10px;
-  border: 1px solid rgba(245, 200, 66, 0.4);
+  border: 1px solid rgba(251, 189, 25, 0.4);
   border-radius: 999px;
-  background: rgba(245, 200, 66, 0.12);
+  background: rgba(251, 189, 25, 0.12);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -291,7 +275,7 @@ body.capacitor-app [contenteditable="true"] {
 }
 
 .powered .attn {
-  color: rgba(245, 200, 66, 0.7);
+  color: rgba(251, 189, 25, 0.7);
   font-weight: 600;
 }
 
@@ -315,11 +299,10 @@ body.capacitor-app [contenteditable="true"] {
       180deg,
       rgba(255, 255, 255, 1) 0%,
       rgba(255, 255, 255, 0.94) 18%,
-      rgba(248, 246, 239, 0.4) 42%,
-      rgba(248, 246, 239, 0.14) 68%,
-      rgba(248, 246, 239, 0) 100%
+      rgba(245, 247, 248, 0.4) 42%,
+      rgba(245, 247, 248, 0.14) 68%,
+      rgba(245, 247, 248, 0) 100%
     );
-  filter: blur(8px);
 }
 
 .section-seam {
@@ -338,7 +321,7 @@ body.capacitor-app [contenteditable="true"] {
 .section-seam__line {
   height: 1px;
   flex: 1;
-  background: linear-gradient(90deg, transparent, rgba(10, 24, 56, 0.18), transparent);
+  background: linear-gradient(90deg, transparent, rgba(12, 73, 90, 0.18), transparent);
 }
 
 .section-seam__label {
@@ -346,16 +329,15 @@ body.capacitor-app [contenteditable="true"] {
   align-items: center;
   justify-content: center;
   padding: 6px 12px;
-  border: 1px solid rgba(10, 24, 56, 0.08);
+  border: 1px solid rgba(12, 73, 90, 0.08);
   border-radius: 999px;
-  background: rgba(248, 246, 239, 0.78);
-  color: rgba(10, 24, 56, 0.68);
+  background: rgba(245, 247, 248, 0.9);
+  color: rgba(12, 73, 90, 0.68);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  box-shadow: 0 10px 26px rgba(10, 24, 56, 0.08);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 26px rgba(12, 73, 90, 0.08);
 }
 
 .ms-summary {
@@ -364,8 +346,8 @@ body.capacitor-app [contenteditable="true"] {
   padding: 14px 16px;
   color: white;
   background:
-    radial-gradient(120% 80% at 100% 0%, rgba(245, 200, 66, 0.18), transparent 60%),
-    linear-gradient(135deg, #0a1838 0%, #142554 100%);
+    radial-gradient(120% 80% at 100% 0%, rgba(251, 189, 25, 0.16), transparent 60%),
+    linear-gradient(150deg, #0c495a 0%, #0e5a70 100%);
 }
 
 .ms-summary::after {
@@ -380,7 +362,7 @@ body.capacitor-app [contenteditable="true"] {
     linear-gradient(
       245deg,
       transparent 0 30%,
-      rgba(245, 200, 66, 0.4) 30% 32%,
+      rgba(251, 189, 25, 0.4) 30% 32%,
       transparent 32% 55%,
       rgba(74, 215, 192, 0.35) 55% 57%,
       transparent 57%
@@ -401,7 +383,7 @@ body.capacitor-app [contenteditable="true"] {
   position: relative;
   z-index: 2;
   margin-top: 4px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 24px;
   font-weight: 700;
   line-height: 1.02;
@@ -418,7 +400,7 @@ body.capacitor-app [contenteditable="true"] {
 .ms-stat {
   flex: 1;
   padding: 8px 10px;
-  border: 1px solid rgba(245, 200, 66, 0.18);
+  border: 1px solid rgba(251, 189, 25, 0.18);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.08);
 }
@@ -447,7 +429,7 @@ body.capacitor-app [contenteditable="true"] {
   border: 3px solid #ffffff;
   border-radius: 999px 999px 999px 0;
   background: var(--color-indigo);
-  box-shadow: 0 12px 36px rgba(8, 20, 47, 0.28);
+  box-shadow: 0 12px 36px rgba(12, 73, 90, 0.28);
   transform: rotate(-45deg);
   transition:
     transform 160ms ease,
@@ -474,4 +456,8 @@ body.capacitor-app [contenteditable="true"] {
 
 .map-pin-marker-active .map-pin-marker__dot {
   background: var(--color-midnight);
+}
+
+body:has(.sponsor-sections-details[open]) .app-bottom-nav {
+  display: none;
 }

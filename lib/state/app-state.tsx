@@ -40,10 +40,15 @@ type AppStoreContextValue = AppState & {
   auth: AuthSummary;
   isReady: boolean;
   isSupabaseEnabled: boolean;
+  previewProfileId: string | null;
+  isPreviewing: boolean;
+  availableProfiles: AttendeeProfile[];
   conflictingSessionIds: Set<string>;
   sponsorAnalytics: Record<string, SponsorAnalytics | undefined>;
   submissions: SessionSubmission[];
   scheduleControl: ScheduleControl;
+  setPreviewProfile: (profileId: string | null) => void;
+  clearPreviewProfile: () => void;
   createAttachment: (input: AttachmentCreateInput) => Promise<void>;
   deleteAttachment: (attachmentId: string) => Promise<void>;
   saveSession: (sessionId: string) => Promise<void>;
@@ -79,12 +84,44 @@ type AppStoreContextValue = AppState & {
 };
 
 const AppStoreContext = createContext<AppStoreContextValue | null>(null);
+const PREVIEW_PROFILE_STORAGE_KEY = "tcsw-preview-profile-id";
+
+function canUseStorage() {
+  return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+}
+
+function readPreviewProfileId() {
+  if (!canUseStorage()) return null;
+
+  window.localStorage.removeItem(PREVIEW_PROFILE_STORAGE_KEY);
+  return null;
+}
+
+function writePreviewProfileId(_profileId: string | null) {
+  if (!canUseStorage()) return;
+
+  window.localStorage.removeItem(PREVIEW_PROFILE_STORAGE_KEY);
+}
+
+function mergeProfiles(primary: AttendeeProfile[], fallback: AttendeeProfile[]) {
+  const seen = new Set<string>();
+  return [...primary, ...fallback].filter((profile) => {
+    if (seen.has(profile.id)) return false;
+    seen.add(profile.id);
+    return true;
+  });
+}
 
 export function AppStateProvider({ children }: PropsWithChildren) {
   const [state, setState] = useState<AppState>(defaultAppState);
   const stateRef = useRef(state);
   const [auth, setAuth] = useState<AuthSummary>({ status: "guest", email: null });
+  const [authIdentity, setAuthIdentity] = useState<{ email: string | null; name: string | null }>({
+    email: null,
+    name: null
+  });
   const [isReady, setIsReady] = useState(false);
+  const [previewProfileId, setPreviewProfileId] = useState<string | null>(null);
   const [sponsorAnalytics, setSponsorAnalytics] = useState<Record<string, SponsorAnalytics | undefined>>({});
   const isSupabaseEnabled = hasSupabaseConfig();
 
@@ -94,30 +131,10 @@ export function AppStateProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     let isMounted = true;
-    const repository = getRepository();
     const client = getSupabaseBrowserClient();
 
-    async function syncFromAuth(email: string | null, name?: string | null) {
-      if (!isMounted) return;
-
-      if (email) {
-        await repository.ensureProfileFromAuth({ email, name });
-      }
-
-      const nextState = await repository.getAppState(email);
-      if (!isMounted) return;
-
-      setState(nextState);
-      stateRef.current = nextState;
-      setAuth({
-        status: email ? "authenticated" : "guest",
-        email
-      });
-      setIsReady(true);
-    }
-
     if (!client) {
-      void syncFromAuth(null);
+      setAuthIdentity({ email: null, name: null });
       return () => {
         isMounted = false;
       };
@@ -127,20 +144,27 @@ export function AppStateProvider({ children }: PropsWithChildren) {
       .getSession()
       .then(({ data }) => {
         const session = data.session;
-        return syncFromAuth(
-          session?.user.email ?? null,
-          session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? null
-        );
+        if (!isMounted) return;
+
+        setAuthIdentity({
+          email: session?.user.email ?? null,
+          name: session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? null
+        });
       })
-      .catch(() => syncFromAuth(null));
+      .catch(() => {
+        if (!isMounted) return;
+        setAuthIdentity({ email: null, name: null });
+      });
 
     const {
       data: { subscription }
     } = client.auth.onAuthStateChange((_event, session) => {
-      void syncFromAuth(
-        session?.user.email ?? null,
-        session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? null
-      );
+      if (!isMounted) return;
+
+      setAuthIdentity({
+        email: session?.user.email ?? null,
+        name: session?.user.user_metadata?.full_name ?? session?.user.user_metadata?.name ?? null
+      });
     });
 
     return () => {
@@ -149,9 +173,78 @@ export function AppStateProvider({ children }: PropsWithChildren) {
     };
   }, []);
 
+  useEffect(() => {
+    setPreviewProfileId(readPreviewProfileId());
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const repository = getRepository();
+
+    async function syncAppState() {
+      const { email, name } = authIdentity;
+      setIsReady(false);
+
+      setAuth({
+        status: email ? "authenticated" : "guest",
+        email
+      });
+
+      if (email) {
+        await repository.ensureProfileFromAuth({ email, name });
+      }
+
+      const baseState = await repository.getAppState(email);
+      if (!isMounted) return;
+
+      let nextState = baseState;
+      if (previewProfileId) {
+        const previewProfile =
+          baseState.profiles.find((profile) => profile.id === previewProfileId) ??
+          defaultAppState.profiles.find((profile) => profile.id === previewProfileId);
+
+        if (previewProfile?.email && previewProfile.email !== email) {
+          nextState = await repository.getAppState(previewProfile.email);
+        }
+
+        const matchedProfile =
+          nextState.profiles.find((profile) => profile.id === previewProfileId) ?? previewProfile;
+        if (matchedProfile) {
+          nextState = {
+            ...nextState,
+            currentUser: matchedProfile,
+            profiles: nextState.profiles.some((profile) => profile.id === matchedProfile.id)
+              ? nextState.profiles
+              : [matchedProfile, ...nextState.profiles]
+          };
+        }
+      }
+
+      if (!isMounted) return;
+
+      setState(nextState);
+      stateRef.current = nextState;
+      setIsReady(true);
+    }
+
+    void syncAppState();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [authIdentity, previewProfileId]);
+
   const conflictingSessionIds = useMemo(
     () => getConflictingSessionIds(state.sessions, state.savedSchedule),
     [state.savedSchedule, state.sessions]
+  );
+
+  const availableProfiles = useMemo(
+    () =>
+      mergeProfiles(state.profiles, defaultAppState.profiles)
+        .slice()
+        .sort((left, right) => left.name.localeCompare(right.name)),
+    [state.profiles]
   );
 
   const value = useMemo<AppStoreContextValue>(
@@ -160,10 +253,22 @@ export function AppStateProvider({ children }: PropsWithChildren) {
       auth,
       isReady,
       isSupabaseEnabled,
+      previewProfileId,
+      isPreviewing: Boolean(previewProfileId),
+      availableProfiles,
       conflictingSessionIds,
       sponsorAnalytics,
       submissions: state.submissions,
       scheduleControl: state.scheduleControl,
+      setPreviewProfile(profileId) {
+        const nextProfileId = profileId || null;
+        writePreviewProfileId(nextProfileId);
+        setPreviewProfileId(nextProfileId);
+      },
+      clearPreviewProfile() {
+        writePreviewProfileId(null);
+        setPreviewProfileId(null);
+      },
       async createAttachment(input) {
         const attachment = await getRepository().createAttachment(input, state.currentUser.id);
         setState((currentState) => ({
@@ -294,7 +399,17 @@ export function AppStateProvider({ children }: PropsWithChildren) {
         }));
       },
       getOwnedSessions() {
-        return state.sessions.filter((session) => session.ownerProfileId === state.currentUser.id);
+        return state.sessions.filter(
+          (session) =>
+            session.ownerProfileId === state.currentUser.id ||
+            session.speakers.some(
+              (speaker) =>
+                speaker.profileId === state.currentUser.id ||
+                (state.currentUser.email
+                  ? speaker.email?.toLowerCase() === state.currentUser.email.toLowerCase()
+                  : false)
+            )
+        );
       },
       getOwnedSpeakers() {
         return state.sessions
@@ -387,7 +502,16 @@ export function AppStateProvider({ children }: PropsWithChildren) {
         }));
       }
     }),
-    [auth, conflictingSessionIds, isReady, isSupabaseEnabled, sponsorAnalytics, state]
+    [
+      auth,
+      availableProfiles,
+      conflictingSessionIds,
+      isReady,
+      isSupabaseEnabled,
+      previewProfileId,
+      sponsorAnalytics,
+      state
+    ]
   );
 
   return <AppStoreContext.Provider value={value}>{children}</AppStoreContext.Provider>;

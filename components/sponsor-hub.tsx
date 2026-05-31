@@ -159,8 +159,8 @@ function computeDeltaText(current: number, baseline: number) {
   }
 
   const delta = Math.round(((current - baseline) / baseline) * 100);
-  if (delta > 0) return `▲ ${delta}% vs. previous window`;
-  if (delta < 0) return `▼ ${Math.abs(delta)}% vs. previous window`;
+  if (delta > 0) return `Up ${delta}% vs. previous window`;
+  if (delta < 0) return `Down ${Math.abs(delta)}% vs. previous window`;
   return "Flat vs. previous window";
 }
 
@@ -240,8 +240,8 @@ function useSponsorHubData() {
         views: baseViews
       },
       ...sessionBase.slice(0, 2).map((session, index) => ({
-        title: `Sponsored session · "${session.title}"`,
-        meta: `${session.day.toUpperCase()} ${session.startTime} · ${session.room} · counted per detail view`,
+        title: `Sponsored session - "${session.title}"`,
+        meta: `${session.day.toUpperCase()} ${session.startTime} - ${session.room} - counted per detail view`,
         views: Math.round(session.attendeeCount * (index === 0 ? 24 : 18))
       })),
       {
@@ -309,11 +309,10 @@ function SponsorHubShell({
   children: ReactNode;
 }) {
   const { sponsor } = useSponsorHubData();
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   if (!sponsor) {
     return (
-      <section className="rounded-[28px] border border-midnight/8 bg-white p-6 shadow-card">
+      <section className="rounded-[14px] border border-midnight/8 bg-white p-6 shadow-card">
         <h1 className="font-display text-3xl font-semibold text-midnight">
           Sponsor profile missing
         </h1>
@@ -322,54 +321,34 @@ function SponsorHubShell({
   }
 
   return (
-    <section className="grid gap-3 bg-[#fafbfd] px-4 pb-4 lg:grid-cols-[200px_minmax(0,1fr)] lg:px-6">
-      <div className="lg:hidden">
-        <div className="rounded-[14px] border border-[#e6e7ef] bg-white px-4 py-3 shadow-card">
+    <section className="grid gap-3 bg-[#f5f7f8] px-4 pb-4 lg:grid-cols-[200px_minmax(0,1fr)] lg:px-6">
+      <details className="sponsor-sections-details group lg:hidden">
+        <summary className="cursor-pointer select-none list-none rounded-[14px] border border-[#e6e7ef] bg-white px-4 py-3 shadow-card [&::-webkit-details-marker]:hidden">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[#7f8497]">
+              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[#5a6a72]">
                 Sponsor hub
               </p>
-              <p className="truncate font-display text-[19px] font-semibold text-[#0a1838]">
+              <p className="truncate font-display text-[19px] font-semibold text-[#0c495a]">
                 {sponsor.name}
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => setMobileOpen(true)}
-              className="rounded-[8px] bg-[#0a1838] px-[14px] py-[8px] text-[12px] font-semibold text-white"
-            >
-              Sections
-            </button>
+            <span className="rounded-[8px] bg-[#0c495a] px-[14px] py-[8px] text-[12px] font-semibold text-white">
+              <span className="group-open:hidden">Sections</span>
+              <span className="hidden group-open:inline">Close</span>
+            </span>
           </div>
-        </div>
-      </div>
+        </summary>
 
-      {mobileOpen ? (
-        <div className="fixed inset-0 z-[90] bg-midnight/32 lg:hidden">
-          <div
-            className="absolute inset-0"
-            onClick={() => setMobileOpen(false)}
-            aria-hidden="true"
-          />
-          <div className="absolute left-0 top-0 h-full w-[86vw] max-w-[320px] overflow-y-auto border-r border-[#1d2556] bg-[#0c1033] p-[20px] shadow-2xl">
-            <div className="flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/45">
-                  TCSW Sponsor Hub
-                </p>
-                <p className="truncate font-display text-[20px] font-semibold text-white">
-                  {sponsor.name}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-[8px] border border-white/10 px-3 py-1.5 text-[12px] font-semibold text-white/84"
-              >
-                Close
-              </button>
-            </div>
+        <div className="mt-3 max-h-[52vh] overflow-y-auto rounded-[14px] border border-midnight/10 bg-[linear-gradient(180deg,#0e5365_0%,#0c495a_100%)] p-[16px] pb-28 text-white shadow-card">
+          <div className="min-w-0">
+            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/45">
+              TCSW Sponsor Hub
+            </p>
+            <p className="truncate font-display text-[20px] font-semibold text-white">
+              {sponsor.name}
+            </p>
+          </div>
 
             <div className="mt-5 text-[9px] font-bold uppercase tracking-[0.18em] text-white/45">
               {sponsor.tier}
@@ -382,17 +361,16 @@ function SponsorHubShell({
                   <Link
                     key={link.key}
                     href={link.href}
-                    onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-[10px] rounded-[8px] px-[10px] py-[9px] text-[12px] font-semibold transition ${
                       active === link.key
-                        ? "border-l-2 border-[#f5c842] bg-[rgba(245,200,66,0.12)] pl-2 text-[#f6d978]"
-                        : "text-white/75 hover:bg-white/5"
+                        ? "bg-[#f4f5fa] text-midnight"
+                        : "text-white/75 hover:bg-white/8"
                     }`}
                   >
                     <span
                       className={`h-[6px] w-[6px] rounded-full ${
                         active === link.key
-                          ? "bg-[#f5c842] shadow-[0_0_8px_rgba(245,200,66,0.8)]"
+                          ? "bg-[#fbbd19] shadow-[0_0_8px_rgba(251,189,25,0.8)]"
                           : "bg-white/30"
                       }`}
                     />
@@ -412,17 +390,16 @@ function SponsorHubShell({
                   <Link
                     key={link.key}
                     href={link.href}
-                    onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-[10px] rounded-[8px] px-[10px] py-[9px] text-[12px] font-semibold transition ${
                       active === link.key
-                        ? "border-l-2 border-[#f5c842] bg-[rgba(245,200,66,0.12)] pl-2 text-[#f6d978]"
-                        : "text-white/75 hover:bg-white/5"
+                        ? "bg-[#f4f5fa] text-midnight"
+                        : "text-white/75 hover:bg-white/8"
                     }`}
                   >
                     <span
                       className={`h-[6px] w-[6px] rounded-full ${
                         active === link.key
-                          ? "bg-[#f5c842] shadow-[0_0_8px_rgba(245,200,66,0.8)]"
+                          ? "bg-[#fbbd19] shadow-[0_0_8px_rgba(251,189,25,0.8)]"
                           : "bg-white/30"
                       }`}
                     />
@@ -431,17 +408,16 @@ function SponsorHubShell({
                 ))}
             </div>
           </div>
-        </div>
-      ) : null}
+      </details>
 
-      <aside className="hidden bg-[#0c1033] px-[14px] py-[20px] text-white shadow-card lg:sticky lg:top-[calc(var(--safe-top)+5.6rem)] lg:block lg:self-start">
+      <aside className="hidden rounded-[18px] border border-white/10 bg-[linear-gradient(180deg,#0e5365_0%,#0c495a_100%)] px-[14px] py-[20px] text-white shadow-card lg:sticky lg:top-[calc(var(--safe-top)+5.6rem)] lg:block lg:self-start">
         <div className="flex items-center gap-2 font-display text-[13px] font-bold text-white">
-          <span className="inline-flex h-[22px] w-[22px] rounded-[6px] bg-[#f5c842]" />
+          <span className="inline-flex h-[22px] w-[22px] rounded-[6px] bg-[#fbbd19]" />
           TCSW Sponsor Hub
         </div>
 
         <div className="mt-[22px] text-[9px] font-bold uppercase tracking-[0.18em] text-white/45">
-          {sponsor.name} · {sponsor.tier}
+          {sponsor.name} - {sponsor.tier}
         </div>
 
         <div className="mt-4 grid gap-2">
@@ -453,14 +429,14 @@ function SponsorHubShell({
                 href={link.href}
                 className={`flex items-center gap-[10px] rounded-[8px] px-[10px] py-[9px] text-[12px] font-semibold transition ${
                   active === link.key
-                    ? "border-l-2 border-[#f5c842] bg-[rgba(245,200,66,0.12)] pl-2 text-[#f6d978]"
-                    : "text-white/75 hover:bg-white/5"
+                    ? "bg-[#f4f5fa] text-midnight"
+                    : "text-white/75 hover:bg-white/8"
                 }`}
               >
                 <span
                   className={`h-[6px] w-[6px] rounded-full ${
                     active === link.key
-                      ? "bg-[#f5c842] shadow-[0_0_8px_rgba(245,200,66,0.8)]"
+                      ? "bg-[#fbbd19] shadow-[0_0_8px_rgba(251,189,25,0.8)]"
                       : "bg-white/30"
                   }`}
                 />
@@ -482,14 +458,14 @@ function SponsorHubShell({
                 href={link.href}
                 className={`flex items-center gap-[10px] rounded-[8px] px-[10px] py-[9px] text-[12px] font-semibold transition ${
                   active === link.key
-                    ? "border-l-2 border-[#f5c842] bg-[rgba(245,200,66,0.12)] pl-2 text-[#f6d978]"
-                    : "text-white/75 hover:bg-white/5"
+                    ? "bg-[#f4f5fa] text-midnight"
+                    : "text-white/75 hover:bg-white/8"
                 }`}
               >
                 <span
                   className={`h-[6px] w-[6px] rounded-full ${
                     active === link.key
-                      ? "bg-[#f5c842] shadow-[0_0_8px_rgba(245,200,66,0.8)]"
+                      ? "bg-[#fbbd19] shadow-[0_0_8px_rgba(251,189,25,0.8)]"
                       : "bg-white/30"
                   }`}
                 />
@@ -517,10 +493,10 @@ function SponsorHeader({
     <div className="rounded-[14px] border border-[#e6e7ef] bg-white px-[24px] py-[20px] shadow-card md:px-[28px]">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-[22px] font-semibold tracking-[-0.01em] text-[#0a1838]">
+          <h1 className="font-display text-[22px] font-semibold tracking-[-0.01em] text-[#0c495a]">
             {title}
           </h1>
-          <p className="mt-[3px] text-[13px] text-[#7f8497]">{subtitle}</p>
+          <p className="mt-[3px] text-[13px] text-[#5a6a72]">{subtitle}</p>
         </div>
         {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
       </div>
@@ -532,50 +508,50 @@ function MetricsRow({ metrics }: { metrics: SponsorHubMetrics }) {
   return (
     <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
       <article className="rounded-[14px] border border-[#e6e7ef] bg-white p-[14px] shadow-card">
-        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
           Page views
         </p>
-        <p className="mt-1 font-display text-[26px] font-bold leading-none text-[#0a1838]">
+        <p className="mt-1 font-display text-[26px] font-bold leading-none text-[#0c495a]">
           {formatNumber(metrics.profileViews)}
         </p>
-        <p className="mt-2 text-[12px] font-semibold text-[#2d8c58]">
-          ▲ {metrics.promiseLift}% vs. promised
+        <p className="mt-2 text-[12px] font-semibold text-[#0e5a70]">
+          Up {metrics.promiseLift}% vs. promised
         </p>
       </article>
 
       <article className="rounded-[14px] border border-[#e6e7ef] bg-white p-[14px] shadow-card">
-        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
           Unique app viewers
         </p>
-        <p className="mt-1 font-display text-[26px] font-bold leading-none text-[#0a1838]">
+        <p className="mt-1 font-display text-[26px] font-bold leading-none text-[#0c495a]">
           {formatNumber(metrics.uniqueViewers)}
         </p>
-        <p className="mt-2 text-[12px] font-semibold text-[#2d8c58]">
-          ▲ {metrics.attendanceRate}% of active attendees
+        <p className="mt-2 text-[12px] font-semibold text-[#0e5a70]">
+          Up {metrics.attendanceRate}% of active attendees
         </p>
       </article>
 
       <article className="rounded-[14px] border border-[#e6e7ef] bg-white p-[14px] shadow-card">
-        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
           Session RSVPs
         </p>
-        <p className="mt-1 font-display text-[26px] font-bold leading-none text-[#0a1838]">
+        <p className="mt-1 font-display text-[26px] font-bold leading-none text-[#0c495a]">
           {formatNumber(metrics.sessionRsvps)}
         </p>
-        <p className="mt-2 text-[12px] font-semibold text-[#2d8c58]">
-          ▲ {metrics.rsvpDelta} vs. day one
+        <p className="mt-2 text-[12px] font-semibold text-[#0e5a70]">
+          Up {metrics.rsvpDelta} vs. day one
         </p>
       </article>
 
       <article className="rounded-[14px] border border-[#e6e7ef] bg-white p-[14px] shadow-card">
-        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
           Booth tap-ins
         </p>
-        <p className="mt-1 font-display text-[26px] font-bold leading-none text-[#0a1838]">
+        <p className="mt-1 font-display text-[26px] font-bold leading-none text-[#0c495a]">
           {formatNumber(metrics.boothTapIns)}
         </p>
-        <p className="mt-2 text-[12px] font-semibold text-[#c9971c]">
-          ★ Track sponsor avg: 198
+        <p className="mt-2 text-[12px] font-semibold text-[#e0a510]">
+          * Track sponsor avg: 198
         </p>
       </article>
     </div>
@@ -596,18 +572,18 @@ function ReachPanels({
       <div className="grid gap-3 xl:grid-cols-[1.15fr,0.85fr]">
         <article className="rounded-[14px] border border-[#e6e7ef] bg-white p-[16px] shadow-card">
           <h2 className="font-display text-[22px] font-semibold text-midnight">
-            Page views by surface · last 24h
+            Page views by surface - last 24h
           </h2>
-          <div className="mt-4 overflow-hidden rounded-[10px] border border-[#e6e7ef] bg-[#fafbfd] p-3">
+          <div className="mt-4 overflow-hidden rounded-[10px] border border-[#e6e7ef] bg-[#f5f7f8] p-3">
             <svg viewBox="0 0 600 200" preserveAspectRatio="none" className="h-[200px] w-full">
               <defs>
                 <linearGradient id="sponsor-wave-gold" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="#f5c842" stopOpacity="0.55" />
-                  <stop offset="100%" stopColor="#f5c842" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#fbbd19" stopOpacity="0.55" />
+                  <stop offset="100%" stopColor="#fbbd19" stopOpacity="0" />
                 </linearGradient>
                 <linearGradient id="sponsor-wave-ink" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="#0a1838" stopOpacity="0.38" />
-                  <stop offset="100%" stopColor="#0a1838" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#0c495a" stopOpacity="0.38" />
+                  <stop offset="100%" stopColor="#0c495a" stopOpacity="0" />
                 </linearGradient>
               </defs>
               <g stroke="#edf0f7" strokeWidth="1">
@@ -622,7 +598,7 @@ function ReachPanels({
               />
               <path
                 d="M0,180 C40,170 80,150 120,120 C160,90 200,70 240,55 C280,42 320,40 360,55 C400,70 440,90 480,80 C520,68 560,40 600,35"
-                stroke="#d9a916"
+                stroke="#e0a510"
                 strokeWidth="2.5"
                 fill="none"
               />
@@ -632,12 +608,12 @@ function ReachPanels({
               />
               <path
                 d="M0,190 C40,185 80,178 120,160 C160,145 200,130 240,118 C280,108 320,100 360,108 C400,115 440,130 480,128 C520,126 560,118 600,110"
-                stroke="#0a1838"
+                stroke="#0c495a"
                 strokeWidth="2.5"
                 fill="none"
                 strokeDasharray="4 4"
               />
-              <g fill="#6b6f86" fontSize="9" fontFamily="Arial, sans-serif">
+              <g fill="#5a6a72" fontSize="9" fontFamily="Arial, sans-serif">
                 <text x="0" y="195">12a</text>
                 <text x="100" y="195">4a</text>
                 <text x="200" y="195">8a</text>
@@ -647,7 +623,7 @@ function ReachPanels({
               </g>
             </svg>
           </div>
-          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-[#6b6f86]">
+          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-[#5a6a72]">
             <span className="inline-flex items-center gap-2">
               <i className="h-2.5 w-2.5 rounded-full bg-gold" />
               Sponsored session views
@@ -667,17 +643,17 @@ function ReachPanels({
             {placements.map((placement) => (
               <div
                 key={placement.title}
-                className="grid grid-cols-[1fr,88px] gap-3 rounded-[10px] border border-[#e6e7ef] bg-[#fafbfd] px-4 py-3"
+                className="grid grid-cols-[1fr,88px] gap-3 rounded-[10px] border border-[#e6e7ef] bg-[#f5f7f8] px-4 py-3"
               >
                 <div className="min-w-0">
-                  <p className="text-[13px] font-semibold text-[#0a1838]">{placement.title}</p>
-                  <p className="mt-1 text-[11px] leading-5 text-[#7f8497]">{placement.meta}</p>
+                  <p className="text-[13px] font-semibold text-[#0c495a]">{placement.title}</p>
+                  <p className="mt-1 text-[11px] leading-5 text-[#5a6a72]">{placement.meta}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-display text-[20px] font-bold leading-none text-[#0a1838]">
+                  <p className="font-display text-[20px] font-bold leading-none text-[#0c495a]">
                     {formatCompact(placement.views)}
                   </p>
-                  <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-[#7f8497]">
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-[#5a6a72]">
                     page views
                   </p>
                 </div>
@@ -690,7 +666,7 @@ function ReachPanels({
       <div className="grid gap-3 xl:grid-cols-2">
         <article className="rounded-[14px] border border-[#e6e7ef] bg-white p-[16px] shadow-card">
           <h2 className="font-display text-[22px] font-semibold text-midnight">
-            Reach by day · Sept 14–18
+            Reach by day - Sept 14-18
           </h2>
           <div className="mt-4 grid gap-3">
             {dayLabels.map((day) => {
@@ -700,14 +676,14 @@ function ReachPanels({
                   key={day.short}
                   className="grid grid-cols-[56px_1fr_56px] items-center gap-3 text-[12px]"
                 >
-                  <p className="font-bold text-[#0a1838]">{day.short}</p>
+                  <p className="font-bold text-[#0c495a]">{day.short}</p>
                   <div className="h-[10px] overflow-hidden rounded-full bg-[#eef0f7]">
                     <div
-                      className="h-full rounded-full bg-[linear-gradient(90deg,#0a1838,#f5c842)]"
+                      className="h-full rounded-full bg-[linear-gradient(90deg,#0c495a,#fbbd19)]"
                       style={{ width: `${Math.min(96, Math.round(day.value * 100))}%` }}
                     />
                   </div>
-                  <p className="text-right font-display text-[16px] font-bold text-[#0a1838]">
+                  <p className="text-right font-display text-[16px] font-bold text-[#0c495a]">
                     {formatCompact(reachValue)}
                   </p>
                 </div>
@@ -724,19 +700,19 @@ function ReachPanels({
             {audienceBreakdown.map((entry) => (
               <div
                 key={entry.label}
-                className="rounded-[10px] border border-[#e6e7ef] bg-[#fafbfd] p-[10px]"
+                className="rounded-[10px] border border-[#e6e7ef] bg-[#f5f7f8] p-[10px]"
               >
-                <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+                <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
                   {entry.label}
                 </p>
-                <p className="mt-1 font-display text-[20px] font-bold leading-none text-[#0a1838]">
+                <p className="mt-1 font-display text-[20px] font-bold leading-none text-[#0c495a]">
                   {formatNumber(entry.value)}
                 </p>
-                <p className="mt-2 text-[11px] leading-5 text-[#7f8497]">{entry.note}</p>
+                <p className="mt-2 text-[11px] leading-5 text-[#5a6a72]">{entry.note}</p>
               </div>
             ))}
           </div>
-          <div className="mt-3 rounded-[10px] bg-[linear-gradient(135deg,#0a1838,#182d61)] px-4 py-3">
+          <div className="mt-3 rounded-[10px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] px-4 py-3">
             <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold/70">
               Fulfillment status
             </p>
@@ -768,13 +744,13 @@ export function SponsorOverviewPage() {
             <>
               <Link
                 href={`/app/community/${sponsor.slug}`}
-                className="rounded-[8px] border border-[#dfe2ea] px-[14px] py-[8px] text-[12px] font-semibold text-[#0a1838] transition hover:bg-[#f4f6fb]"
+                className="rounded-[8px] border border-[#dfe2ea] px-[14px] py-[8px] text-[12px] font-semibold text-[#0c495a] transition hover:bg-[#f4f6fb]"
               >
                 View public page
               </Link>
               <Link
                 href="/app/sponsor/edit"
-                className="rounded-[8px] bg-[#0a1838] px-[14px] py-[8px] text-[12px] font-semibold text-white transition hover:bg-[#132b5b]"
+                className="rounded-[8px] bg-[#0c495a] px-[14px] py-[8px] text-[12px] font-semibold text-white transition hover:bg-[#0e5a70]"
               >
                 Edit sponsor page
               </Link>
@@ -786,35 +762,35 @@ export function SponsorOverviewPage() {
 
         <div className="grid gap-3 xl:grid-cols-[1fr,0.92fr]">
           <article className="rounded-[14px] border border-[#e6e7ef] bg-white p-[16px] shadow-card">
-            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
               Snapshot
             </p>
-            <h2 className="mt-2 font-display text-[20px] font-bold text-[#0a1838]">
+            <h2 className="mt-2 font-display text-[20px] font-bold text-[#0c495a]">
               What is working right now
             </h2>
             <div className="mt-4 grid gap-3">
-              <div className="rounded-[10px] border border-[#e6e7ef] bg-[#fafbfd] p-4">
-                <p className="text-[13px] font-semibold text-[#0a1838]">
+              <div className="rounded-[10px] border border-[#e6e7ef] bg-[#f5f7f8] p-4">
+                <p className="text-[13px] font-semibold text-[#0c495a]">
                   Sponsor page strongest entry point
                 </p>
-                <p className="mt-1 text-[11px] leading-5 text-[#7f8497]">
+                <p className="mt-1 text-[11px] leading-5 text-[#5a6a72]">
                   {formatCompact(placements[0]?.views ?? 0)} views from schedule cards, track
                   placements, and direct sponsor hub entry.
                 </p>
               </div>
-              <div className="rounded-[10px] border border-[#e6e7ef] bg-[#fafbfd] p-4">
-                <p className="text-[13px] font-semibold text-[#0a1838]">
+              <div className="rounded-[10px] border border-[#e6e7ef] bg-[#f5f7f8] p-4">
+                <p className="text-[13px] font-semibold text-[#0c495a]">
                   {sessions.length} sponsored sessions carrying reach
                 </p>
-                <p className="mt-1 text-[11px] leading-5 text-[#7f8497]">
+                <p className="mt-1 text-[11px] leading-5 text-[#5a6a72]">
                   Best performing slot right now: {sessions[0]?.title ?? "No linked sessions yet"}.
                 </p>
               </div>
-              <div className="rounded-[10px] border border-[#e6e7ef] bg-[#fafbfd] p-4">
-                <p className="text-[13px] font-semibold text-[#0a1838]">
+              <div className="rounded-[10px] border border-[#e6e7ef] bg-[#f5f7f8] p-4">
+                <p className="text-[13px] font-semibold text-[#0c495a]">
                   Last live signal
                 </p>
-                <p className="mt-1 text-[11px] leading-5 text-[#7f8497]">
+                <p className="mt-1 text-[11px] leading-5 text-[#5a6a72]">
                   {analytics?.lastEventAt
                     ? new Date(analytics.lastEventAt).toLocaleString()
                     : "Waiting for first tracked interaction."}
@@ -824,7 +800,7 @@ export function SponsorOverviewPage() {
           </article>
 
           <article className="rounded-[14px] border border-[#e6e7ef] bg-white p-[16px] shadow-card">
-            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
               Quick links
             </p>
             <div className="mt-4 grid gap-3">
@@ -834,9 +810,9 @@ export function SponsorOverviewPage() {
                   <Link
                     key={link.key}
                     href={link.href}
-                    className="rounded-[10px] border border-[#e6e7ef] bg-[#fafbfd] px-4 py-4 transition hover:border-[#cfd4df] hover:bg-[#f4f6fb]"
+                    className="rounded-[10px] border border-[#e6e7ef] bg-[#f5f7f8] px-4 py-4 transition hover:border-[#cfd4df] hover:bg-[#f4f6fb]"
                   >
-                    <p className="text-[13px] font-semibold text-[#0a1838]">{link.label}</p>
+                    <p className="text-[13px] font-semibold text-[#0c495a]">{link.label}</p>
                   </Link>
                 ))}
             </div>
@@ -856,7 +832,7 @@ export function SponsorReachPage() {
   const venueOptions = useMemo(
     () =>
       Array.from(new Map(sessions.map((session) => [session.venueId, session.room])).entries()).map(
-        ([id, room]) => ({ id, label: room.split("·")[0]?.trim() || room })
+        ([id, room]) => ({ id, label: room.split("-")[0]?.trim() || room })
       ),
     [sessions]
   );
@@ -1002,20 +978,20 @@ export function SponsorReachPage() {
     <SponsorHubShell active="reach">
       <div className="space-y-3">
         <SponsorHeader
-          title="Page views and reach · live"
-          subtitle="Tuesday · Sept 15, 2026 · Auto-refresh every 60s"
+          title="Page views and reach - live"
+          subtitle="Tuesday - Sept 15, 2026 - Auto-refresh every 60s"
           actions={
             <>
               <button
                 type="button"
                 onClick={() => exportCsv(placements)}
-                className="rounded-[8px] border border-[#dfe2ea] px-[14px] py-[8px] text-[12px] font-semibold text-[#0a1838] transition hover:bg-[#f4f6fb]"
+                className="rounded-[8px] border border-[#dfe2ea] px-[14px] py-[8px] text-[12px] font-semibold text-[#0c495a] transition hover:bg-[#f4f6fb]"
               >
                 Export CSV
               </button>
               <Link
                 href="/app/sponsor/edit"
-                className="rounded-[8px] bg-[#0a1838] px-[14px] py-[8px] text-[12px] font-semibold text-white transition hover:bg-[#132b5b]"
+                className="rounded-[8px] bg-[#0c495a] px-[14px] py-[8px] text-[12px] font-semibold text-white transition hover:bg-[#0e5a70]"
               >
                 Edit sponsor page
               </Link>
@@ -1025,13 +1001,13 @@ export function SponsorReachPage() {
         <div className="rounded-[14px] border border-[#e6e7ef] bg-white p-[16px] shadow-card">
           <div className="grid gap-3 md:grid-cols-3">
             <label className="grid gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
                 Day
               </span>
               <select
                 value={dayFilter}
                 onChange={(event) => setDayFilter(event.target.value)}
-                className="rounded-[10px] border border-[#dfe2ea] bg-[#fafbfd] px-3 py-3 text-[12px] text-[#0a1838] outline-none"
+                className="rounded-[10px] border border-[#dfe2ea] bg-[#f5f7f8] px-3 py-3 text-[12px] text-[#0c495a] outline-none"
               >
                 <option value="all">All days</option>
                 <option value="mon">MON 14</option>
@@ -1043,13 +1019,13 @@ export function SponsorReachPage() {
             </label>
 
             <label className="grid gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
                 Venue
               </span>
               <select
                 value={venueFilter}
                 onChange={(event) => setVenueFilter(event.target.value)}
-                className="rounded-[10px] border border-[#dfe2ea] bg-[#fafbfd] px-3 py-3 text-[12px] text-[#0a1838] outline-none"
+                className="rounded-[10px] border border-[#dfe2ea] bg-[#f5f7f8] px-3 py-3 text-[12px] text-[#0c495a] outline-none"
               >
                 <option value="all">All venues</option>
                 {venueOptions.map((venue) => (
@@ -1061,13 +1037,13 @@ export function SponsorReachPage() {
             </label>
 
             <label className="grid gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
                 Session
               </span>
               <select
                 value={sessionFilter}
                 onChange={(event) => setSessionFilter(event.target.value)}
-                className="rounded-[10px] border border-[#dfe2ea] bg-[#fafbfd] px-3 py-3 text-[12px] text-[#0a1838] outline-none"
+                className="rounded-[10px] border border-[#dfe2ea] bg-[#f5f7f8] px-3 py-3 text-[12px] text-[#0c495a] outline-none"
               >
                 <option value="all">All sponsored sessions</option>
                 {sessions.map((session) => (
@@ -1090,23 +1066,23 @@ export function SponsorReachPage() {
                 key={card.label}
                 className="rounded-[14px] border border-[#e6e7ef] bg-white p-[14px] shadow-card"
               >
-                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#7f8497]">
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5a6a72]">
                   Trend
                 </p>
-                <p className="mt-2 text-[13px] font-semibold text-[#0a1838]">{card.label}</p>
-                <p className="mt-2 font-display text-[24px] font-bold leading-none text-[#0a1838]">
+                <p className="mt-2 text-[13px] font-semibold text-[#0c495a]">{card.label}</p>
+                <p className="mt-2 font-display text-[24px] font-bold leading-none text-[#0c495a]">
                   {formatNumber(card.value)}
                 </p>
                 <div className="mt-4 flex h-[56px] items-end gap-1.5">
                   {card.series.map((value, index) => (
                     <div
                       key={`${card.label}-${index}`}
-                      className="flex-1 rounded-t-[8px] bg-[linear-gradient(180deg,#f5c842,#0a1838)]"
+                      className="flex-1 rounded-t-[8px] bg-[linear-gradient(180deg,#fbbd19,#0c495a)]"
                       style={{ height: `${Math.max(12, (value / max) * 100)}%` }}
                     />
                   ))}
                 </div>
-                <p className="mt-3 text-[11px] text-[#7f8497]">{card.delta}</p>
+                <p className="mt-3 text-[11px] text-[#5a6a72]">{card.delta}</p>
               </article>
             );
           })}
@@ -1134,7 +1110,7 @@ export function SponsorSessionsPage() {
         />
 
         <div className="grid gap-3 md:grid-cols-3">
-          <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+          <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-midnight/46">
               Linked sessions
             </p>
@@ -1142,7 +1118,7 @@ export function SponsorSessionsPage() {
               {sessions.length}
             </p>
           </article>
-          <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+          <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-midnight/46">
               Session views
             </p>
@@ -1150,7 +1126,7 @@ export function SponsorSessionsPage() {
               {formatNumber(analytics?.sessionViews ?? metrics.sessionRsvps)}
             </p>
           </article>
-          <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+          <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-midnight/46">
               Avg. session reach
             </p>
@@ -1171,7 +1147,7 @@ export function SponsorSessionsPage() {
           {sessions.map((session) => (
             <article
               key={session.id}
-              className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card"
+              className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
@@ -1179,7 +1155,7 @@ export function SponsorSessionsPage() {
                     {session.title}
                   </p>
                   <p className="mt-1 text-[12px] text-midnight/58">
-                    {session.day.toUpperCase()} · {session.startTime}–{session.endTime} ·{" "}
+                    {session.day.toUpperCase()} - {session.startTime}-{session.endTime} -{" "}
                     {session.room}
                   </p>
                 </div>
@@ -1241,7 +1217,7 @@ export function SponsorBoothPage() {
         />
 
         <div className="grid gap-3 md:grid-cols-[1.1fr,0.9fr]">
-          <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+          <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
             <h2 className="font-display text-[22px] font-semibold text-midnight">
               Activation footprint
             </h2>
@@ -1255,7 +1231,7 @@ export function SponsorBoothPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="rounded-[18px] border border-midnight/8 bg-[#fafbfd] px-4 py-3"
+                  className="rounded-[18px] border border-midnight/8 bg-[#f5f7f8] px-4 py-3"
                 >
                   <p className="text-[14px] font-semibold text-midnight">{item}</p>
                 </div>
@@ -1263,7 +1239,7 @@ export function SponsorBoothPage() {
             </div>
           </article>
 
-          <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+          <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
             <h2 className="font-display text-[22px] font-semibold text-midnight">
               Tap-ins and visits
             </h2>
@@ -1345,12 +1321,12 @@ export function SponsorEditPage() {
       <div className="space-y-3">
         <SponsorHeader
           title="Edit sponsor page"
-          subtitle="Last saved 2 minutes ago · auto-publishes on save"
+          subtitle="Last saved 2 minutes ago - auto-publishes on save"
         />
 
-        <div className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+        <div className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
           <form onSubmit={handleSubmit} className="grid gap-3 md:grid-cols-2">
-            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#fafbfd] p-3">
+            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#f5f7f8] p-3">
               <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-midnight/45">
                 Tier
               </span>
@@ -1361,7 +1337,7 @@ export function SponsorEditPage() {
               />
             </label>
 
-            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#fafbfd] p-3">
+            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#f5f7f8] p-3">
               <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-midnight/45">
                 Tagline
               </span>
@@ -1372,7 +1348,7 @@ export function SponsorEditPage() {
               />
             </label>
 
-            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#fafbfd] p-3">
+            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#f5f7f8] p-3">
               <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-midnight/45">
                 Website
               </span>
@@ -1383,7 +1359,7 @@ export function SponsorEditPage() {
               />
             </label>
 
-            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#fafbfd] p-3">
+            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#f5f7f8] p-3">
               <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-midnight/45">
                 LinkedIn
               </span>
@@ -1394,31 +1370,31 @@ export function SponsorEditPage() {
               />
             </label>
 
-            <div className="rounded-[18px] border border-midnight/8 bg-[#fafbfd] p-3">
+            <div className="rounded-[18px] border border-midnight/8 bg-[#f5f7f8] p-3">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-midnight/45">
                 Booth location
               </p>
               <p className="mt-2 text-[15px] font-semibold text-midnight">
-                Coffman lobby · Welcome wall
+                Coffman lobby - Welcome wall
               </p>
               <p className="mt-1 text-[12px] text-midnight/56">
-                Tue–Thu · map pin and venue cards
+                Tue-Thu - map pin and venue cards
               </p>
             </div>
 
-            <div className="rounded-[18px] border border-midnight/8 bg-[#fafbfd] p-3">
+            <div className="rounded-[18px] border border-midnight/8 bg-[#f5f7f8] p-3">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-midnight/45">
                 CTA button
               </p>
               <p className="mt-2 text-[15px] font-semibold text-midnight">
-                Talk to our small-business team →
+                Talk to our small-business team -&gt;
               </p>
               <p className="mt-1 text-[12px] text-midnight/56">
                 Opens website or sponsor contact link
               </p>
             </div>
 
-            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#fafbfd] p-3 md:col-span-2">
+            <label className="grid gap-2 rounded-[18px] border border-midnight/8 bg-[#f5f7f8] p-3 md:col-span-2">
               <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-midnight/45">
                 Headline and sponsor story
               </span>
@@ -1430,7 +1406,7 @@ export function SponsorEditPage() {
               />
             </label>
 
-            <div className="rounded-[18px] border border-midnight/8 bg-[#fafbfd] p-3 md:col-span-2">
+            <div className="rounded-[18px] border border-midnight/8 bg-[#f5f7f8] p-3 md:col-span-2">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-midnight/45">
                 Sponsored sessions ({sessions.length} linked)
               </p>
@@ -1439,7 +1415,7 @@ export function SponsorEditPage() {
                   <Link
                     key={session.id}
                     href={`/app/sessions/${session.slug}`}
-                    className="rounded-full bg-mist px-3 py-2 text-[12px] font-semibold text-midnight transition hover:bg-[#ece8dd]"
+                    className="rounded-full bg-mist px-3 py-2 text-[12px] font-semibold text-midnight transition hover:bg-[#e6eef1]"
                   >
                     {session.title}
                   </Link>
@@ -1447,7 +1423,7 @@ export function SponsorEditPage() {
               </div>
             </div>
 
-            <div className="rounded-[18px] border border-midnight/8 bg-[#fafbfd] p-3 md:col-span-2">
+            <div className="rounded-[18px] border border-midnight/8 bg-[#f5f7f8] p-3 md:col-span-2">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-midnight/45">
                 Public materials ({sponsorMaterials.length})
               </p>
@@ -1466,7 +1442,7 @@ export function SponsorEditPage() {
             <div className="md:col-span-2 flex flex-wrap gap-3">
               <button
                 type="submit"
-                className="rounded-full bg-midnight px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#132b5b]"
+                className="rounded-full bg-midnight px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0e5a70]"
               >
                 Save sponsor page
               </button>
@@ -1503,7 +1479,7 @@ export function SponsorLeadsPage() {
         />
 
         <div className="grid gap-3 md:grid-cols-3">
-          <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+          <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-midnight/46">
               Opt-in leads
             </p>
@@ -1511,7 +1487,7 @@ export function SponsorLeadsPage() {
               {formatNumber(optedIn)}
             </p>
           </article>
-          <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+          <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-midnight/46">
               Contact-ready
             </p>
@@ -1519,7 +1495,7 @@ export function SponsorLeadsPage() {
               {formatNumber(Math.round(optedIn * 0.62))}
             </p>
           </article>
-          <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+          <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-midnight/46">
               Warmest segment
             </p>
@@ -1529,7 +1505,7 @@ export function SponsorLeadsPage() {
           </article>
         </div>
 
-        <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
+        <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
           <h2 className="font-display text-[22px] font-semibold text-midnight">
             Lead sources
           </h2>
@@ -1541,7 +1517,7 @@ export function SponsorLeadsPage() {
             ].map(([label, value]) => (
               <div
                 key={String(label)}
-                className="grid grid-cols-[1fr,88px] gap-3 rounded-[18px] border border-midnight/8 bg-[#fafbfd] px-4 py-3"
+                className="grid grid-cols-[1fr,88px] gap-3 rounded-[18px] border border-midnight/8 bg-[#f5f7f8] px-4 py-3"
               >
                 <p className="text-[14px] font-semibold text-midnight">{label}</p>
                 <p className="text-right font-display text-[22px] font-semibold text-midnight">
@@ -1575,7 +1551,7 @@ export function SponsorTeamPage() {
           ].map(([name, role, email]) => (
             <article
               key={name}
-              className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card"
+              className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card"
             >
               <p className="font-display text-[24px] font-semibold text-midnight">{name}</p>
               <p className="mt-1 text-[12px] text-midnight/58">{role}</p>
@@ -1603,8 +1579,8 @@ export function SponsorFulfillmentPage() {
           subtitle="Show sponsor delivery proof in one place, not scattered screenshots."
         />
 
-        <article className="rounded-[24px] border border-midnight/8 bg-white p-4 shadow-card">
-          <div className="rounded-[18px] bg-[linear-gradient(135deg,#0a1838,#182d61)] px-4 py-4">
+        <article className="rounded-[12px] border border-midnight/8 bg-white p-4 shadow-card">
+          <div className="rounded-[18px] bg-[linear-gradient(135deg,#0c495a,#0e5a70)] px-4 py-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold/70">
               Deliverable status
             </p>
@@ -1618,7 +1594,7 @@ export function SponsorFulfillmentPage() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between rounded-[18px] border border-midnight/8 bg-[#fafbfd] px-4 py-3"
+                className="flex items-center justify-between rounded-[18px] border border-midnight/8 bg-[#f5f7f8] px-4 py-3"
               >
                 <div>
                   <p className="text-[14px] font-semibold text-midnight">{item.label}</p>
@@ -1630,7 +1606,7 @@ export function SponsorFulfillmentPage() {
                 <span
                   className={`rounded-full px-3 py-1 text-[11px] font-semibold ${
                     item.status === "exceeded"
-                      ? "bg-[rgba(245,200,66,0.22)] text-[#8f6a02]"
+                      ? "bg-[rgba(251,189,25,0.22)] text-[#8f6a02]"
                       : item.status === "met"
                         ? "bg-[rgba(53,143,95,0.16)] text-[#215b3c]"
                         : "bg-[rgba(220,98,64,0.14)] text-coral"
