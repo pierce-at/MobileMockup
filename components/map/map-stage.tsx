@@ -100,7 +100,8 @@ export function MapStage({
         container: ref.current,
         style: styleUrl,
         center: [venue.lng, venue.lat],
-        zoom: 13.4
+        zoom: 13.4,
+        attributionControl: false
       });
 
       const visiblePins = pins.length ? pins : [{ venue, active: true }];
